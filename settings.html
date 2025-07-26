@@ -56,6 +56,10 @@
                   <i class="fas fa-cog mr-3"></i>
                   <span class="sidebar-text">Settings</span>
               </a>
+              <a href="profile.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+                <i class="fa-solid fa-user mr-3"></i>
+                <span class="sidebar-text">Profile</span>
+            </a>
             </div>
             </nav>
 
@@ -205,5 +209,31 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     </script>
+<script>
+// Update sidebar profile picture from session (always show latest)
+document.addEventListener('DOMContentLoaded', function() {
+    // Check localStorage for updated profile picture URL
+    const localProfilePic = localStorage.getItem('profile_picture_url');
+    const avatarImage = document.querySelector('.sidebar img[alt="User"]');
+    if (localProfilePic && avatarImage) {
+        avatarImage.src = localProfilePic;
+    } else {
+        // Fallback to fetch from server
+        fetch('auth.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=check_status'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.logged_in) {
+                if (avatarImage && data.user.profile_picture) {
+                    avatarImage.src = data.user.profile_picture + '?t=' + Date.now();
+                }
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>

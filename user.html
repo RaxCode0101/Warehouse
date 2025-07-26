@@ -13,7 +13,7 @@
         <div class="sidebar bg-blue-800 text-white w-64 flex flex-col h-screen">
             <div class="p-4 flex items-center border-b border-blue-700">
                 <i class="fas fa-warehouse text-2xl mr-3"></i>
-                <span class="font-bold text-xl">WarehousePro</span>
+                <span class="font-bold text-xl">Stokku</span>
             </div>
 
             <div class="p-4 flex items-center justify-between border-b border-blue-700">
@@ -49,13 +49,17 @@
                   <span class="sidebar-text">Transactions</span>
               </a>
               <a href="user.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
-                <i class="fas fa-users mr-3"></i>
+                <i class="fas fa-cog mr-3"></i>
                 <span class="sidebar-text">Users</span>
             </a>
               <a href="settings.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
                   <i class="fas fa-cog mr-3"></i>
                   <span class="sidebar-text">Settings</span>
               </a>
+              <a href="profile.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+                <i class="fa-solid fa-user mr-3"></i>
+                <span class="sidebar-text">Profile</span>
+            </a>
             </div>
             </nav>
 
@@ -366,5 +370,29 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </div>
     </div>
+<script>
+// Update sidebar profile picture from localStorage or server on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const localProfilePic = localStorage.getItem('profile_picture_url');
+    const avatarImage = document.querySelector('.sidebar img[alt="User"]');
+    if (localProfilePic && avatarImage) {
+        avatarImage.src = localProfilePic;
+    } else {
+        fetch('auth.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=check_status'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.logged_in) {
+                if (avatarImage && data.user.profile_picture) {
+                    avatarImage.src = data.user.profile_picture + '?t=' + Date.now();
+                }
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>

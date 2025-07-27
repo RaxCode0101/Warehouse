@@ -154,13 +154,12 @@
     <!-- Main Content -->
     <div class="flex-1 flex flex-col items-center justify-center ml-64">
         <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-md mt-10">
-            <form id="updateProfileForm" class="flex flex-col items-center mb-6 space-y-2">
-                <img id="profilePicture" src="https://ui-avatars.com/api/?name=User&size=128" alt="Profile Picture" class="w-32 h-32 rounded-full mb-4 border-4 border-blue-200 object-cover">
-                <form id="uploadProfilePicForm" enctype="multipart/form-data" class="flex flex-col items-center w-full mb-2">
-                    <input type="file" id="inputProfilePic" accept="image/*" class="mb-2 w-full" style="max-width: 250px;">
-                    <button type="submit" id="btnUploadProfilePic" class="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600">Upload Foto</button>
-                    <div id="profilePicMsg" class="mt-1 text-center text-sm"></div>
-                </form>
+            <form id="profilePictureForm" class="flex flex-col items-center mb-6 space-y-2">
+<img id="profilePicture" src="https://ui-avatars.com/api/?name=User&size=128" alt="Profile Picture" class="w-32 h-32 rounded-full mb-4 border-4 border-blue-200 object-cover">
+<input type="file" id="profilePictureInput" name="profilePicture" accept="image/*" class="mb-2 w-full" style="max-width: 250px;">
+<button type="submit" id="btnProfilePicturePic" class="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600">Upload Foto</button>
+<div id="profilePicMsg" class="mt-1 text-center text-sm"></div>
+                
                 <div class="w-full">
                     <label for="inputUsername" class="block text-gray-700">Username</label>
                     <input type="text" id="inputUsername" class="w-full border border-gray-300 rounded px-3 py-2" required>
@@ -209,56 +208,58 @@
         </div>
     </div>
     <script>
-    // Handle upload profile picture
-    document.getElementById('uploadProfilePicForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const fileInput = document.getElementById('inputProfilePic');
-        const msgDiv = document.getElementById('profilePicMsg');
-        msgDiv.textContent = '';
-        if (!fileInput.files || !fileInput.files[0]) {
-            msgDiv.textContent = 'Pilih file gambar terlebih dahulu!';
-            msgDiv.className = 'mt-1 text-center text-sm text-red-600';
-            return;
-        }
-        const formData = new FormData();
-        formData.append('action', 'upload_profile_picture');
-        formData.append('profilePicture', fileInput.files[0]);
-        try {
-            const res = await fetch('auth.php', {
-                method: 'POST',
-                body: formData
-            });
-            const result = await res.json();
-            if (result.success && result.newProfilePictureUrl) {
-                const newUrl = result.newProfilePictureUrl + '?t=' + Date.now();
-                document.getElementById('profilePicture').src = newUrl;
-                // Update sidebar image in profile.html after upload
-                const sidebarImg = document.querySelector('.sidebar img[alt="User"]');
-                if (sidebarImg) sidebarImg.src = newUrl;
-                // Simpan ke localStorage agar halaman lain bisa akses tanpa reload
-                localStorage.setItem('profile_picture_url', newUrl);
-                msgDiv.textContent = 'Foto profil berhasil diupdate!';
-                msgDiv.className = 'mt-1 text-center text-sm text-green-600';
-            } else {
-                msgDiv.textContent = result.message || 'Gagal upload foto profil!';
-                msgDiv.className = 'mt-1 text-center text-sm text-red-600';
-            }
-        } catch (err) {
-            msgDiv.textContent = 'Gagal upload foto profil!';
-            msgDiv.className = 'mt-1 text-center text-sm text-red-600';
-        }
-    });
+// Handle upload profile picture
+document.getElementById('profilePictureForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-    // Preview gambar sebelum upload
-    document.getElementById('inputProfilePic').addEventListener('change', function(e) {
-        if (this.files && this.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                document.getElementById('profilePicture').src = ev.target.result;
-            };
-            reader.readAsDataURL(this.files[0]);
+    const fileInput = document.getElementById('profilePictureInput');
+    const msgDiv = document.getElementById('profilePicMsg');
+    msgDiv.textContent = '';
+    
+    if (!fileInput.files || !fileInput.files[0]) {
+        msgDiv.textContent = 'Pilih file gambar terlebih dahulu!';
+        msgDiv.className = 'mt-1 text-center text-sm text-red-600';
+        return;
+    }
+    const formData = new FormData();
+    formData.append('action', 'upload_profile_picture');
+    formData.append('profilePicture', fileInput.files[0]);
+    try {
+        const res = await fetch('auth.php', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await res.json();
+        if (result.success && result.newProfilePictureUrl) {
+            const newUrl = result.newProfilePictureUrl + '?t=' + Date.now();
+            document.getElementById('profilePicture').src = newUrl;
+            // Update sidebar image in profile.html after upload
+            const sidebarImg = document.querySelector('.sidebar img[alt="User"]');
+            if (sidebarImg) sidebarImg.src = newUrl;
+            // Simpan ke localStorage agar halaman lain bisa akses tanpa reload
+            localStorage.setItem('profile_picture_url', newUrl);
+            msgDiv.textContent = 'Foto profil berhasil diupdate!';
+            msgDiv.className = 'mt-1 text-center text-sm text-green-600';
+        } else {
+            msgDiv.textContent = result.message || 'Gagal upload foto profil!';
+            msgDiv.className = 'mt-1 text-center text-sm text-red-600';
         }
-    });
+    } catch (err) {
+        msgDiv.textContent = 'Gagal upload foto profil!';
+        msgDiv.className = 'mt-1 text-center text-sm text-red-600';
+    }
+});
+
+// Preview gambar sebelum upload
+document.getElementById('profilePictureInput').addEventListener('change', function(e) {
+    if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            document.getElementById('profilePicture').src = ev.target.result;
+        };
+        reader.readAsDataURL(this.files[0]);
+    }
+});
 
     // Placeholder: fetch user profile data (replace with real AJAX if needed)
     document.addEventListener('DOMContentLoaded', async function() {
@@ -314,7 +315,7 @@
                 });
                 // Always show upload button for all roles
                 document.getElementById('btnUpdateProfile').style.display = isAdmin ? '' : 'none';
-                document.getElementById('btnUploadProfilePic').style.display = '';
+                document.getElementById('btnProfilePicturePic').style.display = '';
             }
         } catch (err) {
             // fallback: tampilkan placeholder

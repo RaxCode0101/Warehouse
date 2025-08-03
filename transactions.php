@@ -15,7 +15,7 @@ switch ($method) {
         $sort_by = $_GET['sort_by'] ?? 'id';
         $sort_order = $_GET['sort_order'] ?? 'ASC';
 
-        $allowed_sort_columns = ['id', 'transaction_number', 'order_id', 'transaction_date', 'amount', 'payment_method', 'status'];
+        $allowed_sort_columns = ['id', 'order_id', 'transaction_date', 'amount', 'payment_method', 'status'];
         if (!in_array($sort_by, $allowed_sort_columns)) {
             $sort_by = 'id';
         }
@@ -23,9 +23,9 @@ switch ($method) {
 
         try {
             if ($search) {
-                $stmt = $pdo->prepare("SELECT * FROM transactions WHERE transaction_number LIKE ? OR payment_method LIKE ? OR status LIKE ? ORDER BY $sort_by $sort_order");
+                $stmt = $pdo->prepare("SELECT * FROM transactions WHERE payment_method LIKE ? OR status LIKE ? ORDER BY $sort_by $sort_order");
                 $like_search = "%$search%";
-                $stmt->execute([$like_search, $like_search, $like_search]);
+                $stmt->execute([$like_search, $like_search]);
             } else {
                 $stmt = $pdo->query("SELECT * FROM transactions ORDER BY $sort_by $sort_order");
             }
@@ -43,15 +43,14 @@ switch ($method) {
         }
 
         $id = $input['id'] ?? null;
-        $transaction_number = trim($input['transaction_number'] ?? '');
         $order_id = intval($input['order_id'] ?? 0);
         $transaction_date = $input['transaction_date'] ?? '';
         $amount = intval($input['amount'] ?? 0);
         $payment_method = trim($input['payment_method'] ?? '');
         $status = $input['status'] ?? 'Belum Lunas';
 
-        if (!$transaction_number || !$order_id || !$transaction_date) {
-            respond(false, [], 'Transaction number, order, and transaction date are required');
+        if (!$order_id || !$transaction_date) {
+            respond(false, [], 'Order and transaction date are required');
         }
 
         if (!in_array($status, ['belum lunas', 'lunas'])) {
@@ -67,12 +66,12 @@ switch ($method) {
             }
 
             if ($id) {
-                $stmt = $pdo->prepare("UPDATE transactions SET transaction_number = ?, order_id = ?, transaction_date = ?, amount = ?, payment_method = ?, status = ? WHERE id = ?");
-                $stmt->execute([$transaction_number, $order_id, $transaction_date, $amount, $payment_method, $status, $id]);
+                $stmt = $pdo->prepare("UPDATE transactions SET order_id = ?, transaction_date = ?, amount = ?, payment_method = ?, status = ? WHERE id = ?");
+                $stmt->execute([$order_id, $transaction_date, $amount, $payment_method, $status, $id]);
                 respond(true, [], 'Transaction updated successfully');
             } else {
-                $stmt = $pdo->prepare("INSERT INTO transactions (transaction_number, order_id, transaction_date, amount, payment_method, status) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$transaction_number, $order_id, $transaction_date, $amount, $payment_method, $status]);
+                $stmt = $pdo->prepare("INSERT INTO transactions (order_id, transaction_date, amount, payment_method, status) VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([$order_id, $transaction_date, $amount, $payment_method, $status]);
                 respond(true, [], 'Transaction created successfully');
             }
         } catch (PDOException $e) {

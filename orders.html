@@ -158,6 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="item_code">Item Code</th>    
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="buyers">Buyers</th> 
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="id">Order ID</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="order_date">Order Date</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="status">Status</th>
@@ -178,6 +179,10 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="mb-4">
                                 <label for="itemCode" class="block text-gray-700">Item Code</label>
                                 <input type="text" id="itemCode" class="w-full border border-gray-300 rounded px-3 py-2" required />
+                            </div>
+                            <div class="mb-4">
+                                <label for="buyers" class="block text-gray-700">Buyers</label>
+                                <input type="text" id="buyers" class="w-full border border-gray-300 rounded px-3 py-2" required />
                             </div>
                             <div class="mb-4">
                                 <label for="orderDate" class="block text-gray-700">Order Date</label>
@@ -250,6 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.item_code}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.buyers}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.id}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.order_date}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.status}</td>
@@ -287,11 +293,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         const status = document.getElementById('status');
                         const totalAmount = document.getElementById('totalAmount');
                         const itemCode = document.getElementById('itemCode');
+                        const buyers = document.getElementById('buyers');
         
                         if (id) {
                             const item = ordersData.find(i => i.id == id);
                             modalTitle.textContent = 'Edit Order';
                             itemCode.value = item.item_code;
+                            buyers.value = item.buyers;
                             orderId.value = item.id;
                             orderDate.value = item.order_date;
                             status.value = item.status;
@@ -299,6 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         } else {
                             modalTitle.textContent = 'Add Order';
                             itemCode.value = '';
+                            buyers.value = '';
                             orderId.value = '';
                             orderDate.value = '';
                             status.value = 'Pending';
@@ -317,11 +326,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         event.preventDefault();
                         const orderId = document.getElementById('orderId').value;
                         const itemCode = document.getElementById('itemCode').value.trim();
+                        const buyers = document.getElementById('buyers').value.trim();
                         const orderDate = document.getElementById('orderDate').value;
                         const status = document.getElementById('status').value;
                         const totalAmount = document.getElementById('totalAmount').value;
 
-                        if (!itemCode || !orderDate || !totalAmount) {
+                        if (!itemCode || !buyers || !orderDate || !totalAmount) {
                             alert('Please fill in all fields correctly.');
                             return;
                         }
@@ -329,6 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const payload = {
                             id: orderId || null,
                             item_code: itemCode,
+                            buyers: buyers,
                             order_date: orderDate,
                             status: status,
                             total_amount: totalAmount

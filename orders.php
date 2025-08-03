@@ -15,7 +15,7 @@ switch ($method) {
         $sort_by = $_GET['sort_by'] ?? 'id';
         $sort_order = $_GET['sort_order'] ?? 'ASC';
 
-        $allowed_sort_columns = ['id', 'item_code', 'order_date', 'status', 'total_amount'];
+        $allowed_sort_columns = ['id', 'item_code', 'buyers', 'order_date', 'status', 'total_amount'];
         if (!in_array($sort_by, $allowed_sort_columns)) {
             $sort_by = 'id';
         }
@@ -44,11 +44,12 @@ switch ($method) {
 
         $id = $input['id'] ?? null;
         $item_code = trim($input['item_code'] ?? '');
+        $buyers = trim($input['buyers'] ?? '');
         $order_date = $input['order_date'] ?? '';
         $status = $input['status'] ?? 'Pending';
         $total_amount = intval($input['total_amount'] ?? 0);
 
-        if (!$item_code || !$order_date) {
+        if (!$item_code || !$buyers || !$order_date) {
             respond(false, [], 'Order date is required');
         }
 
@@ -58,12 +59,12 @@ switch ($method) {
 
         try {
             if ($id) {
-                $stmt = $pdo->prepare("UPDATE orders SET item_code = ?, order_date = ?, status = ?, total_amount = ? WHERE id = ?");
-                $stmt->execute([$item_code, $order_date, $status, $total_amount, $id]);
+                $stmt = $pdo->prepare("UPDATE orders SET item_code = ?, buyers = ?, order_date = ?, status = ?, total_amount = ? WHERE id = ?");
+                $stmt->execute([$item_code, $buyers, $order_date, $status, $total_amount, $id]);
                 respond(true, [], 'Order updated successfully');
             } else { 
-                $stmt = $pdo->prepare("INSERT INTO orders (item_code, order_date, status, total_amount) VALUES (?, ?, ?, ?)");
-                $stmt->execute([$item_code, $order_date, $status, $total_amount]);
+                $stmt = $pdo->prepare("INSERT INTO orders (item_code, buyers, order_date, status, total_amount) VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([$item_code, $buyers, $order_date, $status, $total_amount]);
                 respond(true, [], 'Order created successfully');
             }
         } catch (PDOException $e) {

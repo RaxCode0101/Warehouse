@@ -211,12 +211,6 @@
                             </th>
                             <th
                               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                              data-sort="transaction_number"
-                            >
-                              Transaction Number
-                            </th>
-                            <th
-                              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                               data-sort="order_id"
                             >
                               Order ID
@@ -262,15 +256,6 @@
                     <h2 id="modalTitle" class="text-xl font-bold mb-4">Add Transaction</h2>
                     <form id="transactionForm">
                         <input type="hidden" id="transactionId" />
-                        <div class="mb-4">
-                            <label for="transactionNumber" class="block text-gray-700">Transaction Number</label>
-                            <input
-                              type="text"
-                              id="transactionNumber"
-                              class="w-full border border-gray-300 rounded px-3 py-2"
-                              required
-                            />
-                        </div>
                         <div class="mb-4">
                             <label for="orderId" class="block text-gray-700">Order ID</label>
                             <select
@@ -410,7 +395,7 @@ function renderTable() {
     if (transactions.length === 0) {
         const tr = document.createElement('tr');
         const td = document.createElement('td');
-        td.colSpan = 8;
+        td.colSpan = 7;
         td.className = 'text-center py-4 text-gray-500';
         td.textContent = 'No transactions found.';
         tr.appendChild(td);
@@ -436,7 +421,6 @@ function renderTable() {
 
         tr.innerHTML = `
             <td class="px-6 py-4 whitespace-nowrap">${tx.id}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${tx.transaction_number}</td>
             <td class="px-6 py-4 whitespace-nowrap">${tx.order_id}</td>
             <td class="px-6 py-4 whitespace-nowrap">${tx.transaction_date}</td>
             <td class="px-6 py-4 whitespace-nowrap">${tx.amount}</td>
@@ -486,7 +470,6 @@ function renderTable() {
                     if (!tx) return;
                     modalTitle.textContent = 'Edit Transaction';
                     document.getElementById('transactionId').value = tx.id;
-                    document.getElementById('transactionNumber').value = tx.transaction_number;
                     document.getElementById('orderId').value = tx.order_id;
                     document.getElementById('transactionDate').value = tx.transaction_date;
                     document.getElementById('amount').value = tx.amount;
@@ -515,21 +498,19 @@ function renderTable() {
                 transactionForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     const id = document.getElementById('transactionId').value;
-                    const transaction_number = document.getElementById('transactionNumber').value.trim();
                     const order_id = parseInt(document.getElementById('orderId').value);
                     const transaction_date = document.getElementById('transactionDate').value;
                     const amount = parseFloat(document.getElementById('amount').value);
                     const payment_method = document.getElementById('paymentMethod').value.trim();
                     const status = document.getElementById('status').value;
 
-                    if (!transaction_number || !order_id || !transaction_date) {
-                        alert('Transaction number, order ID, and transaction date are required.');
+                    if (!order_id || !transaction_date) {
+                        alert('Order ID, and transaction date are required.');
                         return;
                     }
 
                     const payload = {
                         id: id || null,
-                        transaction_number,
                         order_id,
                         transaction_date,
                         amount,

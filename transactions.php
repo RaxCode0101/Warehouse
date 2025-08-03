@@ -47,7 +47,7 @@ switch ($method) {
         $transaction_date = $input['transaction_date'] ?? '';
         $amount = intval($input['amount'] ?? 0);
         $payment_method = trim($input['payment_method'] ?? '');
-        $status = $input['status'] ?? 'Belum Lunas';
+        $status = $input['status'] ?? 'belum lunas';
 
         if (!$order_id || !$transaction_date) {
             respond(false, [], 'Order and transaction date are required');

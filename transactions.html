@@ -223,9 +223,9 @@
                             </th>
                             <th
                               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                              data-sort="amount"
+                              data-sort="price"
                             >
-                              Amount
+                              Price
                             </th>
                             <th
                               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
@@ -276,10 +276,10 @@
                             />
                         </div>
                         <div class="mb-4">
-                            <label for="amount" class="block text-gray-700">Amount</label>
+                            <label for="price" class="block text-gray-700">Price</label>
                             <input
                               type="number"
-                              id="amount"
+                              id="price"
                               class="w-full border border-gray-300 rounded px-3 py-2"
                               required
                             />
@@ -442,14 +442,14 @@ function renderTable() {
             statusText = 'Unknown';
         }
 
-        // Format the amount to Indonesian Rupiah format
-        const formattedAmount = formatRupiah(tx.amount);
+        // Format the price to Indonesian Rupiah format
+        const formattedPrice = formatRupiah(tx.price);
 
         tr.innerHTML = `
             <td class="px-6 py-4 whitespace-nowrap">${tx.id}</td>
             <td class="px-6 py-4 whitespace-nowrap">${tx.order_id}</td>
             <td class="px-6 py-4 whitespace-nowrap">${tx.transaction_date}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${formattedAmount}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${formattedPrice}</td>
             <td class="px-6 py-4 whitespace-nowrap">${tx.payment_method}</td>
             <td class="px-6 py-4 whitespace-nowrap">
                 <span class="px-2 py-1 rounded-full text-xs font-semibold ${statusClass}">${statusText}</span>
@@ -498,7 +498,7 @@ function renderTable() {
                     document.getElementById('transactionId').value = tx.id;
                     document.getElementById('orderId').value = tx.order_id;
                     document.getElementById('transactionDate').value = tx.transaction_date;
-                    document.getElementById('amount').value = tx.amount;
+                    document.getElementById('price').value = tx.price;
                     document.getElementById('paymentMethod').value = tx.payment_method;
                     document.getElementById('status').value = tx.status;
                     showModal();
@@ -526,7 +526,7 @@ function renderTable() {
                     const id = document.getElementById('transactionId').value;
                     const order_id = parseInt(document.getElementById('orderId').value);
                     const transaction_date = document.getElementById('transactionDate').value;
-                    const amount = parseFloat(document.getElementById('amount').value);
+                    const price = parseFloat(document.getElementById('price').value);
                     const payment_method = document.getElementById('paymentMethod').value.trim();
                     const status = document.getElementById('status').value;
 
@@ -539,7 +539,7 @@ function renderTable() {
                         id: id || null,
                         order_id,
                         transaction_date,
-                        amount,
+                        price,
                         payment_method,
                         status
                     };

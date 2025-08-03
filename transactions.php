@@ -15,7 +15,7 @@ switch ($method) {
         $sort_by = $_GET['sort_by'] ?? 'id';
         $sort_order = $_GET['sort_order'] ?? 'ASC';
 
-        $allowed_sort_columns = ['id', 'order_id', 'transaction_date', 'amount', 'payment_method', 'status'];
+        $allowed_sort_columns = ['id', 'order_id', 'transaction_date', 'price', 'payment_method', 'status'];
         if (!in_array($sort_by, $allowed_sort_columns)) {
             $sort_by = 'id';
         }
@@ -45,7 +45,7 @@ switch ($method) {
         $id = $input['id'] ?? null;
         $order_id = intval($input['order_id'] ?? 0);
         $transaction_date = $input['transaction_date'] ?? '';
-        $amount = intval($input['amount'] ?? 0);
+        $price = intval($input['price'] ?? 0);
         $payment_method = trim($input['payment_method'] ?? '');
         $status = $input['status'] ?? 'belum lunas';
 
@@ -66,12 +66,12 @@ switch ($method) {
             }
 
             if ($id) {
-                $stmt = $pdo->prepare("UPDATE transactions SET order_id = ?, transaction_date = ?, amount = ?, payment_method = ?, status = ? WHERE id = ?");
-                $stmt->execute([$order_id, $transaction_date, $amount, $payment_method, $status, $id]);
+                $stmt = $pdo->prepare("UPDATE transactions SET order_id = ?, transaction_date = ?, price = ?, payment_method = ?, status = ? WHERE id = ?");
+                $stmt->execute([$order_id, $transaction_date, $price, $payment_method, $status, $id]);
                 respond(true, [], 'Transaction updated successfully');
             } else {
-                $stmt = $pdo->prepare("INSERT INTO transactions (order_id, transaction_date, amount, payment_method, status) VALUES (?, ?, ?, ?, ?)");
-                $stmt->execute([$order_id, $transaction_date, $amount, $payment_method, $status]);
+                $stmt = $pdo->prepare("INSERT INTO transactions (order_id, transaction_date, price, payment_method, status) VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([$order_id, $transaction_date, $price, $payment_method, $status]);
                 respond(true, [], 'Transaction created successfully');
             }
         } catch (PDOException $e) {

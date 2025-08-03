@@ -1,4 +1,14 @@
 <?php
+// Set session cookie parameters for better persistence
+$lifetime = 60 * 60 * 24 * 7; // 7 days
+$secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
+session_set_cookie_params([
+    'lifetime' => $lifetime,
+    'path' => '/',
+    'secure' => $secure,
+    'httponly' => true,
+    'samesite' => 'Lax'
+]);
 session_start();
 header('Content-Type: application/json');
 

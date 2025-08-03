@@ -302,10 +302,10 @@
             
             <nav class="flex-1 overflow-y-auto py-4">
                 <div class="px-4 space-y-2">
-                    <a href="index.html" class="nav-item flex items-center px-3 py-2 rounded-lg bg-blue-700 text-white">
-                        <i class="fas fa-tachometer-alt mr-3"></i>
-                        <span class="sidebar-text">Dashboard</span>
-                    </a>
+<a href="#" id="dashboardLink" class="nav-item flex items-center px-3 py-2 rounded-lg bg-blue-700 text-white">
+    <i class="fas fa-tachometer-alt mr-3"></i>
+    <span class="sidebar-text">Dashboard</span>
+</a>
                     <a href="inventory.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
                         <i class="fas fa-boxes mr-3"></i>
                         <span class="sidebar-text">Inventory</span>
@@ -340,20 +340,38 @@
                 </a>
             </div>
             <script>
-                    // Highlight active menu based on current page
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const currentPage = window.location.pathname.split('/').pop();
-                        document.querySelectorAll('.nav-item').forEach(item => {
-                            const href = item.getAttribute('href');
-                            if (href && href === currentPage) {
-                                item.classList.add('bg-blue-700');
-                            } else {
-                                item.classList.remove('bg-blue-700');
-                            }
-                        });
-                    });
+        // Highlight active menu based on current page
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop();
+            document.querySelectorAll('.nav-item').forEach(item => {
+                const href = item.getAttribute('href');
+                if (href && href === currentPage) {
+                    item.classList.add('bg-blue-700');
+                } else {
+                    item.classList.remove('bg-blue-700');
+                }
+            });
 
-// Highlight active menu based on current page
+            // Add event listener for dashboard link to prevent reload and toggle views
+            const dashboardLink = document.getElementById('dashboardLink');
+            if (dashboardLink) {
+                dashboardLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Show dashboard and hide login page
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    document.getElementById('loginPage').classList.add('hidden');
+                    // Set localStorage to keep logged in state
+                    localStorage.setItem('isLoggedIn', 'true');
+                    // Update active menu highlight
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        item.classList.remove('bg-blue-700');
+                    });
+                    dashboardLink.classList.add('bg-blue-700');
+                });
+            }
+        });
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const currentPage = window.location.pathname.split('/').pop();
     document.querySelectorAll('.nav-item').forEach(item => {
@@ -364,6 +382,24 @@ document.addEventListener('DOMContentLoaded', function() {
             item.classList.remove('bg-blue-700');
         }
     });
+
+    // Add event listener for dashboard link to prevent reload and toggle views
+    const dashboardLink = document.getElementById('dashboardLink');
+    if (dashboardLink) {
+        dashboardLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Show dashboard and hide login page
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            // Set localStorage to keep logged in state
+            localStorage.setItem('isLoggedIn', 'true');
+            // Update active menu highlight
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('bg-blue-700');
+            });
+            dashboardLink.classList.add('bg-blue-700');
+        });
+    }
 });
 
                     // Handle logout
@@ -411,18 +447,31 @@ document.addEventListener('DOMContentLoaded', function() {
                                 element.textContent = data.user.full_name; // Update with user's full name
                             });
 
-                            // Update role text and style
-                            const userRoleText = document.getElementById('userRoleText');
-                            if (userRoleText) {
-                                userRoleText.textContent = data.user.role;
-                                if (data.user.role === 'admin') {
-                                    userRoleText.classList.remove('bg-yellow-300', 'text-yellow-800');
-                                    userRoleText.classList.add('bg-green-300', 'text-green-800');
-                                } else {
-                                    userRoleText.classList.remove('bg-green-300', 'text-green-800');
-                                    userRoleText.classList.add('bg-yellow-300', 'text-yellow-800');
-                                }
-                            }
+// Update role text and style
+const userRoleText = document.getElementById('userRoleText');
+if (userRoleText) {
+    userRoleText.textContent = data.user.role;
+    if (data.user.role === 'admin') {
+        userRoleText.classList.remove('bg-yellow-300', 'text-yellow-800');
+        userRoleText.classList.add('bg-green-300', 'text-green-800');
+    } else {
+        userRoleText.classList.remove('bg-green-300', 'text-green-800');
+        userRoleText.classList.add('bg-yellow-300', 'text-yellow-800');
+    }
+}
+
+// Update role text and style in nav bar
+const userRoleNavText = document.getElementById('userRoleNavText');
+if (userRoleNavText) {
+    userRoleNavText.textContent = data.user.role;
+    if (data.user.role === 'admin') {
+        userRoleNavText.classList.remove('bg-yellow-300', 'text-yellow-800');
+        userRoleNavText.classList.add('bg-green-300', 'text-green-800');
+    } else {
+        userRoleNavText.classList.remove('bg-green-300', 'text-green-800');
+        userRoleNavText.classList.add('bg-yellow-300', 'text-yellow-800');
+    }
+}
 
                             // Update avatar dynamically
                             const avatarImage = document.querySelector('img[alt="User"]');
@@ -459,12 +508,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
                             </button>
                         </div>
-                        <div class="relative">
-                            <button id="userMenuButton" class="flex items-center space-x-2">
-                                <img src="https://ui-avatars.com/api/?name=Admin&background=random" class="w-8 h-8 rounded-full" alt="User">
-                                <span class="hidden md:inline user-name">Admin</span>
-                            </button>
-                        </div>
+<div class="relative">
+    <button id="userMenuButton" class="flex flex-col items-center space-y-1">
+        <img src="https://ui-avatars.com/api/?name=Admin&background=random" class="w-8 h-8 rounded-full" alt="User">
+        <span class="hidden md:inline user-name text-sm font-semibold">Admin</span>
+        <span id="userRoleNavText" class="hidden md:inline text-xs font-semibold px-2 rounded"></span>
+    </button>
+</div>
                     </div>
                 </div>
             </header>

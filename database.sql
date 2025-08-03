@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     transaction_number VARCHAR(50) UNIQUE NOT NULL,
     order_id INT NOT NULL,
     transaction_date DATE NOT NULL,
-    amount INT NOT NULL,
+    price INT NOT NULL,
     payment_method VARCHAR(50),
     status ENUM('Pending', 'Completed', 'Failed') NOT NULL DEFAULT 'Pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

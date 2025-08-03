@@ -1,4 +1,4 @@
 -- Migration to update user roles for bryan and alvian
 
-CREATE `users` SET role = 'admin' WHERE username = 'bryan';
-CREATE `users` SET role = 'user' WHERE username = 'alvian';
+UPDATE users SET role = 'admin' WHERE username = 'bryan';
+UPDATE users SET role = 'user' WHERE username = 'alvian';

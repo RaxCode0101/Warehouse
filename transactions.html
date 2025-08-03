@@ -389,6 +389,29 @@
                     }
                 }
 
+                // Format number to Indonesian Rupiah format
+                function formatRupiah(number) {
+                    // Convert to integer if it's a string
+                    const num = parseInt(number);
+                    
+                    // Handle invalid numbers
+                    if (isNaN(num)) return '0';
+                    
+                    // Format based on Indonesian Rupiah conventions
+                    if (num >= 1000000) {
+                        // Format as juta (jt) for millions
+                        const juta = num / 1000000;
+                        return juta % 1 === 0 ? `${juta}jt` : `${juta.toFixed(1)}jt`;
+                    } else if (num >= 1000) {
+                        // Format as ribu (rb) for thousands
+                        const ribu = num / 1000;
+                        return ribu % 1 === 0 ? `${ribu}rb` : `${ribu.toFixed(1)}rb`;
+                    } else {
+                        // Return as is for numbers less than 1000
+                        return num.toString();
+                    }
+                }
+
                 // Render transactions table rows
 function renderTable() {
     transactionsTableBody.innerHTML = '';
@@ -419,11 +442,14 @@ function renderTable() {
             statusText = 'Unknown';
         }
 
+        // Format the amount to Indonesian Rupiah format
+        const formattedAmount = formatRupiah(tx.amount);
+
         tr.innerHTML = `
             <td class="px-6 py-4 whitespace-nowrap">${tx.id}</td>
             <td class="px-6 py-4 whitespace-nowrap">${tx.order_id}</td>
             <td class="px-6 py-4 whitespace-nowrap">${tx.transaction_date}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${tx.amount}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${formattedAmount}</td>
             <td class="px-6 py-4 whitespace-nowrap">${tx.payment_method}</td>
             <td class="px-6 py-4 whitespace-nowrap">
                 <span class="px-2 py-1 rounded-full text-xs font-semibold ${statusClass}">${statusText}</span>

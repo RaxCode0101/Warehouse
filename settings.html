@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Warehouse Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="sidebar bg-blue-800 text-white w-64 flex flex-col h-screen">
+            <div class="p-4 flex items-center border-b border-blue-700">
+                <i class="fas fa-warehouse text-2xl mr-3"></i>
+                <span class="font-bold text-xl">WarehousePro</span>
+            </div>
+
+            <div class="p-4 flex items-center justify-between border-b border-blue-700">
+                <div class="flex items-center">
+                    <img src="https://ui-avatars.com/api/?name=Bryan+Phillip+Sumarauw&background=random" class="w-10 h-10 rounded-full mr-3" alt="User">
+<div class="sidebar-text">
+    <div class="font-medium user-name">Bryan Phillip Sumarauw</div>
+    <div id="userRoleText" class="text-xs font-semibold px-2 rounded mt-1 inline-block"></div>
+</div>
+                </div>
+            </div>
+            
+            <nav class="flex-1 overflow-y-auto py-4">
+                <div class="px-4 space-y-2">
+                <a href="index.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                    <i class="fas fa-tachometer-alt mr-3"></i> 
+                    <span class="sidebar-text">Dashboard</span>
+                </a>
+                <a href="inventory.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                    <i class="fas fa-boxes mr-3"></i>
+                    <span class="sidebar-text">Inventory</span>
+                </a>
+                <a href="suppliers.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                    <i class="fas fa-truck mr-3"></i> 
+                    <span class="sidebar-text">Suppliers</span>
+                </a>
+                <a href="orders.html" class="nav-item flex items-center px-3 py-2 bg-blue-700">
+                    <i class="fas fa-shopping-cart mr-3"></i> 
+                    <span class="sidebar-text">Orders</span>
+                </a>
+                <a href="transactions.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+                  <i class="fas fa-exchange-alt mr-3"></i>
+                  <span class="sidebar-text">Transactions</span>
+              </a>
+              <a href="user.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+                  <i class="fas fa-users mr-3"></i>
+                  <span class="sidebar-text">Users</span>
+              </a>
+              <a href="settings.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+                  <i class="fas fa-cog mr-3"></i>
+                  <span class="sidebar-text">Settings</span>
+              </a>
+            </div>
+            </nav>
+
+            <div class="p-4 border-t border-blue-700">
+                <a href="#" id="logoutBtn" class="flex items-center text-white hover:text-blue-200">
+                    <i class="fas fa-sign-out-alt mr-3"></i>
+                    <span class="sidebar-text">Logout</span>
+                </a>
+            </div>
+
+            <script>
+
+                // Highlight active menu based on current page
+document.addEventListener('DOMContentLoaded', function() {
+    const currentPage = window.location.pathname.split('/').pop();
+    document.querySelectorAll('.nav-item').forEach(item => {
+        const href = item.getAttribute('href');
+        if (href && href === currentPage) {
+            item.classList.add('bg-blue-700');
+        } else {
+            item.classList.remove('bg-blue-700');
+        }
+    });
+});
+
+                // Handle logout
+                document.getElementById('logoutBtn').addEventListener('click', function (e) {
+                    e.preventDefault();
+                    fetch('auth.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'action=logout'
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Redirect to login page or show login form
+                                window.location.href = 'index.html'; // Redirect to login page
+                            } else {
+                                alert('Logout failed: ' + (data.message || 'Unknown error'));
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Logout failed. Please try again.');
+                        });
+                });
+  
+                // Check login status on page load
+                fetch('auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'action=check_status'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.logged_in) {
+                        // Update user information
+                        const userNameElements = document.querySelectorAll('.user-name');
+                        userNameElements.forEach(element => {
+                            element.textContent = data.user.full_name; // Update with user's full name
+                        });
+
+                        // Update avatar dynamically
+                        const avatarImage = document.querySelector('img[alt="User"]');
+                        avatarImage.src = data.user.profile_picture; // Use profile picture from server
+                    
+                    // Update user role text and background color
+                    const userRoleText = document.getElementById('userRoleText');
+                        if (data.user.role === 'admin') {
+                            userRoleText.textContent = 'admin';
+                            userRoleText.style.backgroundColor = 'green';
+                            userRoleText.style.color = 'white';
+                        } else {
+                            userRoleText.textContent = 'user';
+                            userRoleText.style.backgroundColor = 'yellow';
+                            userRoleText.style.color = 'black';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            </script>
+
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6">
+            <h1 class="text-2xl font-bold mb-4">Settings</h1>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-bold mb-4">Change Profile Picture</h2>
+                <form id="profilePictureForm" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="profilePicture" class="block text-sm font-medium text-gray-700">Upload New Profile Picture</label>
+                        <input type="file" id="profilePicture" name="profilePicture" accept="image/*" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none">
+                    </div>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Upload</button>
+                </form>
+                <p id="uploadStatus" class="mt-4 text-sm text-gray-600"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('profilePictureForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData();
+            const fileInput = document.getElementById('profilePicture');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file to upload.');
+                return;
+            }
+
+            formData.append('action', 'upload_profile_picture');
+            formData.append('profilePicture', fileInput.files[0]);
+
+            fetch('auth.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text()) // Ubah ke .text() untuk melihat respons mentah
+            .then(data => {
+                console.log('Raw Response:', data); // Debugging
+                try {
+                    const jsonData = JSON.parse(data); // Parse JSON
+                    if (jsonData.success) {
+                        document.getElementById('uploadStatus').textContent = 'Profile picture updated successfully!';
+                        const avatarImage = document.querySelector('img[alt="User"]');
+                        avatarImage.src = jsonData.newProfilePictureUrl + '?t=' + new Date().getTime(); // Force reload
+                    } else {
+                        document.getElementById('uploadStatus').textContent = 'Failed to update profile picture: ' + jsonData.message;
+                    }
+                } catch (error) {
+                    console.error('JSON Parse Error:', error);
+                    document.getElementById('uploadStatus').textContent = 'Invalid server response. Check console for details.';
+                }
+            })
+            .catch(error => {
+                console.error('Fetch Error:', error);
+                document.getElementById('uploadStatus').textContent = 'An error occurred while uploading the profile picture.';
+            });
+        });
+    </script>
+</body>
+</html>

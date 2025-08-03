@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User - Warehouse Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="sidebar bg-blue-800 text-white w-64 flex flex-col h-screen">
+            <div class="p-4 flex items-center border-b border-blue-700">
+                <i class="fas fa-warehouse text-2xl mr-3"></i>
+                <span class="font-bold text-xl">WarehousePro</span>
+            </div>
+
+            <div class="p-4 flex items-center justify-between border-b border-blue-700">
+                <div class="flex items-center">
+                    <img src="https://ui-avatars.com/api/?name=Bryan+Phillip+Sumarauw&background=random" class="w-10 h-10 rounded-full mr-3" alt="User">
+                    <div class="sidebar-text">
+                        <div class="font-medium user-name">Bryan Phillip Sumarauw</div>
+                        <div id="userRoleText" class="text-xs font-semibold px-2 rounded mt-1 inline-block user-role">User</div>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="flex-1 overflow-y-auto py-4">
+                <div class="px-4 space-y-2">
+                <a href="index.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                    <i class="fas fa-tachometer-alt mr-3"></i> 
+                    <span class="sidebar-text">Dashboard</span>
+                </a>
+                <a href="inventory.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                    <i class="fas fa-boxes mr-3"></i>
+                    <span class="sidebar-text">Inventory</span>
+                </a>
+                <a href="suppliers.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                    <i class="fas fa-truck mr-3"></i> 
+                    <span class="sidebar-text">Suppliers</span>
+                </a>
+                <a href="orders.html" class="nav-item flex items-center px-3 py-2 bg-blue-700">
+                    <i class="fas fa-shopping-cart mr-3"></i> 
+                    <span class="sidebar-text">Orders</span>
+                </a>
+                <a href="transactions.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+                  <i class="fas fa-exchange-alt mr-3"></i>
+                  <span class="sidebar-text">Transactions</span>
+              </a>
+              <a href="user.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+                <i class="fas fa-users mr-3"></i>
+                <span class="sidebar-text">Users</span>
+            </a>
+              <a href="settings.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+                  <i class="fas fa-cog mr-3"></i>
+                  <span class="sidebar-text">Settings</span>
+              </a>
+            </div>
+            </nav>
+
+            <div class="p-4 border-t border-blue-700">
+                <a href="#" id="logoutBtn" class="flex items-center text-white hover:text-blue-200">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </a>
+            </div>
+
+            <script>
+
+                // Highlight active menu based on current page
+document.addEventListener('DOMContentLoaded', function() {
+    const currentPage = window.location.pathname.split('/').pop();
+    document.querySelectorAll('.nav-item').forEach(item => {
+        const href = item.getAttribute('href');
+        if (href && href === currentPage) {
+            item.classList.add('bg-blue-700');
+        } else {
+            item.classList.remove('bg-blue-700');
+        }
+    });
+});
+
+                // Handle logout
+                document.getElementById('logoutBtn').addEventListener('click', function (e) {
+                    e.preventDefault();
+                    fetch('auth.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'action=logout'
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Server Response:', data);
+                            if (data.success) {
+                                // Redirect to login page
+                                window.location.href = 'index.html';
+                            } else {
+                                alert('Logout failed: ' + (data.message || 'Unknown error'));
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Logout failed. Please try again.');
+                        });
+                });
+  
+                // Check login status on page load
+                fetch('auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'action=check_status'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.logged_in) {
+                        // Update user information
+                        const userNameElements = document.querySelectorAll('.user-name');
+                        userNameElements.forEach(element => {
+                            element.textContent = data.user.full_name; // Update with user's full name
+                        });
+
+                        // Update role text and style
+                        const userRoleText = document.getElementById('userRoleText');
+                            if (userRoleText) {
+                                userRoleText.textContent = data.user.role;
+                                if (data.user.role === 'admin') {
+                                    userRoleText.classList.remove('bg-yellow-300', 'text-yellow-800');
+                                    userRoleText.classList.add('bg-green-300', 'text-green-800');
+                                } else {
+                                    userRoleText.classList.remove('bg-green-300', 'text-green-800');
+                                    userRoleText.classList.add('bg-yellow-300', 'text-yellow-800');
+                                }
+                            }
+
+                        // Update avatar dynamically
+                        const avatarImage = document.querySelector('img[alt="User"]');
+                        avatarImage.src = data.user.profile_picture; // Use profile picture from server
+
+                        // Hide user management for non-admin users
+                        if (data.user.role !== 'admin') {
+                            document.querySelector('a[href="user.html"]').style.display = 'none';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            </script>
+
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6">
+            <h1 class="text-2xl font-bold mb-4">User</h1>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <p>Here you can manage user accounts.</p>
+                <div class="p-4 flex justify-between items-center">
+                    <input type="text" id="searchInput" placeholder="Search users..." class="border border-gray-300 rounded px-3 py-1 w-1/3" />
+                    <button id="addUserBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add User</button>
+                </div>
+                <table class="min-w-full divide-y divide-gray-200 mt-4">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="id">User ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="username">Username</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="full_name">Full Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="created_at">Created At</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200">
+                    </tbody>
+                </table>
+
+                <!-- Modal for Add/Edit -->
+                <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white rounded-lg p-6 w-96">
+                        <h2 id="modalTitle" class="text-xl font-bold mb-4">Add User</h2>
+                        <form id="userForm">
+                            <input type="hidden" id="userId" />
+                            <div class="mb-4">
+                                <label for="username" class="block text-gray-700">Username</label>
+                                <input type="text" id="username" class="w-full border border-gray-300 rounded px-3 py-2" required />
+                            </div>
+                            <div class="mb-4">
+                                <label for="fullName" class="block text-gray-700">Full Name</label>
+                                <input type="text" id="fullName" class="w-full border border-gray-300 rounded px-3 py-2" required />
+                            </div>
+                            <div class="mb-4">
+                                <label for="password" class="block text-gray-700">Password</label>
+                                <input type="password" id="password" class="w-full border border-gray-300 rounded px-3 py-2" />
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="button" id="cancelBtn" class="mr-2 px-4 py-2 rounded border border-gray-300 hover:bg-gray-100">Cancel</button>
+                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <script>
+                    let usersData = [];
+                    let currentSortColumn = 'id';
+                    let currentSortOrder = 'ASC';
+
+                    async function fetchUsers() {
+                        const search = document.getElementById('searchInput').value;
+                        const response = await fetch(`users.php?search=${encodeURIComponent(search)}&sort_by=${currentSortColumn}&sort_order=${currentSortOrder}`);
+                        const result = await response.json();
+                        if (result.success) {
+                            usersData = result.data;
+                            renderTable();
+                        } else {
+                            alert('Failed to fetch users: ' + result.message);
+                        }
+                    }
+
+                    function renderTable() {
+                        const tbody = document.getElementById('usersTableBody');
+                        tbody.innerHTML = '';
+                        usersData.forEach(item => {
+                            const tr = document.createElement('tr');
+
+                            tr.innerHTML = `
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.id}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.username}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.full_name}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.created_at}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <button class="text-blue-600 hover:text-blue-900 mr-2 editBtn" data-id="${item.id}">Edit</button>
+                                    <button class="text-red-600 hover:text-red-900 deleteBtn" data-id="${item.id}">Delete</button>
+                                </td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+
+                        document.querySelectorAll('.editBtn').forEach(button => {
+                            button.addEventListener('click', () => {
+                                const id = button.getAttribute('data-id');
+                                openModal(id);
+                            });
+                        });
+
+                        document.querySelectorAll('.deleteBtn').forEach(button => {
+                            button.addEventListener('click', () => {
+                                const id = button.getAttribute('data-id');
+                                if (confirm('Are you sure you want to delete this user?')) {
+                                    deleteUser(id);
+                                }
+                            });
+                        });
+                    }
+
+                    function openModal(id = null) {
+                        const modal = document.getElementById('userModal');
+                        const modalTitle = document.getElementById('modalTitle');
+                        const userId = document.getElementById('userId');
+                        const username = document.getElementById('username');
+                        const fullName = document.getElementById('fullName');
+                        const password = document.getElementById('password');
+
+                        if (id) {
+                            const item = usersData.find(i => i.id == id);
+                            modalTitle.textContent = 'Edit User';
+                            userId.value = item.id;
+                            username.value = item.username;
+                            fullName.value = item.full_name;
+                            password.value = '';
+                        } else {
+                            modalTitle.textContent = 'Add User';
+                            userId.value = '';
+                            username.value = '';
+                            fullName.value = '';
+                            password.value = '';
+                        }
+
+                        modal.classList.remove('hidden');
+                    }
+
+                    function closeModal() {
+                        const modal = document.getElementById('userModal');
+                        modal.classList.add('hidden');
+                    }
+
+                    async function saveUser(event) {
+                        event.preventDefault();
+                        const userId = document.getElementById('userId').value;
+                        const username = document.getElementById('username').value.trim();
+                        const fullName = document.getElementById('fullName').value.trim();
+                        const password = document.getElementById('password').value;
+
+                        if (!username || !fullName) {
+                            alert('Please fill in all required fields.');
+                            return;
+                        }
+
+                        const payload = {
+                            id: userId || null,
+                            username: username,
+                            full_name: fullName,
+                            password: password || null
+                        };
+
+                        const response = await fetch('users.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json();
+                        if (result.success) {
+                            alert(result.message);
+                            closeModal();
+                            fetchUsers();
+                        } else {
+                            alert('Failed to save user: ' + result.message);
+                        }
+                    }
+
+                    async function deleteUser(id) {
+                        const response = await fetch('users.php', {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'id=' + encodeURIComponent(id)
+                        });
+
+                        const result = await response.json();
+                        if (result.success) {
+                            alert(result.message);
+                            fetchUsers();
+                        } else {
+                            alert('Failed to delete user: ' + result.message);
+                        }
+                    }
+
+                    document.getElementById('addUserBtn').addEventListener('click', () => openModal());
+                    document.getElementById('cancelBtn').addEventListener('click', closeModal);
+                    document.getElementById('userForm').addEventListener('submit', saveUser);
+                    document.getElementById('searchInput').addEventListener('input', fetchUsers);
+
+                    // Sorting
+                    document.querySelectorAll('th[data-sort]').forEach(header => {
+                        header.addEventListener('click', () => {
+                            const sortBy = header.getAttribute('data-sort');
+                            if (currentSortColumn === sortBy) {
+                                currentSortOrder = currentSortOrder === 'ASC' ? 'DESC' : 'ASC';
+                            } else {
+                                currentSortColumn = sortBy;
+                                currentSortOrder = 'ASC';
+                            }
+                            fetchUsers();
+                        });
+                    });
+
+                    // Initial fetch
+                    fetchUsers();
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

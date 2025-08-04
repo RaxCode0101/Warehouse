@@ -12,6 +12,20 @@ session_set_cookie_params([
 session_start();
 header('Content-Type: application/json');
 
+// Helper function to check if user is admin
+function isAdmin() {
+    return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+}
+
+// Helper function to check admin access and respond with error if not admin
+function requireAdmin() {
+    if (!isAdmin()) {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'Unauthorized: Admin access required']);
+        exit;
+    }
+}
+
 // Debugging
 error_log('Request received: ' . print_r($_POST, true));
 

@@ -9,13 +9,18 @@ function respond($success, $data = [], $message = '') {
     exit;
 }
 
+// Check admin access for POST, PUT, DELETE operations
+if (in_array($method, ['POST', 'PUT', 'DELETE'])) {
+    requireAdmin();
+}
+
 switch ($method) {
     case 'GET':
         $search = $_GET['search'] ?? '';
         $sort_by = $_GET['sort_by'] ?? 'id';
         $sort_order = $_GET['sort_order'] ?? 'ASC';
 
-        $allowed_sort_columns = ['id', 'order_id', 'transaction_date', 'price', 'payment_method', 'status'];
+        $allowed_sort_columns = ['id', 'order_id', 'transaction_date', 'amount', 'payment_method', 'status'];
         if (!in_array($sort_by, $allowed_sort_columns)) {
             $sort_by = 'id';
         }
@@ -23,9 +28,9 @@ switch ($method) {
 
         try {
             if ($search) {
-                $stmt = $pdo->prepare("SELECT * FROM transactions WHERE payment_method LIKE ? OR status LIKE ? ORDER BY $sort_by $sort_order");
+                $stmt = $pdo->prepare("SELECT * FROM transactions WHERE order_id LIKE ? OR payment_method LIKE ? OR status LIKE ? ORDER BY $sort_by $sort_order");
                 $like_search = "%$search%";
-                $stmt->execute([$like_search, $like_search]);
+                $stmt->execute([$like_search, $like_search, $like_search]);
             } else {
                 $stmt = $pdo->query("SELECT * FROM transactions ORDER BY $sort_by $sort_order");
             }
@@ -44,34 +49,23 @@ switch ($method) {
 
         $id = $input['id'] ?? null;
         $order_id = intval($input['order_id'] ?? 0);
-        $transaction_date = $input['transaction_date'] ?? '';
-        $price = intval($input['price'] ?? 0);
-        $payment_method = trim($input['payment_method'] ?? '');
-        $status = $input['status'] ?? 'belum lunas';
+        $transaction_date = $input['transaction_date'] ?? date('Y-m-d H:i:s');
+        $amount = floatval($input['amount'] ?? 0);
+        $payment_method = trim($input['payment_method'] ?? 'Cash');
+        $status = $input['status'] ?? 'Pending';
 
-        if (!$order_id || !$transaction_date) {
-            respond(false, [], 'Order and transaction date are required');
-        }
-
-        if (!in_array($status, ['belum lunas', 'lunas'])) {
-            $status = 'belum lunas';
+        if (!$order_id || !$transaction_date || !$amount) {
+            respond(false, [], 'Order ID, transaction date, and amount are required');
         }
 
         try {
-            // Validate order_id exists
-            $orderCheck = $pdo->prepare("SELECT id FROM orders WHERE id = ?");
-            $orderCheck->execute([$order_id]);
-            if ($orderCheck->rowCount() === 0) {
-                respond(false, [], 'Failed to save transaction: The specified order does not exist. Please provide a valid order ID.');
-            }
-
             if ($id) {
-                $stmt = $pdo->prepare("UPDATE transactions SET order_id = ?, transaction_date = ?, price = ?, payment_method = ?, status = ? WHERE id = ?");
-                $stmt->execute([$order_id, $transaction_date, $price, $payment_method, $status, $id]);
+                $stmt = $pdo->prepare("UPDATE transactions SET order_id = ?, transaction_date = ?, amount = ?, payment_method = ?, status = ? WHERE id = ?");
+                $stmt->execute([$order_id, $transaction_date, $amount, $payment_method, $status, $id]);
                 respond(true, [], 'Transaction updated successfully');
             } else {
-                $stmt = $pdo->prepare("INSERT INTO transactions (order_id, transaction_date, price, payment_method, status) VALUES (?, ?, ?, ?, ?)");
-                $stmt->execute([$order_id, $transaction_date, $price, $payment_method, $status]);
+                $stmt = $pdo->prepare("INSERT INTO transactions (order_id, transaction_date, amount, payment_method, status) VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([$order_id, $transaction_date, $amount, $payment_method, $status]);
                 respond(true, [], 'Transaction created successfully');
             }
         } catch (PDOException $e) {

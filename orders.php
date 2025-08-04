@@ -9,6 +9,11 @@ function respond($success, $data = [], $message = '') {
     exit;
 }
 
+// Check admin access for POST, PUT, DELETE operations
+if (in_array($method, ['POST', 'PUT', 'DELETE'])) {
+    requireAdmin();
+}
+
 switch ($method) {
     case 'GET':
         $search = $_GET['search'] ?? '';
@@ -23,9 +28,9 @@ switch ($method) {
 
         try {
             if ($search) {
-                $stmt = $pdo->prepare("SELECT * FROM orders WHERE order_date LIKE ? AND status LIKE ? ORDER BY $sort_by $sort_order");
+                $stmt = $pdo->prepare("SELECT * FROM orders WHERE item_code LIKE ? OR buyers LIKE ? OR status LIKE ? ORDER BY $sort_by $sort_order");
                 $like_search = "%$search%";
-                $stmt->execute([$like_search, $like_search]);
+                $stmt->execute([$like_search, $like_search, $like_search]);
             } else {
                 $stmt = $pdo->query("SELECT * FROM orders ORDER BY $sort_by $sort_order");
             }
@@ -50,11 +55,7 @@ switch ($method) {
         $total_amount = intval($input['total_amount'] ?? 0);
 
         if (!$item_code || !$buyers || !$order_date) {
-            respond(false, [], 'Order date is required');
-        }
-
-        if (!in_array($status, ['Pending', 'Processing', 'Completed', 'Cancelled'])) {
-            $status = 'Pending';
+            respond(false, [], 'Item code, buyers, and order date are required');
         }
 
         try {
@@ -62,7 +63,7 @@ switch ($method) {
                 $stmt = $pdo->prepare("UPDATE orders SET item_code = ?, buyers = ?, order_date = ?, status = ?, total_amount = ? WHERE id = ?");
                 $stmt->execute([$item_code, $buyers, $order_date, $status, $total_amount, $id]);
                 respond(true, [], 'Order updated successfully');
-            } else { 
+            } else {
                 $stmt = $pdo->prepare("INSERT INTO orders (item_code, buyers, order_date, status, total_amount) VALUES (?, ?, ?, ?, ?)");
                 $stmt->execute([$item_code, $buyers, $order_date, $status, $total_amount]);
                 respond(true, [], 'Order created successfully');

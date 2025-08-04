@@ -34,6 +34,7 @@ try {
         password VARCHAR(255) NOT NULL,
         full_name VARCHAR(100) NOT NULL,
         role VARCHAR(20) NOT NULL DEFAULT 'user',
+        profile_picture VARCHAR(255) DEFAULT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )";
     $pdo->exec($sql);
@@ -57,7 +58,7 @@ if (empty($action)) {
 }
 
 switch($action) {
-        case 'register':
+    case 'register':
         $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '';
         $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '';
         $fullName = filter_input(INPUT_POST, 'full_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '';
@@ -184,22 +185,46 @@ switch($action) {
         echo json_encode(['success' => true, 'message' => 'Logged out successfully']);
         exit;
 
-            case 'check_status':
+    case 'check_status':
         if (isset($_SESSION['user_id'])) {
-            $stmt = $pdo->prepare("SELECT username, full_name, profile_picture, role FROM users WHERE id = ?");
-            $stmt->execute([$_SESSION['user_id']]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            try {
+                $stmt = $pdo->prepare("SELECT username, full_name, profile_picture, role FROM users WHERE id = ?");
+                $stmt->execute([$_SESSION['user_id']]);
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            echo json_encode([
-                'success' => true,
-                'logged_in' => true,
-                'user' => [
-                    'username' => $user['username'],
-                    'full_name' => $user['full_name'],
-                    'profile_picture' => $user['profile_picture'] ?? 'https://ui-avatars.com/api/?name=' . urlencode($user['full_name']) . '&background=random',
-                    'role' => $user['role']
-                ]
-            ]);
+                // Check if profile_picture column exists
+                $profile_picture = 'https://ui-avatars.com/api/?name=' . urlencode($user['full_name']) . '&background=random';
+                if (isset($user['profile_picture']) && !empty($user['profile_picture'])) {
+                    $profile_picture = $user['profile_picture'];
+                }
+
+                echo json_encode([
+                    'success' => true,
+                    'logged_in' => true,
+                    'user' => [
+                        'username' => $user['username'],
+                        'full_name' => $user['full_name'],
+                        'profile_picture' => $profile_picture,
+                        'role' => $user['role']
+                    ]
+                ]);
+            } catch (PDOException $e) {
+                // Handle case where profile_picture column doesn't exist yet
+                $stmt = $pdo->prepare("SELECT username, full_name, role FROM users WHERE id = ?");
+                $stmt->execute([$_SESSION['user_id']]);
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                echo json_encode([
+                    'success' => true,
+                    'logged_in' => true,
+                    'user' => [
+                        'username' => $user['username'],
+                        'full_name' => $user['full_name'],
+                        'profile_picture' => 'https://ui-avatars.com/api/?name=' . urlencode($user['full_name']) . '&background=random',
+                        'role' => $user['role']
+                    ]
+                ]);
+            }
         } else {
             echo json_encode([
                 'success' => true,
@@ -246,14 +271,20 @@ switch($action) {
 
         // Pindahkan file ke direktori unggahan
         if (move_uploaded_file($_FILES['profilePicture']['tmp_name'], $filePath)) {
-            // Perbarui URL foto profil di database
-            $stmt = $pdo->prepare("UPDATE users SET profile_picture = ? WHERE id = ?");
-            $stmt->execute([$filePath, $_SESSION['user_id']]);
+            try {
+                // Perbarui URL foto profil di database
+                $stmt = $pdo->prepare("UPDATE users SET profile_picture = ? WHERE id = ?");
+                $stmt->execute([$filePath, $_SESSION['user_id']]);
 
-            // Perbarui sesi dengan URL foto profil baru
-            $_SESSION['profile_picture'] = $filePath;
+                // Perbarui sesi dengan URL foto profil baru
+                $_SESSION['profile_picture'] = $filePath;
 
-            echo json_encode(['success' => true, 'newProfilePictureUrl' => $filePath]);
+                echo json_encode(['success' => true, 'newProfilePictureUrl' => $filePath]);
+            } catch (PDOException $e) {
+                error_log('Database error when updating profile picture: ' . $e->getMessage());
+                // Even if database update fails, we can still show the uploaded image
+                echo json_encode(['success' => true, 'newProfilePictureUrl' => $filePath, 'message' => 'File uploaded but database update failed.']);
+            }
         } else {
             error_log('Failed to move uploaded file: ' . $_FILES['profilePicture']['tmp_name'] . ' to ' . $filePath);
             echo json_encode(['success' => false, 'message' => 'Failed to move uploaded file.']);

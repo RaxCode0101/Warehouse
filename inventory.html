@@ -49,9 +49,9 @@
           
           <div class="p-4 flex items-center justify-between border-b border-blue-700">
               <div class="flex items-center">
-                  <img src="https://ui-avatars.com/api/?name=Bryan+Phillip+Sumarauw&background=random" class="w-10 h-10 rounded-full mr-3" alt="User">
+                  <img src="https://ui-avatars.com/api/?name=User&background=random" class="w-10 h-10 rounded-full mr-3" alt="User" ...>
 <div class="sidebar-text">
-    <div class="font-medium user-name">Bryan Phillip Sumarauw</div>
+    <div class="font-medium user-name">Loading...</div>
     <div id="userRoleText" class="text-xs font-semibold px-2 rounded mt-1 inline-block user-role"></div>
 </div>
               </div>
@@ -137,42 +137,46 @@ document.addEventListener('DOMContentLoaded', function() {
               });
 
               // Check login status on page load
-              fetch('auth.php', {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/x-www-form-urlencoded',
-                  },
-                  body: 'action=check_status'
-              })
-              .then(response => response.json())
-              .then(data => {
-                  if (data.success && data.logged_in) {
-                      // Update user information
-                      const userNameElements = document.querySelectorAll('.user-name');
-                      userNameElements.forEach(element => {
-                          element.textContent = data.user.full_name; // Update with user's full name
-                      });
+fetch('auth.php', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
+  body: 'action=check_status',
+})
+  .then(response => response.json())
+  .then(data => {
+    if (data.success && data.logged_in) {
+      // Update user information
+      const userNameElements = document.querySelectorAll('.user-name');
+      userNameElements.forEach(element => {
+        element.textContent = data.user.full_name; // ✅ PASTIKAN INI full_name
+      });
 
-                      // Update avatar dynamically
-                      const avatarImage = document.querySelector('img[alt="User"]');
-                      avatarImage.src = data.user.profile_picture; // Use profile picture from server
+      // Update avatar dynamically
+      const avatarImage = document.querySelector('img[alt="User"]');
+      if (avatarImage) {
+        // ✅ TAMBAHKAN: Generate avatar berdasarkan full_name
+        const encodedName = encodeURIComponent(data.user.full_name);
+        avatarImage.src = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
+      }
 
-                      // Update user role text and background color
-                      const userRoleText = document.getElementById('userRoleText');
-                      if (data.user.role === 'admin') {
-                          userRoleText.textContent = 'admin';
-                          userRoleText.style.backgroundColor = 'green';
-                          userRoleText.style.color = 'white';
-                      } else {
-                          userRoleText.textContent = 'user';
-                          userRoleText.style.backgroundColor = 'yellow';
-                          userRoleText.style.color = 'black';
-                      }
-                  }
-              })
-              .catch(error => {
-                  console.error('Error:', error);
-              }); 
+      // Update user role text and background color
+      const userRoleText = document.getElementById('userRoleText');
+      if (data.user.role === 'admin') {
+        userRoleText.textContent = 'admin';
+        userRoleText.style.backgroundColor = 'green';
+        userRoleText.style.color = 'white';
+      } else {
+        userRoleText.textContent = 'user';
+        userRoleText.style.backgroundColor = 'yellow';
+        userRoleText.style.color = 'black';
+      }
+    }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
           </script>
       </div>
 

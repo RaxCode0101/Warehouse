@@ -32,7 +32,6 @@
                     <i class="fas fa-warehouse text-2xl mr-3"></i>
                     <span class="font-bold text-xl">WarehousePro</span>
                 </div>
-                <!-- Close button visible only on mobile -->
                 <button id="mobileCloseSidebar" class="md:hidden p-2 text-xl text-white/90 hover:text-white focus:outline-none" aria-label="Close menu">
                     <i class="fas fa-times"></i>
                 </button>
@@ -40,9 +39,11 @@
 
             <div class="p-4 flex items-center justify-between border-b border-blue-700">
                 <div class="flex items-center">
-                    <img src="https://ui-avatars.com/api/?name=Bryan+Phillip+Sumarauw&background=random" class="w-10 h-10 rounded-full mr-3" alt="User">
+                    <!-- ✅ Avatar akan diupdate otomatis -->
+                    <img src="https://ui-avatars.com/api/?name=User&background=random" class="w-10 h-10 rounded-full mr-3" alt="User">
                     <div class="sidebar-text">
-                        <div class="font-medium user-name">Bryan Phillip Sumarauw</div>
+                        <!-- ✅ Nama akan diupdate otomatis dari session -->
+                        <div class="font-medium user-name">Loading...</div>
                         <div id="userRoleText" class="text-xs font-semibold px-2 rounded mt-1 inline-block user-role">User</div>
                     </div>
                 </div>
@@ -62,7 +63,7 @@
                     <i class="fas fa-truck mr-3"></i> 
                     <span class="sidebar-text">Suppliers</span>
                 </a>
-                <a href="orders.html" class="nav-item flex items-center px-3 py-2 bg-blue-700">
+                <a href="orders.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
                     <i class="fas fa-shopping-cart mr-3"></i> 
                     <span class="sidebar-text">Orders</span>
                 </a>
@@ -70,7 +71,7 @@
                   <i class="fas fa-exchange-alt mr-3"></i>
                   <span class="sidebar-text">Transactions</span>
               </a>
-              <a href="user.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+              <a href="user.html" class="nav-item flex items-center px-3 py-2 rounded-lg bg-blue-700 text-white">
                 <i class="fas fa-users mr-3"></i>
                 <span class="sidebar-text">Users</span>
             </a>
@@ -88,9 +89,10 @@
             </div>
 
             <script>
-
-                // Highlight active menu based on current page
+// ✅ PERBAIKAN: Wrap semua dalam DOMContentLoaded
 document.addEventListener('DOMContentLoaded', function() {
+    
+    // Highlight active menu based on current page
     const currentPage = window.location.pathname.split('/').pop();
     document.querySelectorAll('.nav-item').forEach(item => {
         const href = item.getAttribute('href');
@@ -100,78 +102,90 @@ document.addEventListener('DOMContentLoaded', function() {
             item.classList.remove('bg-blue-700');
         }
     });
-});
 
-                // Handle logout
-                document.getElementById('logoutBtn').addEventListener('click', function (e) {
-                    e.preventDefault();
-                    fetch('auth.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: 'action=logout'
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log('Server Response:', data);
-                            if (data.success) {
-                                // Redirect to login page
-                                window.location.href = 'index.html';
-                            } else {
-                                alert('Logout failed: ' + (data.message || 'Unknown error'));
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Logout failed. Please try again.');
-                        });
-                });
-  
-                // Check login status on page load
-                fetch('auth.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'action=check_status'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.logged_in) {
-                        // Update user information
-                        const userNameElements = document.querySelectorAll('.user-name');
-                        userNameElements.forEach(element => {
-                            element.textContent = data.user.full_name; // Update with user's full name
-                        });
+    // Handle logout
+    document.getElementById('logoutBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        fetch('auth.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'action=logout'
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Server Response:', data);
+            if (data.success) {
+                window.location.href = 'index.html'; // ✅ Fixed redirect
+            } else {
+                alert('Logout failed: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Logout failed. Please try again.');
+        });
+    });
 
-                        // Update role text and style
-                        const userRoleText = document.getElementById('userRoleText');
-                            if (userRoleText) {
-                                userRoleText.textContent = data.user.role;
-                                if (data.user.role === 'admin') {
-                                    userRoleText.classList.remove('bg-yellow-300', 'text-yellow-800');
-                                    userRoleText.classList.add('bg-green-300', 'text-green-800');
-                                } else {
-                                    userRoleText.classList.remove('bg-green-300', 'text-green-800');
-                                    userRoleText.classList.add('bg-yellow-300', 'text-yellow-800');
-                                }
-                            }
+    // ✅ Check login status dan update user info
+    fetch('auth.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'action=check_status'
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Auth check response:', data);
+        
+        if (data.success && data.logged_in) {
+            // Update user full name
+            const userNameElements = document.querySelectorAll('.user-name');
+            userNameElements.forEach(element => {
+                element.textContent = data.user.full_name;
+            });
 
-                        // Update avatar dynamically
-                        const avatarImage = document.querySelector('img[alt="User"]');
-                        avatarImage.src = data.user.profile_picture; // Use profile picture from server
+            // Update avatar
+            const avatarImage = document.querySelector('img[alt="User"]');
+            if (avatarImage) {
+                const encodedName = encodeURIComponent(data.user.full_name);
+                avatarImage.src = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
+            }
 
-                        // Hide user management for non-admin users
-                        if (data.user.role !== 'admin') {
-                            document.querySelector('a[href="user.html"]').style.display = 'none';
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            </script>
+            // Update role
+            const userRoleText = document.getElementById('userRoleText');
+            if (userRoleText) {
+                userRoleText.textContent = data.user.role;
+                if (data.user.role === 'admin') {
+                    userRoleText.style.backgroundColor = 'green';
+                    userRoleText.style.color = 'white';
+                } else {
+                    userRoleText.style.backgroundColor = 'yellow';
+                    userRoleText.style.color = 'black';
+                }
+            }
+
+            // Hide user management for non-admin
+            const userManagementLink = document.querySelector('a[href="user.html"]');
+            if (userManagementLink && data.user.role !== 'admin') {
+                const fullNameLower = data.user.full_name.toLowerCase().trim();
+                if (fullNameLower !== 'bryan phillip sumarauw') {
+                    userManagementLink.style.display = 'none';
+                }
+            }
+        } else {
+            window.location.href = 'login.html';
+        }
+    })
+    .catch(error => {
+        console.error('Error checking auth:', error);
+        // Jangan redirect jika error jaringan
+    });
+    
+}); // End DOMContentLoaded
+</script>
 
         </div>
 
@@ -185,14 +199,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="flex items-center justify-between px-6 py-4">
                     <div class="flex items-center">
                         <button id="mobileToggleSidebar" class="mr-4 md:hidden p-2 text-2xl text-gray-800 dark:text-gray-200 z-50" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar"><i class="fas fa-bars"></i></button>
-                        <h1 class="text-2xl font-bold mb-4">User</h1>
+                        <h1 class="text-2xl font-bold mb-4">User Management</h1>
                     </div>
                 </div>
             </header>
-            <div class="bg-white p-6 rounded-lg shadow">
-                <p>Here you can manage user accounts.</p>
+            <div class="bg-white dark:bg-gray-800 dark:text-gray-100 p-6 rounded-lg shadow">
+                <p class="mb-4">Manage user accounts and permissions.</p>
                 <div class="p-4 flex justify-between items-center">
-                    <input type="text" id="searchInput" placeholder="Search users..." class="border border-gray-300 rounded px-3 py-1 w-1/3" />
+                    <input type="text" id="searchInput" placeholder="Search users..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded px-3 py-1 w-1/3" />
                     <button id="addUserBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add User</button>
                 </div>
                 <table class="min-w-full divide-y divide-gray-200 mt-4">
@@ -211,32 +225,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 </table>
 
                 <!-- Modal for Add/Edit -->
-                <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
                     <div class="bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg p-6 w-96">
                         <h2 id="modalTitle" class="text-xl font-bold mb-4">Add User</h2>
                         <form id="userForm">
                             <input type="hidden" id="userId" />
                             <div class="mb-4">
-                                <label for="username" class="block text-gray-700">Username</label>
-                                <input type="text" id="username" class="w-full border border-gray-300 rounded px-3 py-2" required />
+                                <label for="username" class="block text-gray-700 dark:text-gray-300">Username</label>
+                                <input type="text" id="username" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded px-3 py-2" required />
                             </div>
                             <div class="mb-4">
-                                <label for="fullName" class="block text-gray-700">Full Name</label>
-                                <input type="text" id="fullName" class="w-full border border-gray-300 rounded px-3 py-2" required />
+                                <label for="fullName" class="block text-gray-700 dark:text-gray-300">Full Name</label>
+                                <input type="text" id="fullName" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded px-3 py-2" required />
                             </div>
                             <div class="mb-4">
-                                <label for="password" class="block text-gray-700">Password</label>
-                                <input type="password" id="password" class="w-full border border-gray-300 rounded px-3 py-2" />
+                                <label for="password" class="block text-gray-700 dark:text-gray-300">Password</label>
+                                <input type="password" id="password" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded px-3 py-2" />
+                                <small class="text-gray-500 dark:text-gray-400">Leave blank to keep current password</small>
                             </div>
                             <div class="mb-4">
-                                <label for="role" class="block text-gray-700">Role</label>
-                                <select id="role" class="w-full border border-gray-300 rounded px-3 py-2" required>
+                                <label for="role" class="block text-gray-700 dark:text-gray-300">Role</label>
+                                <select id="role" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded px-3 py-2" required>
                                     <option value="user">User</option>
                                     <option value="admin">Admin</option>
                                 </select>
                             </div>
                             <div class="flex justify-end">
-                                <button type="button" id="cancelBtn" class="mr-2 px-4 py-2 rounded border border-gray-300 hover:bg-gray-100">Cancel</button>
+                                <button type="button" id="cancelBtn" class="mr-2 px-4 py-2 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">Cancel</button>
                                 <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
                             </div>
                         </form>
@@ -267,12 +282,17 @@ document.addEventListener('DOMContentLoaded', function() {
                             const tr = document.createElement('tr');
                             tr.className = 'hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors';
 
+                            // Role badge
+                            const roleBadge = item.role === 'admin' 
+                                ? '<span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">Admin</span>'
+                                : '<span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">User</span>';
+
                             tr.innerHTML = `
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">${item.id}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.username}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.full_name}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.created_at}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.role}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${roleBadge}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <button class="text-yellow-500 hover:text-yellow-700 mr-3 transition-transform hover:scale-110 editBtn" data-id="${item.id}" title="Edit"><i class="fas fa-pencil-alt"></i></button>
                                     <button class="text-red-500 hover:text-red-700 transition-transform hover:scale-110 deleteBtn" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>
@@ -416,7 +436,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 
 <script>
-// Mobile sidebar toggle (match orders/transactions)
+// Mobile sidebar toggle
 (function(){
   const sidebar = document.querySelector('.sidebar');
   const toggleBtn = document.getElementById('mobileToggleSidebar');

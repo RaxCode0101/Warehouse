@@ -113,3 +113,374 @@ Stack trace:
 #0 C:\xampp\htdocs\stokku\auth.php(244): PDOStatement->execute(Array)
 #1 {main}
   thrown in C:\xampp\htdocs\stokku\auth.php on line 244
+[19-Nov-2025 04:38:00 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:38:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 04:45:00 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:45:01 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 04:45:16 Europe/Berlin] Action received: logout
+[19-Nov-2025 04:46:14 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:46:17 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:46:21 Europe/Berlin] Action received: logout
+[19-Nov-2025 04:46:22 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:46:22 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:46:24 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:46:24 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:46:27 Europe/Berlin] Action received: login
+[19-Nov-2025 04:46:27 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => coba
+    [password] => 123456
+)
+
+[19-Nov-2025 04:46:27 Europe/Berlin] Invalid username or password for user: coba
+[19-Nov-2025 04:46:27 Europe/Berlin] Action received: login
+[19-Nov-2025 04:46:27 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => coba
+    [password] => 123456
+)
+
+[19-Nov-2025 04:46:27 Europe/Berlin] Invalid username or password for user: coba
+[19-Nov-2025 04:46:32 Europe/Berlin] Action received: login
+[19-Nov-2025 04:46:32 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 123456
+)
+
+[19-Nov-2025 04:46:32 Europe/Berlin] Login successful for user: bryan
+[19-Nov-2025 04:46:32 Europe/Berlin] Action received: login
+[19-Nov-2025 04:46:32 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 123456
+)
+
+[19-Nov-2025 04:46:33 Europe/Berlin] Login successful for user: bryan
+[19-Nov-2025 04:46:33 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:46:33 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 04:46:38 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:46:38 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 04:47:44 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:47:44 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 04:47:49 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:47:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 04:47:52 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:47:52 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 04:47:52 Europe/Berlin] Fetched 1 transactions
+[19-Nov-2025 04:47:52 Europe/Berlin] ID 1: status = 'belum lunas' (length: 11)
+[19-Nov-2025 04:48:02 Europe/Berlin] POST Request: {"id":"1","order_id":20,"transaction_date":"2024-04-11","price":5000000,"payment_method":"OVO","status":"lunas"}
+[19-Nov-2025 04:48:02 Europe/Berlin] Received status: 'lunas' (length: 5)
+[19-Nov-2025 04:48:02 Europe/Berlin] Final status to save: 'lunas'
+[19-Nov-2025 04:48:02 Europe/Berlin] Verified saved status in DB: 'lunas'
+[19-Nov-2025 04:48:02 Europe/Berlin] Fetched 1 transactions
+[19-Nov-2025 04:48:02 Europe/Berlin] ID 1: status = 'lunas' (length: 5)
+[19-Nov-2025 04:48:12 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:48:12 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 04:48:34 Europe/Berlin] Action received: logout
+[19-Nov-2025 05:09:29 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:09:30 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:10:36 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:10:37 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:10:44 Europe/Berlin] Action received: login
+[19-Nov-2025 05:10:44 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 123456
+)
+
+[19-Nov-2025 05:10:45 Europe/Berlin] Login successful for user: bryan
+[19-Nov-2025 05:10:45 Europe/Berlin] Action received: login
+[19-Nov-2025 05:10:45 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 123456
+)
+
+[19-Nov-2025 05:10:45 Europe/Berlin] Login successful for user: bryan
+[19-Nov-2025 05:10:45 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:10:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:10:49 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:10:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:10:53 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:10:53 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:10:57 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:10:57 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:10:57 Europe/Berlin] Fetched 1 transactions
+[19-Nov-2025 05:10:57 Europe/Berlin] ID 1: status = 'lunas' (length: 5)
+[19-Nov-2025 05:11:00 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:00 Europe/Berlin] Fetched 1 transactions
+[19-Nov-2025 05:11:00 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:11:00 Europe/Berlin] ID 1: status = 'lunas' (length: 5)
+[19-Nov-2025 05:11:04 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:04 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:11:06 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:07 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:11:10 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:10 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:11:13 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:13 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:11:13 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:14 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:11:19 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:19 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:11:23 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:24 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:11:26 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:26 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:11:27 Europe/Berlin] Fetched 1 transactions
+[19-Nov-2025 05:11:27 Europe/Berlin] ID 1: status = 'lunas' (length: 5)
+[19-Nov-2025 05:11:29 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:30 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:11:34 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:11:37 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:37 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:11:37 Europe/Berlin] Fetched 1 transactions
+[19-Nov-2025 05:11:37 Europe/Berlin] ID 1: status = 'lunas' (length: 5)
+[19-Nov-2025 05:11:40 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:11:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:12:28 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:12:28 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:12:34 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:12:34 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:12:41 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:12:41 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:13:04 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:13:05 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:13:41 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:13:41 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:13:45 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:13:45 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:13:50 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:13:50 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:13:55 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:13:55 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:13:59 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:13:59 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:14:01 Europe/Berlin] Action received: logout
+[19-Nov-2025 05:14:01 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:14:01 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:14:08 Europe/Berlin] Action received: login
+[19-Nov-2025 05:14:08 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => gino
+    [password] => 123456
+)
+
+[19-Nov-2025 05:14:08 Europe/Berlin] Login successful for user: gino
+[19-Nov-2025 05:14:08 Europe/Berlin] Action received: login
+[19-Nov-2025 05:14:08 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => gino
+    [password] => 123456
+)
+
+[19-Nov-2025 05:14:08 Europe/Berlin] Login successful for user: gino
+[19-Nov-2025 05:14:08 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:14:08 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:14:12 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:14:12 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:14:15 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:14:15 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:14:21 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:14:21 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:14:23 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:14:23 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:14:27 Europe/Berlin] Action received: logout
+[19-Nov-2025 05:14:27 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:14:27 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:14:31 Europe/Berlin] Action received: login
+[19-Nov-2025 05:14:31 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 123456
+)
+
+[19-Nov-2025 05:14:31 Europe/Berlin] Login successful for user: bryan
+[19-Nov-2025 05:14:32 Europe/Berlin] Action received: login
+[19-Nov-2025 05:14:32 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 123456
+)
+
+[19-Nov-2025 05:14:32 Europe/Berlin] Login successful for user: bryan
+[19-Nov-2025 05:14:32 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:14:32 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 05:14:35 Europe/Berlin] Action received: check_status
+[19-Nov-2025 05:14:35 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183

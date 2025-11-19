@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Warehouse Management System</title>
+    <script>
+      window.tailwind = window.tailwind || {};
+      window.tailwind.config = { darkMode: 'class' };
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="src/output.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .sidebar {
@@ -49,11 +57,22 @@
             height: 300px;
         }
     </style>
+<script>
+// Early theme initialization to add 'dark' before paint
+(function(){
+  try {
+    var saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+})();
+</script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 dark:bg-gray-900 font-sans">
     <!-- Login Page (initially shown) -->
-    <div id="loginPage" class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
+    <div id="loginPage" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 p-8 rounded-lg shadow-md">
             <div>
                 <i class="fas fa-warehouse text-5xl text-blue-600 mx-auto"></i>
                 <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -279,7 +298,7 @@
     <!-- Dashboard (initially hidden) -->
     <div id="dashboard" class="hidden">
         <!-- Sidebar -->
-        <div class="sidebar bg-blue-800 text-white w-64 flex flex-col fixed h-full">
+        <div class="sidebar bg-blue-800 dark:bg-gray-900 text-white w-64 flex flex-col fixed h-full">
             <div class="p-4 flex items-center border-b border-blue-700">
                 <div class="flex items-center">
                     <i class="fas fa-warehouse text-2xl mr-3"></i>

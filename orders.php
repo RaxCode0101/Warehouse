@@ -15,19 +15,21 @@ switch ($method) {
         $sort_by = $_GET['sort_by'] ?? 'id';
         $sort_order = $_GET['sort_order'] ?? 'ASC';
 
-        $allowed_sort_columns = ['id', 'item_code', 'buyers', 'order_date', 'status', 'total_amount'];
+        $allowed_sort_columns = ['id', 'supplier_name', 'item_code', 'buyers', 'order_date', 'status', 'total_amount'];
         if (!in_array($sort_by, $allowed_sort_columns)) {
             $sort_by = 'id';
         }
         $sort_order = strtoupper($sort_order) === 'DESC' ? 'DESC' : 'ASC';
 
         try {
+            $baseQuery = "SELECT o.*, s.name as supplier_name FROM orders o LEFT JOIN suppliers s ON o.supplier_id = s.id";
+
             if ($search) {
-                $stmt = $pdo->prepare("SELECT * FROM orders WHERE order_date LIKE ? AND status LIKE ? ORDER BY $sort_by $sort_order");
+                $stmt = $pdo->prepare("$baseQuery WHERE o.item_code LIKE ? OR o.buyers LIKE ? OR s.name LIKE ? ORDER BY $sort_by $sort_order");
                 $like_search = "%$search%";
-                $stmt->execute([$like_search, $like_search]);
+                $stmt->execute([$like_search, $like_search, $like_search]);
             } else {
-                $stmt = $pdo->query("SELECT * FROM orders ORDER BY $sort_by $sort_order");
+                $stmt = $pdo->query("$baseQuery ORDER BY $sort_by $sort_order");
             }
             $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
             respond(true, $items);
@@ -43,32 +45,51 @@ switch ($method) {
         }
 
         $id = $input['id'] ?? null;
+        $supplier_id = filter_var($input['supplier_id'] ?? null, FILTER_VALIDATE_INT);
         $item_code = trim($input['item_code'] ?? '');
         $buyers = trim($input['buyers'] ?? '');
         $order_date = $input['order_date'] ?? '';
         $status = $input['status'] ?? 'Pending';
-        $total_amount = intval($input['total_amount'] ?? 0);
+        $total_amount = filter_var($input['total_amount'] ?? 0, FILTER_VALIDATE_INT);
 
-        if (!$item_code || !$buyers || !$order_date) {
-            respond(false, [], 'Order date is required');
+        // --- Validasi Input yang Diperketat ---
+        if (empty($supplier_id) || $supplier_id === false || $supplier_id <= 0) {
+            respond(false, [], 'Supplier ID harus dipilih dan valid.');
+        }
+        if (empty($item_code) || empty($buyers) || empty($order_date)) {
+            respond(false, [], 'Kode barang, pembeli, dan tanggal order wajib diisi.');
         }
 
         if (!in_array($status, ['Pending', 'Processing', 'Completed', 'Cancelled'])) {
             $status = 'Pending';
         }
 
+        // --- Validasi Integritas Data (Kunci Pencegahan Error 1452) ---
         try {
+            // Periksa apakah supplier_id ada di tabel suppliers
+            $stmtCheck = $pdo->prepare("SELECT 1 FROM suppliers WHERE id = ?");
+            $stmtCheck->execute([$supplier_id]);
+            if ($stmtCheck->fetchColumn() === false) {
+                respond(false, [], "Supplier dengan ID '{$supplier_id}' tidak ditemukan.");
+            }
+
+            // Lanjutkan operasi jika supplier valid
             if ($id) {
-                $stmt = $pdo->prepare("UPDATE orders SET item_code = ?, buyers = ?, order_date = ?, status = ?, total_amount = ? WHERE id = ?");
-                $stmt->execute([$item_code, $buyers, $order_date, $status, $total_amount, $id]);
+                // UPDATE
+                $stmt = $pdo->prepare("UPDATE orders SET supplier_id = ?, item_code = ?, buyers = ?, order_date = ?, status = ?, total_amount = ? WHERE id = ?");
+                $stmt->execute([$supplier_id, $item_code, $buyers, $order_date, $status, $total_amount, $id]);
                 respond(true, [], 'Order updated successfully');
             } else { 
-                $stmt = $pdo->prepare("INSERT INTO orders (item_code, buyers, order_date, status, total_amount) VALUES (?, ?, ?, ?, ?)");
-                $stmt->execute([$item_code, $buyers, $order_date, $status, $total_amount]);
-                respond(true, [], 'Order created successfully');
+                // INSERT
+                $stmt = $pdo->prepare("INSERT INTO orders (supplier_id, item_code, buyers, order_date, status, total_amount) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$supplier_id, $item_code, $buyers, $order_date, $status, $total_amount]);
+                $lastId = $pdo->lastInsertId();
+                respond(true, ['id' => $lastId], 'Order created successfully');
             }
         } catch (PDOException $e) {
-            respond(false, [], 'Failed to save order: ' . $e->getMessage());
+            // Menangkap error database yang tidak terduga, bukan error validasi
+            error_log("Database Error on Order Save: " . $e->getMessage());
+            respond(false, [], 'Gagal menyimpan order karena kesalahan sistem.');
         }
         break;
 

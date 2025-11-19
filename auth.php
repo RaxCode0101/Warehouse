@@ -24,6 +24,7 @@ try {
         password VARCHAR(255) NOT NULL,
         full_name VARCHAR(100) NOT NULL,
         role VARCHAR(20) NOT NULL DEFAULT 'user',
+        profile_picture VARCHAR(255) NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )";
     $pdo->exec($sql);
@@ -37,7 +38,9 @@ if($stmt->rowCount() == 0) {
     die(json_encode(['success' => false, 'message' => 'Users table does not exist']));
 }
 
-$action = $_POST['action'] ?? '';
+// Use $_REQUEST to handle both GET and POST variables, which is more robust for this scenario.
+// This reliably captures the 'action' from FormData in file uploads.
+$action = $_REQUEST['action'] ?? '';
 
 error_log('Action received: ' . $action);
 

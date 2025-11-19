@@ -5,15 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders - Warehouse Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+      window.tailwind = window.tailwind || {};
+      window.tailwind.config = { darkMode: 'class' };
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="src/output.css">
+<script>
+// Early theme initialization to add 'dark' before paint
+(function(){
+  try {
+    var saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+})();
+</script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 dark:bg-gray-900 font-sans">
     <div class="flex">
         <!-- Sidebar -->
-        <div class="sidebar bg-blue-800 text-white w-64 flex flex-col h-screen">
-            <div class="p-4 flex items-center border-b border-blue-700">
-                <i class="fas fa-warehouse text-2xl mr-3"></i>
-                <span class="font-bold text-xl">Stokku</span>
+        <div class="sidebar bg-blue-800 dark:bg-gray-900 text-white w-64 flex flex-col h-screen fixed inset-y-0 left-0 z-40 transform transition-transform duration-200 ease-in-out -translate-x-full md:translate-x-0 md:relative md:transform-none">
+            <div class="p-4 flex items-center justify-between border-b border-blue-700">
+                <div class="flex items-center">
+                    <i class="fas fa-warehouse text-2xl mr-3"></i>
+                    <span class="font-bold text-xl">Stokku</span>
+                </div>
+                <!-- Close button visible only on mobile -->
+                <button id="mobileCloseSidebar" class="md:hidden p-2 text-xl text-white/90 hover:text-white focus:outline-none" aria-label="Close menu">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
 
             <div class="p-4 flex items-center justify-between border-b border-blue-700">
@@ -146,36 +168,55 @@ document.addEventListener('DOMContentLoaded', function() {
             </script>
         </div>
 
+        <!-- Mobile Overlay -->
+        <div id="mobileOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+
         <!-- Main Content -->
         <div class="flex-1 p-6 ml-30">
-            <h1 class="text-2xl font-bold mb-4">Orders</h1>
-            <div class="bg-white p-0 rounded-lg shadow">
+            <!-- Top Navigation -->
+            <header class="bg-white dark:bg-gray-800 shadow-sm md:sticky md:top-0 relative z-20">
+                <div class="flex items-center justify-between px-6 py-4">
+                    <div class="flex items-center">
+                        <button id="mobileToggleSidebar" class="mr-4 md:hidden p-2 text-2xl text-gray-800 dark:text-gray-200 z-50" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar"><i class="fas fa-bars"></i></button>
+                    <h1 class="text-2xl font-bold mb-4">Orders</h1>
+                    </div>
+                </div>
+                </header>
+                 <div class="bg-white dark:bg-gray-800 dark:text-gray-100 p-0 rounded-lg shadow">
                 <div class="p-4 flex justify-between items-center">
-                    <input type="text" id="searchInput" placeholder="Search orders..." class="border border-gray-300 rounded px-3 py-1 w-1/3" />
+                <input type="text" id="searchInput" placeholder="Search orders..." class="border border-gray-300 rounded px-3 py-1 w-1/3" />
                     <button id="addOrderBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Order</button>
                 </div>
-                <table class="min-w-full divide-y divide-gray-200 mt-4">
-                    <thead class="bg-gray-50">
+                    <table class="min-w-full divide-y divide-gray-200 mt-4">
+                    <thead class="bg-gray-50 dark:bg-gray-700">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="item_code">Item Code</th>    
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="buyers">Buyers</th> 
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="id">Order ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="supplier_name">Supplier</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="order_date">Order Date</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" data-sort="status">Status</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">Total Amount</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="ordersTableBody" class="bg-white divide-y divide-gray-200">
+                    <tbody id="ordersTableBody" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     </tbody>
                 </table>
 
                 <!-- Modal for Add/Edit -->
                 <div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-                    <div class="bg-white rounded-lg p-6 w-96">
+                    <div class="bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg p-6 w-96">
                         <h2 id="modalTitle" class="text-xl font-bold mb-4">Add Order</h2>
                         <form id="orderForm">
                             <input type="hidden" id="orderId" />
+                            <div class="mb-4">
+                                <label for="supplierId" class="block text-gray-700 dark:text-gray-300">Supplier</label>
+                                <select id="supplierId" class="w-full border border-gray-300 rounded px-3 py-2" required>
+                                    <option value="">-- Pilih Supplier --</option>
+                                    <!-- Options will be populated by JavaScript -->
+                                </select>
+                            </div>
                             <div class="mb-4">
                                 <label for="itemCode" class="block text-gray-700">Item Code</label>
                                 <input type="text" id="itemCode" class="w-full border border-gray-300 rounded px-3 py-2" required />
@@ -257,12 +298,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.item_code}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.buyers}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.id}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.supplier_name || 'N/A'}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.order_date}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.status}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.total_amount}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <button class="text-blue-600 hover:text-blue-900 mr-2 editBtn" data-id="${item.id}">Edit</button>
-                                    <button class="text-red-600 hover:text-red-900 deleteBtn" data-id="${item.id}">Delete</button>
+                                    <button class="text-yellow-600 hover:text-yellow-800 mr-2 editBtn" data-id="${item.id}" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+                                    <button class="text-red-600 hover:text-red-900 deleteBtn" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>
                                 </td>
                             `;
                             tbody.appendChild(tr);
@@ -289,6 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const modal = document.getElementById('orderModal');
                         const modalTitle = document.getElementById('modalTitle');
                         const orderId = document.getElementById('orderId');
+                        const supplierId = document.getElementById('supplierId');
                         const orderDate = document.getElementById('orderDate');
                         const status = document.getElementById('status');
                         const totalAmount = document.getElementById('totalAmount');
@@ -301,6 +344,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             itemCode.value = item.item_code;
                             buyers.value = item.buyers;
                             orderId.value = item.id;
+                            supplierId.value = item.supplier_id;
                             orderDate.value = item.order_date;
                             status.value = item.status;
                             totalAmount.value = item.total_amount;
@@ -309,6 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             itemCode.value = '';
                             buyers.value = '';
                             orderId.value = '';
+                            supplierId.value = '';
                             orderDate.value = '';
                             status.value = 'Pending';
                             totalAmount.value = '';
@@ -325,19 +370,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     async function saveOrder(event) {
                         event.preventDefault();
                         const orderId = document.getElementById('orderId').value;
+                        const supplierId = document.getElementById('supplierId').value;
                         const itemCode = document.getElementById('itemCode').value.trim();
                         const buyers = document.getElementById('buyers').value.trim();
                         const orderDate = document.getElementById('orderDate').value;
                         const status = document.getElementById('status').value;
                         const totalAmount = document.getElementById('totalAmount').value;
 
-                        if (!itemCode || !buyers || !orderDate || !totalAmount) {
+                        if (!supplierId || !itemCode || !buyers || !orderDate || !totalAmount) {
                             alert('Please fill in all fields correctly.');
                             return;
                         }
 
                         const payload = {
                             id: orderId || null,
+                            supplier_id: supplierId,
                             item_code: itemCode,
                             buyers: buyers,
                             order_date: orderDate,
@@ -405,6 +452,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     // Fetch suppliers and populate the supplier dropdown
                     async function fetchSuppliers() {
+                        const supplierSelect = document.getElementById('supplierId');
                         const response = await fetch('suppliers.php');
                         const result = await response.json();
                         if (result.success) {
@@ -424,5 +472,68 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </div>
     </div>
+
+<script>
+// Mobile sidebar toggle
+(function(){
+  const sidebar = document.querySelector('.sidebar');
+  const toggleBtn = document.getElementById('mobileToggleSidebar');
+  const overlay = document.getElementById('mobileOverlay');
+  const closeBtn = document.getElementById('mobileCloseSidebar');
+  if (!sidebar || !toggleBtn || !overlay) return;
+
+  function openSidebar(){
+    sidebar.classList.remove('-translate-x-full');
+    overlay.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+    toggleBtn.setAttribute('aria-expanded','true');
+  }
+  function closeSidebar(){
+    sidebar.classList.add('-translate-x-full');
+    overlay.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+    toggleBtn.setAttribute('aria-expanded','false');
+  }
+  function isMobile(){
+    return window.matchMedia('(max-width: 767px)').matches;
+  }
+
+  toggleBtn.addEventListener('click', function(){
+    if (!isMobile()) return; // Ignore on desktop
+    if (sidebar.classList.contains('-translate-x-full')) {
+      openSidebar();
+    } else {
+      closeSidebar();
+    }
+  });
+  overlay.addEventListener('click', closeSidebar);
+  if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+
+  // Ensure correct state on resize
+  window.addEventListener('resize', function(){
+    if (!isMobile()) {
+      // Desktop: ensure visible and no overlay/body lock
+      sidebar.classList.remove('-translate-x-full');
+      overlay.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+      toggleBtn.setAttribute('aria-expanded','false');
+    } else {
+      // Mobile: hide by default
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+      toggleBtn.setAttribute('aria-expanded','false');
+    }
+  });
+
+  // Initialize state on load for mobile
+  if (isMobile()) {
+    sidebar.classList.add('-translate-x-full');
+    overlay.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+    toggleBtn.setAttribute('aria-expanded','false');
+  }
+})();
+</script>
 </body>
 </html>

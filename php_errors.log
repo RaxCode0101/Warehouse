@@ -1,0 +1,44 @@
+[19-Nov-2025 04:22:23 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:22:23 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 04:22:24 Europe/Berlin] Fetched 1 transactions
+[19-Nov-2025 04:22:26 Europe/Berlin] ID 1: status = 'belum lunas' (length: 11)
+[19-Nov-2025 04:22:31 Europe/Berlin] POST Request: {"id":"1","order_id":20,"transaction_date":"2024-04-11","price":5000000,"payment_method":"OVO","status":"lunas"}
+[19-Nov-2025 04:22:31 Europe/Berlin] Received status: 'lunas' (length: 5)
+[19-Nov-2025 04:22:31 Europe/Berlin] Final status to save: 'lunas'
+[19-Nov-2025 04:22:31 Europe/Berlin] Verified saved status in DB: 'lunas'
+[19-Nov-2025 04:22:31 Europe/Berlin] Fetched 1 transactions
+[19-Nov-2025 04:22:31 Europe/Berlin] ID 1: status = 'lunas' (length: 5)
+[19-Nov-2025 04:23:14 Europe/Berlin] POST Request: {"id":"1","order_id":20,"transaction_date":"2024-04-11","price":5000000,"payment_method":"OVO","status":"unknown"}
+[19-Nov-2025 04:23:14 Europe/Berlin] Received status: 'unknown' (length: 7)
+[19-Nov-2025 04:23:14 Europe/Berlin] Final status to save: 'unknown'
+[19-Nov-2025 04:23:14 Europe/Berlin] Verified saved status in DB: 'unknown'
+[19-Nov-2025 04:23:15 Europe/Berlin] Fetched 1 transactions
+[19-Nov-2025 04:23:15 Europe/Berlin] ID 1: status = 'unknown' (length: 7)
+[19-Nov-2025 04:23:20 Europe/Berlin] POST Request: {"id":"1","order_id":20,"transaction_date":"2024-04-11","price":5000000,"payment_method":"OVO","status":"belum lunas"}
+[19-Nov-2025 04:23:20 Europe/Berlin] Received status: 'belum lunas' (length: 11)
+[19-Nov-2025 04:23:20 Europe/Berlin] Final status to save: 'belum lunas'
+[19-Nov-2025 04:23:20 Europe/Berlin] Verified saved status in DB: 'belum lunas'
+[19-Nov-2025 04:23:21 Europe/Berlin] Fetched 1 transactions
+[19-Nov-2025 04:23:21 Europe/Berlin] ID 1: status = 'belum lunas' (length: 11)
+[19-Nov-2025 04:23:49 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:23:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 04:23:59 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:23:59 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183
+[19-Nov-2025 04:24:03 Europe/Berlin] Action received: check_status
+[19-Nov-2025 04:24:03 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'profile_picture' in 'field list' in C:\xampp\htdocs\stokku\auth.php:183
+Stack trace:
+#0 C:\xampp\htdocs\stokku\auth.php(183): PDOStatement->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\stokku\auth.php on line 183

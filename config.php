@@ -4,6 +4,13 @@ $dbname = 'warehouse_db';
 $username = 'root';
 $password = '';
 
+// Tambahkan di config.php untuk debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/php_errors.log');
+
 try {
     // First try to connect without specifying database
     $pdo = new PDO("mysql:host=$host", $username, $password);

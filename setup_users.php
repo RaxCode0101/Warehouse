@@ -15,6 +15,9 @@ try {
     // Tambahkan admin bryan
     addOrUpdateUser($pdo, 'bryan', 'bryan123', 'admin', 'Bryan Phillip Sumarauw');
 
+    // Tambahkan akun admin
+    addOrUpdateUser($pdo, 'admin', '123456', 'admin', 'Bryan Phillip Sumarauw');
+
     echo "Users successfully added/updated.";
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();

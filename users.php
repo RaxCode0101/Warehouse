@@ -46,9 +46,12 @@ switch ($method) {
         if (!isset($_SESSION['role'])) {
             respond(false, [], 'Unauthorized: No role set in session');
         }
-        $userRole = trim(strtolower($_SESSION['role']));
+        
+        // ✅ PERBAIKAN: Normalisasi role dan full_name
+        $userRole = trim(strtolower($_SESSION['role'] ?? ''));
         $userFullName = trim(strtolower($_SESSION['full_name'] ?? ''));
-        // Allow admin role or user with full name 'bryan phillip sumarauw' to access
+        
+        // Allow admin role OR user with full name 'bryan phillip sumarauw'
         if ($userRole !== 'admin' && $userFullName !== 'bryan phillip sumarauw') {
             respond(false, [], 'Unauthorized: Admins only');
         }
@@ -74,8 +77,7 @@ switch ($method) {
 
         try {
             if ($id) {
-                // Force role to admin for user with username 'bryan' or specific id (e.g., 1)
-                // Adjust the id below to the actual id of bryan user
+                // Force role to admin for user with id 1 (Bryan)
                 $bryanUserId = 1;
                 if ($id == $bryanUserId) {
                     $role = 'admin';
@@ -115,16 +117,33 @@ switch ($method) {
 
     case 'DELETE':
         session_start();
-        $userRole = $_SESSION['role'] ?? 'user';
-        if ($userRole !== 'admin') {
+        
+        // ✅ PERBAIKAN: Sama seperti POST, izinkan admin ATAU Bryan
+        if (!isset($_SESSION['role'])) {
+            respond(false, [], 'Unauthorized: No role set in session');
+        }
+        
+        $userRole = trim(strtolower($_SESSION['role'] ?? ''));
+        $userFullName = trim(strtolower($_SESSION['full_name'] ?? ''));
+        
+        // Allow admin role OR user with full name 'bryan phillip sumarauw'
+        if ($userRole !== 'admin' && $userFullName !== 'bryan phillip sumarauw') {
             respond(false, [], 'Unauthorized: Admins only');
         }
 
         parse_str(file_get_contents("php://input"), $delete_vars);
         $id = $delete_vars['id'] ?? null;
+        
         if (!$id) {
             respond(false, [], 'ID is required for deletion');
         }
+        
+        // ✅ PERBAIKAN: Cegah hapus user Bryan (id = 1)
+        $bryanUserId = 1;
+        if ($id == $bryanUserId) {
+            respond(false, [], 'Cannot delete the primary admin account');
+        }
+        
         try {
             $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
             $stmt->execute([$id]);

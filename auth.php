@@ -179,7 +179,7 @@ switch($action) {
 
             case 'check_status':
         if (isset($_SESSION['user_id'])) {
-            $stmt = $pdo->prepare("SELECT username, full_name, profile_picture, role FROM users WHERE id = ?");
+            $stmt = $pdo->prepare("SELECT id, username, full_name, role, profile_picture FROM users WHERE id = ?");
             $stmt->execute([$_SESSION['user_id']]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 

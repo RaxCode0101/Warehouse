@@ -56,96 +56,67 @@
         .chart-container {
             height: 300px;
         }
+        
+        /* Dark mode fixes for login page */
+        .dark .text-gray-900 {
+            color: rgb(243 244 246) !important;
+        }
+        .dark .text-gray-800 {
+            color: rgb(243 244 246) !important;
+        }
+        .dark .text-gray-700 {
+            color: rgb(209 213 219) !important;
+        }
+        .dark .text-gray-600 {
+            color: rgb(156 163 175) !important;
+        }
+        .dark .border-gray-300 {
+            border-color: rgb(75 85 99) !important;
+        }
+        .dark .placeholder-gray-500 {
+            color: rgb(156 163 175) !important;
+        }
+        .dark .bg-white {
+            background-color: rgb(31 41 55) !important;
+        }
+        .dark .bg-gray-50 {
+            background-color: rgb(55 65 81) !important;
+        }
+        .dark .bg-gray-100 {
+            background-color: rgb(31 41 55) !important;
+        }
+        .dark .divide-gray-200 {
+            border-color: rgb(75 85 99) !important;
+        }
+        
+        /* Fix for login form dark mode */
+        .dark .login-form-container {
+            background: linear-gradient(135deg, rgb(30 58 138) 0%, rgb(91 33 182) 50%, rgb(147 51 234) 100%);
+        }
+        
+        /* Fix for button backgrounds */
+        .btn-full-width {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
     </style>
 <script>
-// Early theme initialization to add 'dark' before paint
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Early theme initialization to add 'dark' before paint
 (function(){
   try {
-    var saved = localStorage.getItem('theme');
-    if (saved === 'dark') {
-      document.documentElement.classList.add('dark');
-    }
+    // On login page, always start with light mode (default)
+    // This ensures dark mode is reset when user logs out
+    document.documentElement.classList.remove('dark');
+    localStorage.removeItem('theme');
+    console.log('Dark mode reset to default (light mode) on login page');
   } catch (e) {}
 })();
-</script>
-</head>
-<body class="bg-gray-100 dark:bg-gray-900 font-sans">
-    <!-- Login Page (initially shown) -->
-    <div id="loginPage" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8 bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 p-8 rounded-lg shadow-md">
-            <div>
-                <i class="fas fa-warehouse text-5xl text-blue-600 mx-auto"></i>
-                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                    Login
-                </h2>
-            </div>
-            <form id="loginForm" class="mt-8 space-y-4">
-                <div class="rounded-md shadow-sm space-y-4">
-                    <div>
-                        <label for="username" class="sr-only">Username</label>
-                        <input id="username" name="username" type="text" required
-                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                            placeholder="Username">
-                    </div>
-                    <div>
-                        <label for="password" class="sr-only">Password</label>
-                        <input id="password" name="password" type="password" required
-                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                            placeholder="Password">
-                    </div>
-                </div>
 
-                <div>
-                    <button type="submit"
-                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Sign in
-                    </button>
-                </div>
-            </form>
-
-            <div class="mt-6 text-center">
-                <p class="text-sm text-gray-600">
-                    Don't have an account? 
-                    <a href="#" id="showRegister" class="font-medium text-blue-600 hover:text-blue-500">
-                        Register here
-                    </a>
-                </p>
-            </div>
-
-            <form id="registerForm" class="mt-4 space-y-4 hidden">
-                <div>
-                    <label for="regUsername" class="sr-only">Username</label>
-                    <input id="regUsername" name="username" type="text" required
-                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                        placeholder="Username">
-                </div>
-                <div>
-                    <label for="regPassword" class="sr-only">Password</label>
-                    <input id="regPassword" name="password" type="password" required
-                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                        placeholder="Password">
-                </div>
-                <div>
-                    <label for="regFullName" class="sr-only">Full Name</label>
-                    <input id="regFullName" name="full_name" type="text" required
-                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                        placeholder="Full Name">
-                </div>
-                <div>
-                    <button type="submit"
-                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                        Register
-                    </button>
-                </div>
-                <div class="text-center">
-                    <a href="#" id="showLogin" class="text-sm font-medium text-blue-600 hover:text-blue-500">
-                        Back to login
-                    </a>
-                </div>
-            </form>
-
-            <script>
-                // Function to check session status
+// Function to check session status
                 function checkSessionStatus() {
                     fetch('auth.php', {
                         method: 'POST',
@@ -285,13 +256,341 @@
                         errorDiv.textContent = 'Registration failed. Please check:\n- Your internet connection\n- That the username is available\n- All fields are filled correctly';
                         errorDiv.classList.remove('hidden');
                         
-                        // Hide the error after 5 seconds
+                        // Hide error after 5 seconds
                         setTimeout(() => {
                             errorDiv.classList.add('hidden');
                         }, 5000);
                     });
                 });
-            </script>
+
+                const currentPage = window.location.pathname.split('/').pop();
+                        document.querySelectorAll('.nav-item').forEach(item => {
+                            const href = item.getAttribute('href');
+                            if (href && href === currentPage) {
+                                item.classList.add('bg-blue-700');
+                            } else {
+                                item.classList.remove('bg-blue-700');
+                            }
+                        });
+
+// Highlight active menu based on current page
+    document.querySelectorAll('.nav-item').forEach(item => {
+        const href = item.getAttribute('href');
+        if (href && href === currentPage) {
+            item.classList.add('bg-blue-700');
+        } else {
+            item.classList.remove('bg-blue-700');
+        }
+    });
+
+                    // Handle logout
+                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // Reset dark mode to default before logout
+                        const html = document.documentElement;
+                        html.classList.remove('dark');
+                        localStorage.removeItem('theme');
+                        console.log('Dark mode reset to default before logout');
+                        
+                        fetch('auth.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: 'action=logout'
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.success) {
+                                // Show login page and hide dashboard
+                                document.getElementById('loginPage').classList.remove('hidden');
+                                document.getElementById('dashboard').classList.add('hidden');
+                                // Clear form fields
+                                document.getElementById('loginForm').reset();
+                            } else {
+                                alert('Logout failed: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Logout failed. Please try again.');
+                        });
+                    });
+
+                // ===== CHECK LOGIN STATUS & UPDATE USER INFO =====
+fetch('auth.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'action=check_status',
+})
+.then(response => response.json())
+.then(data => {
+    console.log('✅ Auth Response:', data); // Debug
+    
+    if (data.success && data.logged_in) {
+        // ✅ Update user full name
+        const userNameElements = document.querySelectorAll('.user-name');
+        userNameElements.forEach(element => {
+            element.textContent = data.user.full_name || 'User';
+        });
+
+        // ✅ Update avatar - PRIORITAS: Profile Picture > UI Avatars
+        const avatarImage = document.querySelector('img[alt="User"]');
+        if (avatarImage) {
+            if (data.user.profile_picture && data.user.profile_picture.startsWith('uploads/')) {
+                // Gunakan uploaded profile picture
+                avatarImage.src = data.user.profile_picture + '?t=' + Date.now();
+            } else if (data.user.profile_picture && data.user.profile_picture.startsWith('http')) {
+                // Gunakan URL langsung (UI Avatars)
+                avatarImage.src = data.user.profile_picture;
+            } else {
+                // Fallback ke UI Avatars
+                const encodedName = encodeURIComponent(data.user.full_name || 'User');
+                avatarImage.src = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
+            }
+        }
+
+        // ✅ Update role badge
+        const userRoleText = document.getElementById('userRoleText');
+        if (userRoleText) {
+            userRoleText.textContent = data.user.role || 'user';
+            if (data.user.role === 'admin') {
+                userRoleText.style.backgroundColor = 'green';
+                userRoleText.style.color = 'white';
+            } else {
+                userRoleText.style.backgroundColor = 'yellow';
+                userRoleText.style.color = 'black';
+            }
+        }
+        
+        // ✅ Show user management for all users (but with role-based access control)
+        // User management link is now visible to all users
+    } else {
+        // Redirect ke login jika tidak authenticated
+        window.location.href = 'index.html';
+    }
+})
+.catch(error => {
+    console.error('❌ Auth Error:', error);
+});
+
+  // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // AJAX request to server for authentication
+            fetch('auth.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    localStorage.setItem('isLoggedIn', 'true');
+                } else {
+                    alert(data.message || 'Invalid username or password');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Login failed. Please try again.');
+            });
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Reset dark mode to default before logout
+            const html = document.documentElement;
+            html.classList.remove('dark');
+            localStorage.removeItem('theme');
+            console.log('Dark mode reset to default before logout');
+            
+            fetch('auth.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=logout'
+            })
+            .then(() => {
+                document.getElementById('dashboard').classList.add('hidden');
+                document.getElementById('loginPage').classList.remove('hidden');
+                localStorage.removeItem('isLoggedIn');
+                document.getElementById('loginForm').reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        // Check if user is already logged in
+        if(localStorage.getItem('isLoggedIn') === 'true') {
+            fetch('auth.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=check_status'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success && data.logged_in) {
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                } else {
+                    document.getElementById('loginPage').classList.remove('hidden');
+                    document.getElementById('dashboard').classList.add('hidden');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Toggle sidebar
+        const toggleSidebar = document.getElementById('toggleSidebar');
+        const mobileToggleSidebar = document.getElementById('mobileToggleSidebar');
+        const sidebar = document.querySelector('.sidebar');
+        const content = document.querySelector('.content');
+        
+        // For desktop
+        toggleSidebar.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            content.classList.toggle('expanded');
+        });
+        
+        // For mobile
+        mobileToggleSidebar.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+        
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inventory Chart
+            const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+            const inventoryChart = new Chart(inventoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [
+                        {
+                            label: 'Items In',
+                            data: [120, 190, 170, 220, 180, 200, 240],
+                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Items Out',
+                            data: [80, 120, 150, 180, 160, 170, 190],
+                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+});
+</script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 font-sans">
+    <!-- Login Page (initially shown) -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 p-8 rounded-lg shadow-md">
+            <div>
+                <i class="fas fa-warehouse text-5xl text-blue-600 mx-auto"></i>
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                    Login
+                </h2>
+            </div>
+            <form id="loginForm" class="mt-8 space-y-4">
+                <div class="rounded-md shadow-sm space-y-4">
+                    <div>
+                        <label for="username" class="sr-only">Username</label>
+                        <input id="username" name="username" type="text" required
+                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                            placeholder="Username">
+                    </div>
+                    <div>
+                        <label for="password" class="sr-only">Password</label>
+                        <input id="password" name="password" type="password" required
+                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                            placeholder="Password">
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit"
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Sign in
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Don't have an account? 
+                    <a href="#" id="showRegister" class="font-medium text-blue-600 hover:text-blue-500">
+                        Register here
+                    </a>
+                </p>
+            </div>
+
+            <form id="registerForm" class="mt-4 space-y-4 hidden">
+                <div>
+                    <label for="regUsername" class="sr-only">Username</label>
+                    <input id="regUsername" name="username" type="text" required
+                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                        placeholder="Username">
+                </div>
+                <div>
+                    <label for="regPassword" class="sr-only">Password</label>
+                    <input id="regPassword" name="password" type="password" required
+                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                        placeholder="Password">
+                </div>
+                <div>
+                    <label for="regFullName" class="sr-only">Full Name</label>
+                    <input id="regFullName" name="full_name" type="text" required
+                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                        placeholder="Full Name">
+                </div>
+                <div>
+                    <button type="submit"
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        Register
+                    </button>
+                </div>
+                <div class="text-center">
+                    <a href="#" id="showLogin" class="text-sm font-medium text-blue-600 hover:text-blue-500">
+                        Back to login
+                    </a>
+                </div>
+            </form>
+
         </div>
     </div> <!-- End of dashboard div -->
 
@@ -358,103 +657,6 @@
                     <span class="sidebar-text">Logout</span>
                 </a>
             </div>
-            <script>
-                    // Highlight active menu based on current page
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const currentPage = window.location.pathname.split('/').pop();
-                        document.querySelectorAll('.nav-item').forEach(item => {
-                            const href = item.getAttribute('href');
-                            if (href && href === currentPage) {
-                                item.classList.add('bg-blue-700');
-                            } else {
-                                item.classList.remove('bg-blue-700');
-                            }
-                        });
-                    });
-
-// Highlight active menu based on current page
-document.addEventListener('DOMContentLoaded', function() {
-    const currentPage = window.location.pathname.split('/').pop();
-    document.querySelectorAll('.nav-item').forEach(item => {
-        const href = item.getAttribute('href');
-        if (href && href === currentPage) {
-            item.classList.add('bg-blue-700');
-        } else {
-            item.classList.remove('bg-blue-700');
-        }
-    });
-});
-
-                    // Handle logout
-                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                        e.preventDefault();
-                        fetch('auth.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            body: 'action=logout'
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if(data.success) {
-                                // Show login page and hide dashboard
-                                document.getElementById('loginPage').classList.remove('hidden');
-                                document.getElementById('dashboard').classList.add('hidden');
-                                // Clear form fields
-                                document.getElementById('loginForm').reset();
-                            } else {
-                                alert('Logout failed: ' + data.message);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Logout failed. Please try again.');
-                        });
-                    });
-
-                // Check login status on page load
-fetch('auth.php', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  },
-  body: 'action=check_status',
-})
-  .then(response => response.json())
-  .then(data => {
-    if (data.success && data.logged_in) {
-      // Update user information
-      const userNameElements = document.querySelectorAll('.user-name');
-      userNameElements.forEach(element => {
-        element.textContent = data.user.full_name; // ✅ PASTIKAN INI full_name
-      });
-
-      // Update avatar dynamically
-      const avatarImage = document.querySelector('img[alt="User"]');
-      if (avatarImage) {
-        // ✅ TAMBAHKAN: Generate avatar berdasarkan full_name
-        const encodedName = encodeURIComponent(data.user.full_name);
-        avatarImage.src = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
-      }
-
-      // Update user role text and background color
-      const userRoleText = document.getElementById('userRoleText');
-      if (data.user.role === 'admin') {
-        userRoleText.textContent = 'admin';
-        userRoleText.style.backgroundColor = 'green';
-        userRoleText.style.color = 'white';
-      } else {
-        userRoleText.textContent = 'user';
-        userRoleText.style.backgroundColor = 'yellow';
-        userRoleText.style.color = 'black';
-      }
-    }
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
-            </script>
         </div>
         
         <!-- Main Content -->
@@ -740,137 +942,5 @@ fetch('auth.php', {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Login functionality
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // AJAX request to server for authentication
-            fetch('auth.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.success) {
-                    document.getElementById('loginPage').classList.add('hidden');
-                    document.getElementById('dashboard').classList.remove('hidden');
-                    localStorage.setItem('isLoggedIn', 'true');
-                } else {
-                    alert(data.message || 'Invalid username or password');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Login failed. Please try again.');
-            });
-        });
-
-        // Logout functionality
-        document.getElementById('logoutBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            fetch('auth.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'action=logout'
-            })
-            .then(() => {
-                document.getElementById('dashboard').classList.add('hidden');
-                document.getElementById('loginPage').classList.remove('hidden');
-                localStorage.removeItem('isLoggedIn');
-                document.getElementById('loginForm').reset();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-
-        // Check if user is already logged in
-        if(localStorage.getItem('isLoggedIn') === 'true') {
-            fetch('auth.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'action=check_status'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.success && data.logged_in) {
-                    document.getElementById('loginPage').classList.add('hidden');
-                    document.getElementById('dashboard').classList.remove('hidden');
-                } else {
-                    document.getElementById('loginPage').classList.remove('hidden');
-                    document.getElementById('dashboard').classList.add('hidden');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-
-        // Toggle sidebar
-        const toggleSidebar = document.getElementById('toggleSidebar');
-        const mobileToggleSidebar = document.getElementById('mobileToggleSidebar');
-        const sidebar = document.querySelector('.sidebar');
-        const content = document.querySelector('.content');
-        
-        // For desktop
-        toggleSidebar.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            content.classList.toggle('expanded');
-        });
-        
-        // For mobile
-        mobileToggleSidebar.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-        });
-        
-        // Initialize charts
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inventory Chart
-            const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-            const inventoryChart = new Chart(inventoryCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [
-                        {
-                            label: 'Items In',
-                            data: [120, 190, 170, 220, 180, 200, 240],
-                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
-                            borderColor: 'rgba(59, 130, 246, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Items Out',
-                            data: [80, 120, 150, 180, 160, 170, 190],
-                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
-                            borderColor: 'rgba(16, 185, 129, 1)',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        });
-    </script>
 </body>
 </html>

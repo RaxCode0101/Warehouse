@@ -1,18 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User - Warehouse Management System</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
+<head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>User - Warehouse Management System</title>    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <script>
       window.tailwind = window.tailwind || {};
       window.tailwind.config = { darkMode: 'class' };
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="src/output.css">
+    </script>    <script src="https://cdn.tailwindcss.com"></script>    <link rel="stylesheet" href="src/output.css">
 <script>
-// Early theme initialization to add 'dark' before paint
+// Early theme initialization
 (function(){
   try {
     var saved = localStorage.getItem('theme');
@@ -22,6 +15,15 @@
   } catch (e) {}
 })();
 </script>
+<style>
+    /* Fix for button backgrounds */
+    .btn-full-width {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+</style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 font-sans">
     <div class="flex">
@@ -39,10 +41,8 @@
 
             <div class="p-4 flex items-center justify-between border-b border-blue-700">
                 <div class="flex items-center">
-                    <!-- ✅ Avatar akan diupdate otomatis -->
                     <img src="https://ui-avatars.com/api/?name=User&background=random" class="w-10 h-10 rounded-full mr-3" alt="User">
                     <div class="sidebar-text">
-                        <!-- ✅ Nama akan diupdate otomatis dari session -->
                         <div class="font-medium user-name">Loading...</div>
                         <div id="userRoleText" class="text-xs font-semibold px-2 rounded mt-1 inline-block user-role">User</div>
                     </div>
@@ -51,35 +51,35 @@
             
             <nav class="flex-1 overflow-y-auto py-4">
                 <div class="px-4 space-y-2">
-                <a href="index.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
-                    <i class="fas fa-tachometer-alt mr-3"></i> 
-                    <span class="sidebar-text">Dashboard</span>
-                </a>
-                <a href="inventory.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
-                    <i class="fas fa-boxes mr-3"></i>
-                    <span class="sidebar-text">Inventory</span>
-                </a>
-                <a href="suppliers.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
-                    <i class="fas fa-truck mr-3"></i> 
-                    <span class="sidebar-text">Suppliers</span>
-                </a>
-                <a href="orders.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
-                    <i class="fas fa-shopping-cart mr-3"></i> 
-                    <span class="sidebar-text">Orders</span>
-                </a>
-                <a href="transactions.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
-                  <i class="fas fa-exchange-alt mr-3"></i>
-                  <span class="sidebar-text">Transactions</span>
-              </a>
-              <a href="user.html" class="nav-item flex items-center px-3 py-2 rounded-lg bg-blue-700 text-white">
-                <i class="fas fa-users mr-3"></i>
-                <span class="sidebar-text">Users</span>
-            </a>
-              <a href="settings.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
-                  <i class="fas fa-cog mr-3"></i>
-                  <span class="sidebar-text">Settings</span>
-              </a>
-            </div>
+                    <a href="index.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                        <i class="fas fa-tachometer-alt mr-3"></i> 
+                        <span class="sidebar-text">Dashboard</span>
+                    </a>
+                    <a href="inventory.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                        <i class="fas fa-boxes mr-3"></i>
+                        <span class="sidebar-text">Inventory</span>
+                    </a>
+                    <a href="suppliers.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                        <i class="fas fa-truck mr-3"></i> 
+                        <span class="sidebar-text">Suppliers</span>
+                    </a>
+                    <a href="orders.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                        <i class="fas fa-shopping-cart mr-3"></i> 
+                        <span class="sidebar-text">Orders</span>
+                    </a>
+                    <a href="transactions.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+                        <i class="fas fa-exchange-alt mr-3"></i>
+                        <span class="sidebar-text">Transactions</span>
+                    </a>
+                    <a href="user.html" class="nav-item flex items-center px-3 py-2 rounded-lg bg-blue-700 text-white">
+                        <i class="fas fa-users mr-3"></i>
+                        <span class="sidebar-text">Users</span>
+                    </a>
+                    <a href="settings.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+                        <i class="fas fa-cog mr-3"></i>
+                        <span class="sidebar-text">Settings</span>
+                    </a>
+                </div>
             </nav>
 
             <div class="p-4 border-t border-blue-700">
@@ -89,10 +89,10 @@
             </div>
 
             <script>
-// ✅ PERBAIKAN: Wrap semua dalam DOMContentLoaded
+                // ✅ SCRIPT UNTUK SEMUA FILE HTML (inventory.html, transactions.html, dll)
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Highlight active menu based on current page
+    // Highlight active menu
     const currentPage = window.location.pathname.split('/').pop();
     document.querySelectorAll('.nav-item').forEach(item => {
         const href = item.getAttribute('href');
@@ -104,89 +104,164 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Handle logout
-    document.getElementById('logoutBtn').addEventListener('click', function (e) {
-        e.preventDefault();
-        fetch('auth.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'action=logout'
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Server Response:', data);
-            if (data.success) {
-                window.location.href = 'index.html'; // ✅ Fixed redirect
-            } else {
-                alert('Logout failed: ' + (data.message || 'Unknown error'));
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Logout failed. Please try again.');
-        });
-    });
-
-    // ✅ Check login status dan update user info
-    fetch('auth.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: 'action=check_status'
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Auth check response:', data);
-        
-        if (data.success && data.logged_in) {
-            // Update user full name
-            const userNameElements = document.querySelectorAll('.user-name');
-            userNameElements.forEach(element => {
-                element.textContent = data.user.full_name;
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            // Reset dark mode to default before logout
+            const html = document.documentElement;
+            html.classList.remove('dark');
+            localStorage.removeItem('theme');
+            console.log('Dark mode reset to default before logout');
+            
+            fetch('auth.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=logout'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Logout failed: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Logout failed. Please try again.');
             });
+        });
+    }
 
-            // Update avatar
-            const avatarImage = document.querySelector('img[alt="User"]');
-            if (avatarImage) {
-                const encodedName = encodeURIComponent(data.user.full_name);
+    // ===== CHECK LOGIN STATUS & UPDATE USER INFO =====
+fetch('auth.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'action=check_status',
+})
+.then(response => response.json())
+.then(data => {
+    console.log('✅ Auth Response:', data); // Debug
+    
+    if (data.success && data.logged_in) {
+        // ✅ Update user full name
+        const userNameElements = document.querySelectorAll('.user-name');
+        userNameElements.forEach(element => {
+            element.textContent = data.user.full_name || 'User';
+        });
+
+        // ✅ Update avatar - PRIORITAS: Profile Picture > UI Avatars
+        const avatarImage = document.querySelector('img[alt="User"]');
+        if (avatarImage) {
+            if (data.user.profile_picture && data.user.profile_picture.startsWith('uploads/')) {
+                // Gunakan uploaded profile picture
+                avatarImage.src = data.user.profile_picture + '?t=' + Date.now();
+            } else if (data.user.profile_picture && data.user.profile_picture.startsWith('http')) {
+                // Gunakan URL langsung (UI Avatars)
+                avatarImage.src = data.user.profile_picture;
+            } else {
+                // Fallback ke UI Avatars
+                const encodedName = encodeURIComponent(data.user.full_name || 'User');
                 avatarImage.src = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
             }
-
-            // Update role
-            const userRoleText = document.getElementById('userRoleText');
-            if (userRoleText) {
-                userRoleText.textContent = data.user.role;
-                if (data.user.role === 'admin') {
-                    userRoleText.style.backgroundColor = 'green';
-                    userRoleText.style.color = 'white';
-                } else {
-                    userRoleText.style.backgroundColor = 'yellow';
-                    userRoleText.style.color = 'black';
-                }
-            }
-
-            // Hide user management for non-admin
-            const userManagementLink = document.querySelector('a[href="user.html"]');
-            if (userManagementLink && data.user.role !== 'admin') {
-                const fullNameLower = data.user.full_name.toLowerCase().trim();
-                if (fullNameLower !== 'bryan phillip sumarauw') {
-                    userManagementLink.style.display = 'none';
-                }
-            }
-        } else {
-            window.location.href = 'login.html';
         }
-    })
-    .catch(error => {
-        console.error('Error checking auth:', error);
-        // Jangan redirect jika error jaringan
+
+        // ✅ Update role badge
+        const userRoleText = document.getElementById('userRoleText');
+        if (userRoleText) {
+            userRoleText.textContent = data.user.role || 'user';
+            if (data.user.role === 'admin') {
+                userRoleText.style.backgroundColor = 'green';
+                userRoleText.style.color = 'white';
+            } else {
+                userRoleText.style.backgroundColor = 'yellow';
+                userRoleText.style.color = 'black';
+            }
+        }
+        
+        // ✅ Show user management for all users (but with role-based access control)
+        // User management link is now visible to all users
+
+        // ✅ ROLE-BASED ACCESS CONTROL - Simpan user role di global variable
+        window.currentUserRole = data.user.role || 'user';
+        window.currentUser = data.user;
+        
+        // Trigger role-based UI update
+        updateUIBasedOnRole();
+        
+    } else {
+        // Redirect ke login jika tidak authenticated
+        window.location.href = 'index.html';
+    }
+})
+.catch(error => {
+    console.error('❌ Auth Error:', error);
+});
+
+// ✅ FUNCTION UNTUK UPDATE UI BERDASARKAN ROLE
+function updateUIBasedOnRole() {
+    const isAdmin = window.currentUserRole === 'admin';
+    
+    // Sembunyikan tombol Add User untuk non-admin
+    const addUserBtn = document.getElementById('addUserBtn');
+    if (addUserBtn) {
+        addUserBtn.style.display = isAdmin ? 'block' : 'none';
+    }
+    
+    // Sembunyikan kolom Actions untuk non-admin
+    const actionsHeader = document.querySelector('th:last-child');
+    if (actionsHeader && !isAdmin) {
+        actionsHeader.style.display = 'none';
+    }
+    
+    // Sembunyikan tombol edit/delete di setiap row
+    const editButtons = document.querySelectorAll('.editBtn');
+    const deleteButtons = document.querySelectorAll('.deleteBtn');
+    
+    editButtons.forEach(btn => {
+        btn.style.display = isAdmin ? 'inline-block' : 'none';
     });
     
-}); // End DOMContentLoaded
-</script>
+    deleteButtons.forEach(btn => {
+        btn.style.display = isAdmin ? 'inline-block' : 'none';
+    });
+    
+    // Tampilkan pesan read-only untuk non-admin
+    if (!isAdmin) {
+        showReadOnlyMessage();
+    }
+}
 
+// ✅ FUNCTION UNTUK MENAMPILKAN PESAN READ-ONLY
+function showReadOnlyMessage() {
+    const mainContent = document.querySelector('.bg-white.dark\\:bg-gray-800.p-6');
+    if (mainContent) {
+        // Cek apakah pesan sudah ada
+        if (!document.getElementById('readOnlyMessage')) {
+            const messageDiv = document.createElement('div');
+            messageDiv.id = 'readOnlyMessage';
+            messageDiv.className = 'mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg';
+            messageDiv.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                    <p class="text-blue-800">
+                        <strong>Read-Only Access:</strong> You have view-only permissions. Contact an administrator to make changes.
+                    </p>
+                </div>
+            `;
+            mainContent.parentNode.insertBefore(messageDiv, mainContent);
+        }
+    }
+}
+
+});
+            </script>
         </div>
 
         <!-- Mobile Overlay -->
@@ -194,22 +269,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
         <!-- Main Content -->
         <div class="flex-1 p-6">
-            <!-- Top Navigation -->
             <header class="bg-white dark:bg-gray-800 shadow-sm md:sticky md:top-0 relative z-20">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div class="flex items-center">
-                        <button id="mobileToggleSidebar" class="mr-4 md:hidden p-2 text-2xl text-gray-800 dark:text-gray-200 z-50" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar"><i class="fas fa-bars"></i></button>
-                        <h1 class="text-2xl font-bold mb-4">User Management</h1>
+                        <button id="mobileToggleSidebar" class="mr-4 md:hidden p-2 text-2xl text-gray-800 dark:text-gray-200 z-50" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+                        <h1 class="text-2xl font-bold dark:text-gray-100">User Management</h1>
+                    </div>
+                    <div id="permissionBadge" class="hidden">
+                        <span class="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs font-semibold">
+                            <i class="fas fa-eye mr-1"></i> Read Only
+                        </span>
                     </div>
                 </div>
             </header>
+            
             <div class="bg-white dark:bg-gray-800 dark:text-gray-100 p-6 rounded-lg shadow">
-                <p class="mb-4">Manage user accounts and permissions.</p>
+                <p class="mb-4 dark:text-gray-300">Manage user accounts and permissions.</p>
                 <div class="p-4 flex justify-between items-center">
-                    <input type="text" id="searchInput" placeholder="Search users..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded px-3 py-1 w-1/3" />
-                    <button id="addUserBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add User</button>
+                    <input type="text" id="searchInput" placeholder="Search users..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded px-3 py-1 w-1/3" />
+                    <!-- ✅ TOMBOL ADD USER - HANYA UNTUK ADMIN -->
+                    <button id="addUserBtn" class="btn-full-width bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" style="display: none;">
+                        <i class="fas fa-plus mr-2"></i>Add User
+                    </button>
                 </div>
-                <table class="min-w-full divide-y divide-gray-200 mt-4">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mt-4">
                     <thead class="bg-gray-50 dark:bg-gray-700/50">
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider cursor-pointer" data-sort="id">User ID</th>
@@ -217,7 +300,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider cursor-pointer" data-sort="full_name">Full Name</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider cursor-pointer" data-sort="created_at">Created At</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider cursor-pointer" data-sort="role">Role</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                            <!-- ✅ KOLOM ACTIONS - HANYA UNTUK ADMIN -->
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider admin-only">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="usersTableBody" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -231,212 +315,361 @@ document.addEventListener('DOMContentLoaded', function() {
                         <form id="userForm">
                             <input type="hidden" id="userId" />
                             <div class="mb-4">
-                                <label for="username" class="block text-gray-700 dark:text-gray-300">Username</label>
-                                <input type="text" id="username" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded px-3 py-2" required />
+                                <label for="username" class="block text-gray-700 dark:text-gray-300 mb-2">Username</label>
+                                <input type="text" id="username" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded px-3 py-2" required />
                             </div>
                             <div class="mb-4">
-                                <label for="fullName" class="block text-gray-700 dark:text-gray-300">Full Name</label>
-                                <input type="text" id="fullName" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded px-3 py-2" required />
+                                <label for="fullName" class="block text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
+                                <input type="text" id="fullName" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded px-3 py-2" required />
                             </div>
                             <div class="mb-4">
-                                <label for="password" class="block text-gray-700 dark:text-gray-300">Password</label>
-                                <input type="password" id="password" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded px-3 py-2" />
+                                <label for="password" class="block text-gray-700 dark:text-gray-300 mb-2">Password</label>
+                                <input type="password" id="password" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded px-3 py-2" />
                                 <small class="text-gray-500 dark:text-gray-400">Leave blank to keep current password</small>
                             </div>
                             <div class="mb-4">
-                                <label for="role" class="block text-gray-700 dark:text-gray-300">Role</label>
-                                <select id="role" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded px-3 py-2" required>
+                                <label for="role" class="block text-gray-700 dark:text-gray-300 mb-2">Role</label>
+                                <select id="role" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded px-3 py-2" required>
                                     <option value="user">User</option>
                                     <option value="admin">Admin</option>
                                 </select>
                             </div>
                             <div class="flex justify-end">
-                                <button type="button" id="cancelBtn" class="mr-2 px-4 py-2 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">Cancel</button>
+                                <button type="button" id="cancelBtn" class="mr-2 px-4 py-2 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-100">Cancel</button>
                                 <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
                             </div>
                         </form>
                     </div>
                 </div>
-
-                <script>
-                    let usersData = [];
-                    let currentSortColumn = 'id';
-                    let currentSortOrder = 'ASC';
-
-                    async function fetchUsers() {
-                        const search = document.getElementById('searchInput').value;
-                        const response = await fetch(`users.php?search=${encodeURIComponent(search)}&sort_by=${currentSortColumn}&sort_order=${currentSortOrder}`);
-                        const result = await response.json();
-                        if (result.success) {
-                            usersData = result.data;
-                            renderTable();
-                        } else {
-                            alert('Failed to fetch users: ' + result.message);
-                        }
-                    }
-
-                    function renderTable() {
-                        const tbody = document.getElementById('usersTableBody');
-                        tbody.innerHTML = '';
-                        usersData.forEach(item => {
-                            const tr = document.createElement('tr');
-                            tr.className = 'hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors';
-
-                            // Role badge
-                            const roleBadge = item.role === 'admin' 
-                                ? '<span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">Admin</span>'
-                                : '<span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">User</span>';
-
-                            tr.innerHTML = `
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">${item.id}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.username}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.full_name}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.created_at}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${roleBadge}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <button class="text-yellow-500 hover:text-yellow-700 mr-3 transition-transform hover:scale-110 editBtn" data-id="${item.id}" title="Edit"><i class="fas fa-pencil-alt"></i></button>
-                                    <button class="text-red-500 hover:text-red-700 transition-transform hover:scale-110 deleteBtn" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>
-                                </td>
-                            `;
-                            tbody.appendChild(tr);
-                        });
-
-                        document.querySelectorAll('.editBtn').forEach(button => {
-                            button.addEventListener('click', () => {
-                                const id = button.getAttribute('data-id');
-                                openModal(id);
-                            });
-                        });
-
-                        document.querySelectorAll('.deleteBtn').forEach(button => {
-                            button.addEventListener('click', () => {
-                                const id = button.getAttribute('data-id');
-                                if (confirm('Are you sure you want to delete this user?')) {
-                                    deleteUser(id);
-                                }
-                            });
-                        });
-                    }
-
-                    function openModal(id = null) {
-                        const modal = document.getElementById('userModal');
-                        const modalTitle = document.getElementById('modalTitle');
-                        const userId = document.getElementById('userId');
-                        const username = document.getElementById('username');
-                        const fullName = document.getElementById('fullName');
-                        const password = document.getElementById('password');
-                        const role = document.getElementById('role');
-
-                        if (id) {
-                            const item = usersData.find(i => i.id == id);
-                            modalTitle.textContent = 'Edit User';
-                            userId.value = item.id;
-                            username.value = item.username;
-                            fullName.value = item.full_name;
-                            password.value = '';
-                            role.value = item.role;
-                        } else {
-                            modalTitle.textContent = 'Add User';
-                            userId.value = '';
-                            username.value = '';
-                            fullName.value = '';
-                            password.value = '';
-                            role.value = 'user';
-                        }
-
-                        modal.classList.remove('hidden');
-                    }
-
-                    function closeModal() {
-                        const modal = document.getElementById('userModal');
-                        modal.classList.add('hidden');
-                    }
-
-                    async function saveUser(event) {
-                        event.preventDefault();
-                        const userId = document.getElementById('userId').value;
-                        const username = document.getElementById('username').value.trim();
-                        const fullName = document.getElementById('fullName').value.trim();
-                        const password = document.getElementById('password').value;
-                        const role = document.getElementById('role').value;
-
-                        if (!username || !fullName) {
-                            alert('Please fill in all required fields.');
-                            return;
-                        }
-
-                        const payload = {
-                            id: userId || null,
-                            username: username,
-                            full_name: fullName,
-                            password: password || null,
-                            role: role
-                        };
-
-                        const response = await fetch('users.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(payload)
-                        });
-
-                        const result = await response.json();
-                        if (result.success) {
-                            alert(result.message);
-                            closeModal();
-                            fetchUsers();
-                        } else {
-                            alert('Failed to save user: ' + result.message);
-                        }
-                    }
-
-                    async function deleteUser(id) {
-                        const response = await fetch('users.php', {
-                            method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'id=' + encodeURIComponent(id)
-                        });
-
-                        const result = await response.json();
-                        if (result.success) {
-                            alert(result.message);
-                            fetchUsers();
-                        } else {
-                            alert('Failed to delete user: ' + result.message);
-                        }
-                    }
-
-                    document.getElementById('addUserBtn').addEventListener('click', () => openModal());
-                    document.getElementById('cancelBtn').addEventListener('click', closeModal);
-                    document.getElementById('userForm').addEventListener('submit', saveUser);
-                    document.getElementById('searchInput').addEventListener('input', fetchUsers);
-
-                    // Sorting
-                    document.querySelectorAll('th[data-sort]').forEach(header => {
-                        header.addEventListener('click', () => {
-                            const sortBy = header.getAttribute('data-sort');
-                            if (currentSortColumn === sortBy) {
-                                currentSortOrder = currentSortOrder === 'ASC' ? 'DESC' : 'ASC';
-                            } else {
-                                currentSortColumn = sortBy;
-                                currentSortOrder = 'ASC';
-                            }
-                            fetchUsers();
-                        });
-                    });
-
-                    // Initial fetch
-                    fetchUsers();
-                </script>
             </div>
         </div>
     </div>
 
 <script>
-// Mobile sidebar toggle
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // ===== VARIABLES =====
+    let usersData = [];
+    let userPermissions = { can_edit: false, can_delete: false, can_add: false };
+    let currentSortColumn = 'id';
+    let currentSortOrder = 'ASC';
+
+    // ✅ CHECK ADMIN ACCESS BEFORE ALLOWING ACTIONS
+    function checkAdminAccess() {
+        return window.currentUserRole === 'admin';
+    }
+
+    // ✅ SHOW ERROR MESSAGE FOR NON-ADMIN ATTEMPTS
+    function showAdminOnlyError(action) {
+        alert(`${action} is only available for administrators. You have read-only access.`);
+    }
+
+    // ===== HIGHLIGHT ACTIVE MENU =====
+    const currentPage = window.location.pathname.split('/').pop();
+    document.querySelectorAll('.nav-item').forEach(item => {
+        const href = item.getAttribute('href');
+        if (href && href === currentPage) {
+            item.classList.add('bg-blue-700');
+        } else {
+            item.classList.remove('bg-blue-700');
+        }
+    });
+
+    // ===== LOGOUT =====
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            // Reset dark mode to default before logout
+            const html = document.documentElement;
+            html.classList.remove('dark');
+            localStorage.removeItem('theme');
+            console.log('Dark mode reset to default before logout');
+            
+            fetch('auth.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'action=logout'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Logout failed: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Logout failed. Please try again.');
+            });
+        });
+    }
+
+    // ===== FETCH USERS =====
+    async function fetchUsers() {
+        const search = document.getElementById('searchInput').value;
+        const response = await fetch(`users.php?search=${encodeURIComponent(search)}&sort_by=${currentSortColumn}&sort_order=${currentSortOrder}`);
+        const result = await response.json();
+        
+        console.log('📊 Fetch Users Response:', result);
+        
+        if (result.success) {
+            // Handle new format with permissions
+            if (result.data && result.data.users) {
+                usersData = result.data.users;
+                userPermissions = result.data.permissions || { can_edit: false, can_delete: false, can_add: false };
+            } else if (result.data) {
+                // Backward compatibility - if data exists but no users property
+                usersData = result.data;
+                userPermissions = { can_edit: checkAdminAccess(), can_delete: checkAdminAccess(), can_add: checkAdminAccess() };
+            } else if (Array.isArray(result.data)) {
+                // If result.data is directly an array
+                usersData = result.data;
+                userPermissions = { can_edit: checkAdminAccess(), can_delete: checkAdminAccess(), can_add: checkAdminAccess() };
+            } else if (Array.isArray(result)) {
+                // If result itself is an array
+                usersData = result;
+                userPermissions = { can_edit: checkAdminAccess(), can_delete: checkAdminAccess(), can_add: checkAdminAccess() };
+            } else {
+                // Fallback - try to extract users from any possible format
+                usersData = result.data || result || [];
+                userPermissions = { can_edit: checkAdminAccess(), can_delete: checkAdminAccess(), can_add: checkAdminAccess() };
+            }
+            
+            console.log('👥 Users:', usersData);
+            console.log('🔐 Permissions:', userPermissions);
+            
+            renderTable();
+            updateUIPermissions();
+        } else {
+            alert('Failed to fetch users: ' + result.message);
+        }
+    }
+
+    // ===== UPDATE UI BASED ON PERMISSIONS =====
+    function updateUIPermissions() {
+        const isAdmin = checkAdminAccess();
+        const addBtn = document.getElementById('addUserBtn');
+        const badge = document.getElementById('permissionBadge');
+        
+        if (addBtn) {
+            if (isAdmin) {
+                addBtn.style.display = 'block';
+            } else {
+                addBtn.style.display = 'none';
+            }
+        }
+        
+        if (badge) {
+            if (!isAdmin) {
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+    }
+
+    // ===== RENDER TABLE =====
+    function renderTable() {
+        const tbody = document.getElementById('usersTableBody');
+        tbody.innerHTML = '';
+        
+        const isAdmin = checkAdminAccess();
+        
+        usersData.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors';
+
+            const roleBadge = item.role === 'admin' 
+                ? '<span class="px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full text-xs font-semibold">Admin</span>'
+                : '<span class="px-2 py-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 rounded-full text-xs font-semibold">User</span>';
+
+            let actionButtons = '';
+            if (isAdmin) {
+                actionButtons = '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium">';
+                actionButtons += `<button class="text-yellow-500 hover:text-yellow-700 mr-3 transition-transform hover:scale-110 editBtn" data-id="${item.id}" title="Edit"><i class="fas fa-pencil-alt"></i></button>`;
+                actionButtons += `<button class="text-red-500 hover:text-red-700 transition-transform hover:scale-110 deleteBtn" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>`;
+                actionButtons += '</td>';
+            } else {
+                actionButtons = '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400 dark:text-gray-500"><i class="fas fa-lock mr-2"></i>No access</td>';
+            }
+
+            tr.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">${item.id}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.username}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.full_name}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.created_at}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${roleBadge}</td>
+                ${actionButtons}
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Attach event listeners
+        if (isAdmin) {
+            document.querySelectorAll('.editBtn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = button.getAttribute('data-id');
+                    openModal(id);
+                });
+            });
+
+            document.querySelectorAll('.deleteBtn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = button.getAttribute('data-id');
+                    if (confirm('Are you sure you want to delete this user?')) {
+                        deleteUser(id);
+                    }
+                });
+            });
+        }
+    }
+
+    // ===== MODAL FUNCTIONS =====
+    function openModal(id = null) {
+        // ✅ CHECK ADMIN ACCESS BEFORE EDITING
+        if (!checkAdminAccess()) {
+            showAdminOnlyError('Edit User');
+            return;
+        }
+        
+        const modal = document.getElementById('userModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const userId = document.getElementById('userId');
+        const username = document.getElementById('username');
+        const fullName = document.getElementById('fullName');
+        const password = document.getElementById('password');
+        const role = document.getElementById('role');
+
+        if (id) {
+            const item = usersData.find(i => i.id == id);
+            modalTitle.textContent = 'Edit User';
+            userId.value = item.id;
+            username.value = item.username;
+            fullName.value = item.full_name;
+            password.value = '';
+            role.value = item.role;
+        } else {
+            modalTitle.textContent = 'Add User';
+            userId.value = '';
+            username.value = '';
+            fullName.value = '';
+            password.value = '';
+            role.value = 'user';
+        }
+
+        modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('userModal');
+        modal.classList.add('hidden');
+    }
+
+    // ===== SAVE USER =====
+    async function saveUser(event) {
+        event.preventDefault();
+        
+        // ✅ CHECK ADMIN ACCESS BEFORE SAVING
+        if (!checkAdminAccess()) {
+            showAdminOnlyError('Save User');
+            return;
+        }
+        
+        const userId = document.getElementById('userId').value;
+        const username = document.getElementById('username').value.trim();
+        const fullName = document.getElementById('fullName').value.trim();
+        const password = document.getElementById('password').value;
+        const role = document.getElementById('role').value;
+
+        if (!username || !fullName) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        const payload = {
+            id: userId || null,
+            username: username,
+            full_name: fullName,
+            password: password || null,
+            role: role
+        };
+
+        const response = await fetch('users.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message);
+            closeModal();
+            fetchUsers();
+        } else {
+            alert('Failed to save user: ' + result.message);
+        }
+    }
+
+    // ===== DELETE USER =====
+    async function deleteUser(id) {
+        // ✅ CHECK ADMIN ACCESS BEFORE DELETING
+        if (!checkAdminAccess()) {
+            showAdminOnlyError('Delete User');
+            return;
+        }
+        
+        const response = await fetch('users.php', {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'id=' + encodeURIComponent(id)
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(result.message);
+            fetchUsers();
+        } else {
+            alert('Failed to delete user: ' + result.message);
+        }
+    }
+
+    // ===== EVENT LISTENERS =====
+    document.getElementById('addUserBtn').addEventListener('click', () => {
+        // ✅ CHECK ADMIN ACCESS BEFORE ADDING
+        if (!checkAdminAccess()) {
+            showAdminOnlyError('Add User');
+            return;
+        }
+        openModal();
+    });
+    
+    document.getElementById('cancelBtn').addEventListener('click', closeModal);
+    document.getElementById('userForm').addEventListener('submit', saveUser);
+    document.getElementById('searchInput').addEventListener('input', fetchUsers);
+
+    // Sorting
+    document.querySelectorAll('th[data-sort]').forEach(header => {
+        header.addEventListener('click', () => {
+            const sortBy = header.getAttribute('data-sort');
+            if (currentSortColumn === sortBy) {
+                currentSortOrder = currentSortOrder === 'ASC' ? 'DESC' : 'ASC';
+            } else {
+                currentSortColumn = sortBy;
+                currentSortOrder = 'ASC';
+            }
+            fetchUsers();
+        });
+    });
+
+    // Initial fetch
+    fetchUsers();
+
+}); // END DOMCONTENTLOADED
+
+// ===== MOBILE SIDEBAR TOGGLE =====
 (function(){
   const sidebar = document.querySelector('.sidebar');
   const toggleBtn = document.getElementById('mobileToggleSidebar');
@@ -457,17 +690,21 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleBtn.setAttribute('aria-expanded','false');
   }
   function isMobile(){
-    return window.matchMedia('(max-width: 767px)').matches;
+    return window.matchMedia('(max-width:767px)').matches;
   }
 
-  toggleBtn.addEventListener('click', function(){
+  toggleBtn.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
     if (!isMobile()) return;
-    if (sidebar.classList.contains('-translate-x-full')) {
-      openSidebar();
-    } else {
+    const isOpen = !sidebar.classList.contains('-translate-x-full');
+    if (isOpen) {
       closeSidebar();
+    } else {
+      openSidebar();
     }
   });
+  
   overlay.addEventListener('click', closeSidebar);
   if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
 
@@ -476,12 +713,6 @@ document.addEventListener('DOMContentLoaded', function() {
       sidebar.classList.remove('-translate-x-full');
       overlay.classList.add('hidden');
       document.body.classList.remove('overflow-hidden');
-      toggleBtn.setAttribute('aria-expanded','false');
-    } else {
-      sidebar.classList.add('-translate-x-full');
-      overlay.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden');
-      toggleBtn.setAttribute('aria-expanded','false');
     }
   });
 
@@ -489,9 +720,9 @@ document.addEventListener('DOMContentLoaded', function() {
     sidebar.classList.add('-translate-x-full');
     overlay.classList.add('hidden');
     document.body.classList.remove('overflow-hidden');
-    toggleBtn.setAttribute('aria-expanded','false');
   }
 })();
 </script>
+
 </body>
 </html>

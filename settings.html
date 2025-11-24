@@ -12,7 +12,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="src/output.css">
 <script>
-// Early theme initialization to avoid flash and ensure dark class is present before paint
+// Early theme initialization
 (function(){
   try {
     var saved = localStorage.getItem('theme');
@@ -32,7 +32,6 @@
                     <i class="fas fa-warehouse text-2xl mr-3"></i>
                     <span class="font-bold text-xl">WarehousePro</span>
                 </div>
-                <!-- Close button visible only on mobile -->
                 <button id="mobileCloseSidebar" class="md:hidden p-2 text-xl text-white/90 hover:text-white focus:outline-none" aria-label="Close menu">
                     <i class="fas fa-times"></i>
                 </button>
@@ -41,44 +40,44 @@
             <div class="p-4 flex items-center justify-between border-b border-blue-700">
                 <div class="flex items-center">
                     <img src="https://ui-avatars.com/api/?name=User&background=random" class="w-10 h-10 rounded-full mr-3" alt="User">
-<div class="sidebar-text">
-    <div class="font-medium user-name">Loading...</div>
-    <div id="userRoleText" class="text-xs font-semibold px-2 rounded mt-1 inline-block"></div>
-</div>
+                    <div class="sidebar-text">
+                        <div class="font-medium user-name">Loading...</div>
+                        <div id="userRoleText" class="text-xs font-semibold px-2 rounded mt-1 inline-block"></div>
+                    </div>
                 </div>
             </div>
             
             <nav class="flex-1 overflow-y-auto py-4">
                 <div class="px-4 space-y-2">
-                <a href="index.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
-                    <i class="fas fa-tachometer-alt mr-3"></i> 
-                    <span class="sidebar-text">Dashboard</span>
-                </a>
-                <a href="inventory.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
-                    <i class="fas fa-boxes mr-3"></i>
-                    <span class="sidebar-text">Inventory</span>
-                </a>
-                <a href="suppliers.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
-                    <i class="fas fa-truck mr-3"></i> 
-                    <span class="sidebar-text">Suppliers</span>
-                </a>
-                <a href="orders.html" class="nav-item flex items-center px-3 py-2 bg-blue-700">
-                    <i class="fas fa-shopping-cart mr-3"></i> 
-                    <span class="sidebar-text">Orders</span>
-                </a>
-                <a href="transactions.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
-                  <i class="fas fa-exchange-alt mr-3"></i>
-                  <span class="sidebar-text">Transactions</span>
-              </a>
-              <a href="user.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
-                  <i class="fas fa-users mr-3"></i>
-                  <span class="sidebar-text">Users</span>
-              </a>
-              <a href="settings.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
-                  <i class="fas fa-cog mr-3"></i>
-                  <span class="sidebar-text">Settings</span>
-              </a>
-            </div>
+                    <a href="index.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                        <i class="fas fa-tachometer-alt mr-3"></i> 
+                        <span class="sidebar-text">Dashboard</span>
+                    </a>
+                    <a href="inventory.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                        <i class="fas fa-boxes mr-3"></i>
+                        <span class="sidebar-text">Inventory</span>
+                    </a>
+                    <a href="suppliers.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                        <i class="fas fa-truck mr-3"></i> 
+                        <span class="sidebar-text">Suppliers</span>
+                    </a>
+                    <a href="orders.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700">
+                        <i class="fas fa-shopping-cart mr-3"></i> 
+                        <span class="sidebar-text">Orders</span>
+                    </a>
+                    <a href="transactions.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+                        <i class="fas fa-exchange-alt mr-3"></i>
+                        <span class="sidebar-text">Transactions</span>
+                    </a>
+                    <a href="user.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-white">
+                        <i class="fas fa-users mr-3"></i>
+                        <span class="sidebar-text">Users</span>
+                    </a>
+                    <a href="settings.html" class="nav-item flex items-center px-3 py-2 rounded-lg bg-blue-700 text-white">
+                        <i class="fas fa-cog mr-3"></i>
+                        <span class="sidebar-text">Settings</span>
+                    </a>
+                </div>
             </nav>
 
             <div class="p-4 border-t border-blue-700">
@@ -87,90 +86,6 @@
                     <span class="sidebar-text">Logout</span>
                 </a>
             </div>
-
-            <script>
-
-                // Highlight active menu based on current page
-document.addEventListener('DOMContentLoaded', function() {
-    const currentPage = window.location.pathname.split('/').pop();
-    document.querySelectorAll('.nav-item').forEach(item => {
-        const href = item.getAttribute('href');
-        if (href && href === currentPage) {
-            item.classList.add('bg-blue-700');
-        } else {
-            item.classList.remove('bg-blue-700');
-        }
-    });
-});
-
-                // Handle logout
-                document.getElementById('logoutBtn').addEventListener('click', function (e) {
-                    e.preventDefault();
-                    fetch('auth.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: 'action=logout'
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Redirect to login page or show login form
-                                window.location.href = 'index.html'; // Redirect to login page
-                            } else {
-                                alert('Logout failed: ' + (data.message || 'Unknown error'));
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Logout failed. Please try again.');
-                        });
-                });
-  
-                // Check login status on page load
-fetch('auth.php', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  },
-  body: 'action=check_status',
-})
-  .then(response => response.json())
-  .then(data => {
-    if (data.success && data.logged_in) {
-      // Update user information
-      const userNameElements = document.querySelectorAll('.user-name');
-      userNameElements.forEach(element => {
-        element.textContent = data.user.full_name; // ✅ PASTIKAN INI full_name
-      });
-
-      // Update avatar dynamically
-      const avatarImage = document.querySelector('img[alt="User"]');
-      if (avatarImage) {
-        // ✅ TAMBAHKAN: Generate avatar berdasarkan full_name
-        const encodedName = encodeURIComponent(data.user.full_name);
-        avatarImage.src = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
-      }
-
-      // Update user role text and background color
-      const userRoleText = document.getElementById('userRoleText');
-      if (data.user.role === 'admin') {
-        userRoleText.textContent = 'admin';
-        userRoleText.style.backgroundColor = 'green';
-        userRoleText.style.color = 'white';
-      } else {
-        userRoleText.textContent = 'user';
-        userRoleText.style.backgroundColor = 'yellow';
-        userRoleText.style.color = 'black';
-      }
-    }
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
-            </script>
-
         </div>
 
         <!-- Mobile Overlay -->
@@ -178,17 +93,16 @@ fetch('auth.php', {
 
         <!-- Main Content -->
         <div class="flex-1 p-6">
-            <!-- Top Navigation -->
             <header class="bg-white dark:bg-gray-800 shadow-sm md:sticky md:top-0 relative z-20">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div class="flex items-center">
-                        <button id="mobileToggleSidebar" class="mr-4 md:hidden p-2 text-2xl text-gray-800 dark:text-gray-200 z-50" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar"><i class="fas fa-bars"></i></button>
-                        <h1 class="text-2xl font-bold mb-4">Settings</h1>
+                        <button id="mobileToggleSidebar" class="mr-4 md:hidden p-2 text-2xl text-gray-800 dark:text-gray-200 z-50" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+                        <h1 class="text-2xl font-bold dark:text-gray-100">Settings</h1>
                     </div>
                 </div>
             </header>
 
-            <!-- Appearance / Theme -->
+            <!-- Dark Mode -->
             <div class="bg-white dark:bg-gray-800 dark:text-gray-100 p-6 rounded-lg shadow mb-6">
                 <h2 class="text-xl font-bold mb-4">Appearance</h2>
                 <div class="flex items-center justify-between">
@@ -202,27 +116,211 @@ fetch('auth.php', {
                 </div>
             </div>
 
+            <!-- Profile Picture Upload -->
             <div class="bg-white dark:bg-gray-800 dark:text-gray-100 p-6 rounded-lg shadow">
                 <h2 class="text-xl font-bold mb-4">Change Profile Picture</h2>
                 <form id="profilePictureForm" enctype="multipart/form-data">
                     <div class="mb-4">
-                        <label for="profilePicture" class="block text-sm font-medium text-gray-700">Upload New Profile Picture</label>
-                        <input type="file" id="profilePicture" name="profilePicture" accept="image/*" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none">
+                        <label for="profilePicture" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload New Profile Picture</label>
+                        <input type="file" id="profilePicture" name="profilePicture" accept="image/*" class="mt-1 block w-full text-sm text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer focus:outline-none dark:bg-gray-700">
                     </div>
                     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Upload</button>
                 </form>
-                <p id="uploadStatus" class="mt-4 text-sm text-gray-600"></p>
+                <p id="uploadStatus" class="mt-4 text-sm text-gray-600 dark:text-gray-400"></p>
             </div>
         </div>
     </div>
 
 <script>
-// Mobile sidebar toggle (match across pages)
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // ===== HIGHLIGHT ACTIVE MENU =====
+    const currentPage = window.location.pathname.split('/').pop();
+    document.querySelectorAll('.nav-item').forEach(item => {
+        const href = item.getAttribute('href');
+        if (href && href === currentPage) {
+            item.classList.add('bg-blue-700');
+        } else {
+            item.classList.remove('bg-blue-700');
+        }
+    });
+
+    // ===== DARK MODE TOGGLE =====
+    function updateDarkButtonLabel() {
+        const btn = document.getElementById('darkModeToggle');
+        if (!btn) return;
+        const isDark = document.documentElement.classList.contains('dark');
+        btn.textContent = isDark ? 'Disable Dark Mode' : 'Enable Dark Mode';
+    }
+
+    const darkBtn = document.getElementById('darkModeToggle');
+    if (darkBtn) {
+        updateDarkButtonLabel();
+        darkBtn.addEventListener('click', function() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            try { 
+                localStorage.setItem('theme', isDark ? 'dark' : 'light'); 
+            } catch (e) {}
+            updateDarkButtonLabel();
+        });
+    }
+
+    // ===== PROFILE PICTURE UPLOAD =====
+    const profileForm = document.getElementById('profilePictureForm');
+    if (profileForm) {
+        profileForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('profilePicture');
+            const statusEl = document.getElementById('uploadStatus');
+            
+            if (!fileInput.files || fileInput.files.length === 0) {
+                statusEl.textContent = 'Please select a file to upload.';
+                statusEl.className = 'mt-4 text-sm text-red-600';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('profile_picture', fileInput.files[0]); // ✅ PERBAIKAN: Nama field harus 'profile_picture'
+
+            statusEl.textContent = 'Uploading...';
+            statusEl.className = 'mt-4 text-sm text-blue-600';
+
+            try {
+                const response = await fetch('settings.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusEl.textContent = 'Profile picture updated successfully!';
+                    statusEl.className = 'mt-4 text-sm text-green-600';
+                    
+                    // Update avatar in sidebar
+                    const avatarImage = document.querySelector('img[alt="User"]');
+                    if (avatarImage && data.profile_picture) {
+                        avatarImage.src = data.profile_picture + '?t=' + Date.now();
+                    }
+                    
+                    // Reset form
+                    profileForm.reset();
+                    
+                } else {
+                    statusEl.textContent = 'Upload failed: ' + (data.message || 'Unknown error');
+                    statusEl.className = 'mt-4 text-sm text-red-600';
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                statusEl.textContent = 'Upload failed. Please try again.';
+                statusEl.className = 'mt-4 text-sm text-red-600';
+            }
+        });
+    }
+
+    // ===== LOGOUT =====
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            fetch('auth.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=logout'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Logout failed: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Logout failed. Please try again.');
+            });
+        });
+    }
+
+    // ===== CHECK LOGIN STATUS & UPDATE USER INFO =====
+fetch('auth.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'action=check_status',
+})
+.then(response => response.json())
+.then(data => {
+    console.log('✅ Auth Response:', data); // Debug
+    
+    if (data.success && data.logged_in) {
+        // ✅ Update user full name
+        const userNameElements = document.querySelectorAll('.user-name');
+        userNameElements.forEach(element => {
+            element.textContent = data.user.full_name || 'User';
+        });
+
+        // ✅ Update avatar - PRIORITAS: Profile Picture > UI Avatars
+        const avatarImage = document.querySelector('img[alt="User"]');
+        if (avatarImage) {
+            if (data.user.profile_picture && data.user.profile_picture.startsWith('uploads/')) {
+                // Gunakan uploaded profile picture
+                avatarImage.src = data.user.profile_picture + '?t=' + Date.now();
+            } else if (data.user.profile_picture && data.user.profile_picture.startsWith('http')) {
+                // Gunakan URL langsung (UI Avatars)
+                avatarImage.src = data.user.profile_picture;
+            } else {
+                // Fallback ke UI Avatars
+                const encodedName = encodeURIComponent(data.user.full_name || 'User');
+                avatarImage.src = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
+            }
+        }
+
+        // ✅ Update role badge
+        const userRoleText = document.getElementById('userRoleText');
+        if (userRoleText) {
+            userRoleText.textContent = data.user.role || 'user';
+            if (data.user.role === 'admin') {
+                userRoleText.style.backgroundColor = 'green';
+                userRoleText.style.color = 'white';
+            } else {
+                userRoleText.style.backgroundColor = 'yellow';
+                userRoleText.style.color = 'black';
+            }
+        }
+        
+        // ✅ Hide user management for non-admin
+        const userManagementLink = document.querySelector('a[href="user.html"]');
+        if (userManagementLink && data.user.role !== 'admin') {
+            const fullNameLower = (data.user.full_name || '').toLowerCase().trim();
+            if (fullNameLower !== 'bryan phillip sumarauw') {
+                userManagementLink.style.display = 'none';
+            }
+        }
+    } else {
+        // Redirect ke login jika tidak authenticated
+        window.location.href = 'index.html';
+    }
+})
+.catch(error => {
+    console.error('❌ Auth Error:', error);
+});
+
+}); // END DOMContentLoaded
+
+// ===== MOBILE SIDEBAR TOGGLE =====
 (function(){
   const sidebar = document.querySelector('.sidebar');
   const toggleBtn = document.getElementById('mobileToggleSidebar');
   const overlay = document.getElementById('mobileOverlay');
   const closeBtn = document.getElementById('mobileCloseSidebar');
+  
   if (!sidebar || !toggleBtn || !overlay) return;
 
   function openSidebar(){
@@ -231,24 +329,30 @@ fetch('auth.php', {
     document.body.classList.add('overflow-hidden');
     toggleBtn.setAttribute('aria-expanded','true');
   }
+  
   function closeSidebar(){
     sidebar.classList.add('-translate-x-full');
     overlay.classList.add('hidden');
     document.body.classList.remove('overflow-hidden');
     toggleBtn.setAttribute('aria-expanded','false');
   }
+  
   function isMobile(){
     return window.matchMedia('(max-width: 767px)').matches;
   }
 
-  toggleBtn.addEventListener('click', function(){
+  toggleBtn.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
     if (!isMobile()) return;
-    if (sidebar.classList.contains('-translate-x-full')) {
-      openSidebar();
-    } else {
+    const isOpen = !sidebar.classList.contains('-translate-x-full');
+    if (isOpen) {
       closeSidebar();
+    } else {
+      openSidebar();
     }
   });
+  
   overlay.addEventListener('click', closeSidebar);
   if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
 
@@ -275,78 +379,5 @@ fetch('auth.php', {
 })();
 </script>
 
-    <script>
-        // Theme initialization based on localStorage or system preference
-        (function initTheme() {
-            try {
-                const saved = localStorage.getItem('theme');
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (saved === 'dark' || (!saved && prefersDark)) {
-                    document.documentElement.classList.add('dark');
-                }
-            } catch (e) {}
-        })();
-
-        // Update dark mode button label according to current state
-        function updateDarkButtonLabel() {
-            const btn = document.getElementById('darkModeToggle');
-            if (!btn) return;
-            const isDark = document.documentElement.classList.contains('dark');
-            btn.textContent = isDark ? 'Disable Dark Mode' : 'Enable Dark Mode';
-        }
-
-        // Attach toggle behavior
-        (function setupDarkToggle() {
-            const btn = document.getElementById('darkModeToggle');
-            if (!btn) return;
-            updateDarkButtonLabel();
-            btn.addEventListener('click', function() {
-                const html = document.documentElement;
-                const isDark = html.classList.toggle('dark');
-                try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (e) {}
-                updateDarkButtonLabel();
-            });
-        })();
-
-        document.getElementById('profilePictureForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const formData = new FormData();
-            const fileInput = document.getElementById('profilePicture');
-            if (fileInput.files.length === 0) {
-                alert('Please select a file to upload.');
-                return;
-            }
-
-            formData.append('action', 'upload_profile_picture');
-            formData.append('profilePicture', fileInput.files[0]);
-
-            fetch('auth.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text()) // Ubah ke .text() untuk melihat respons mentah
-            .then(data => {
-                console.log('Raw Response:', data); // Debugging
-                try {
-                    const jsonData = JSON.parse(data); // Parse JSON
-                    if (jsonData.success) {
-                        document.getElementById('uploadStatus').textContent = 'Profile picture updated successfully!';
-                        const avatarImage = document.querySelector('img[alt="User"]');
-                        avatarImage.src = jsonData.newProfilePictureUrl + '?t=' + new Date().getTime(); // Force reload
-                    } else {
-                        document.getElementById('uploadStatus').textContent = 'Failed to update profile picture: ' + jsonData.message;
-                    }
-                } catch (error) {
-                    console.error('JSON Parse Error:', error);
-                    document.getElementById('uploadStatus').textContent = 'Invalid server response. Check console for details.';
-                }
-            })
-            .catch(error => {
-                console.error('Fetch Error:', error);
-                document.getElementById('uploadStatus').textContent = 'An error occurred while uploading the profile picture.';
-            });
-        });
-    </script>
 </body>
 </html>

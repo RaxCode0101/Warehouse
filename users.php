@@ -1,17 +1,21 @@
 <?php
 header('Content-Type: application/json');
-require_once 'config.php';
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
 
-$method = $_SERVER['REQUEST_METHOD'];
-
-function respond($success, $data = [], $message = '') {
-    echo json_encode(['success' => $success, 'data' => $data, 'message' => $message]);
-    exit;
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    exit(0);
 }
+
+require_once 'config.php';
 
 // ✅ Helper function untuk cek apakah user adalah admin atau Bryan
 function isAdminOrBryan() {
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
     if (!isset($_SESSION['role'])) {
         return false;
     }
@@ -22,10 +26,39 @@ function isAdminOrBryan() {
     return ($userRole === 'admin' || $userFullName === 'bryan phillip sumarauw');
 }
 
+function respond($success, $data = [], $message = '') {
+    echo json_encode([
+        'success' => $success, 
+        'data' => $data, 
+        'message' => $message
+    ]);
+    exit;
+}
+
+// Handle POST action=get_users for backward compatibility
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'get_users') {
+    try {
+        $stmt = $pdo->query("SELECT id, username, full_name, role, created_at FROM users ORDER BY id DESC");
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        echo json_encode([
+            "success" => true,
+            "users" => $users
+        ]);
+        exit;
+    } catch (PDOException $e) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Failed to fetch users: " . $e->getMessage()
+        ]);
+        exit;
+    }
+}
+
+$method = $_SERVER['REQUEST_METHOD'];
+
 switch ($method) {
     case 'GET':
-        session_start();
-        
         // ✅ SEMUA USER BISA MELIHAT (READ)
         $search = $_GET['search'] ?? '';
         $sort_by = $_GET['sort_by'] ?? 'id';
@@ -151,3 +184,4 @@ switch ($method) {
     default:
         respond(false, [], 'Unsupported HTTP method');
 }
+?>

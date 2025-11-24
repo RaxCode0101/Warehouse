@@ -253,6 +253,23 @@ switch($action) {
         }
         exit;
 
+        case 'get_users':
+    try {
+        $stmt = $pdo->query("SELECT id, username, full_name, role, created_at FROM users ORDER BY id DESC");
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode([
+            'success' => true,
+            'users' => $users
+        ]);
+    } catch (PDOException $e) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Database error: ' . $e->getMessage()
+        ]);
+    }
+    exit;
+
     default:
         echo json_encode(['success' => false, 'message' => 'Invalid action']);
         exit;

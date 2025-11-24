@@ -38,27 +38,45 @@ function respond($success, $data = [], $message = '') {
     exit;
 }
 
+// ✅ FUNCTION TO GENERATE UNIQUE TRANSACTION NUMBER
+function generateTransactionNumber($pdo) {
+    $date = date('Ymd'); // Format: YYYYMMDD
+    $prefix = 'TRX-' . $date . '-';
+    
+    // Get the last transaction number for today
+    try {
+        $stmt = $pdo->prepare("SELECT transaction_number FROM transactions WHERE transaction_number LIKE ? ORDER BY id DESC LIMIT 1");
+        $stmt->execute([$prefix . '%']);
+        $lastNumber = $stmt->fetchColumn();
+        
+        if ($lastNumber) {
+            // Extract the sequence number and increment
+            $sequence = (int)substr($lastNumber, -4);
+            $newSequence = $sequence + 1;
+        } else {
+            // First transaction of the day
+            $newSequence = 1;
+        }
+        
+        // Format: TRX-YYYYMMDD-0001
+        return $prefix . str_pad($newSequence, 4, '0', STR_PAD_LEFT);
+        
+    } catch (PDOException $e) {
+        // Fallback to timestamp-based number
+        return $prefix . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
+    }
+}
+
 // Handle POST (create/update)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
-    
-    // ✅ LOG REQUEST untuk debugging
-    error_log("POST Request: " . json_encode($input));
     
     $id = $input['id'] ?? null;
     $order_id = $input['order_id'] ?? null;
     $transaction_date = $input['transaction_date'] ?? null;
     $price = $input['price'] ?? null;
     $payment_method = $input['payment_method'] ?? null;
-    $status = trim($input['status'] ?? 'belum lunas'); // ✅ TRIM dan default
-    
-    // ✅ Pastikan status tidak kosong
-    if (empty($status)) {
-        $status = 'belum lunas';
-    }
-    
-    // ✅ LOG status sebelum validasi
-    error_log("Received status: '$status' (length: " . strlen($status) . ")");
+    $status = trim($input['status'] ?? 'belum lunas');
     
     // Validasi wajib
     if (!$order_id || !$transaction_date) {
@@ -76,45 +94,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         respond(false, [], 'Failed to validate order: ' . $e->getMessage());
     }
     
-    // ✅ VALIDASI STATUS: Normalisasi
+    // Normalisasi status
     $status = strtolower(trim($status));
     $allowed_statuses = ['belum lunas', 'lunas', 'unknown'];
-    
     if (!in_array($status, $allowed_statuses)) {
-        error_log("Invalid status '$status', using default 'belum lunas'");
         $status = 'belum lunas';
     }
     
-    // ✅ LOG final status
-    error_log("Final status to save: '$status'");
-    
     try {
         if ($id) {
-            // Update
+            // ✅ UPDATE - Tidak perlu generate transaction_number baru
             $stmt = $pdo->prepare("UPDATE transactions SET order_id = ?, transaction_date = ?, price = ?, payment_method = ?, status = ? WHERE id = ?");
             $result = $stmt->execute([$order_id, $transaction_date, $price, $payment_method, $status, $id]);
             
-            // ✅ Verify update
-            $verify = $pdo->prepare("SELECT status FROM transactions WHERE id = ?");
-            $verify->execute([$id]);
-            $savedStatus = $verify->fetchColumn();
-            error_log("Verified saved status in DB: '$savedStatus'");
+            if ($result) {
+                respond(true, [], 'Transaction updated successfully');
+            } else {
+                respond(false, [], 'Failed to update transaction');
+            }
+        } else {
+            // ✅ INSERT - Generate transaction_number otomatis
+            $transaction_number = generateTransactionNumber($pdo);
             
-            $message = 'Transaction updated successfully';
-        } else {
-            // Insert
-            $stmt = $pdo->prepare("INSERT INTO transactions (order_id, transaction_date, price, payment_method, status) VALUES (?, ?, ?, ?, ?)");
-            $result = $stmt->execute([$order_id, $transaction_date, $price, $payment_method, $status]);
-            $message = 'Transaction added successfully';
-        }
-        
-        if ($result) {
-            respond(true, [], $message);
-        } else {
-            respond(false, [], 'Failed to save transaction');
+            // Check if transaction_number column exists
+            $checkColumn = $pdo->query("SHOW COLUMNS FROM transactions LIKE 'transaction_number'");
+            $hasTransactionNumber = $checkColumn->rowCount() > 0;
+            
+            if ($hasTransactionNumber) {
+                // Insert with transaction_number
+                $stmt = $pdo->prepare("INSERT INTO transactions (transaction_number, order_id, transaction_date, price, payment_method, status) VALUES (?, ?, ?, ?, ?, ?)");
+                $result = $stmt->execute([$transaction_number, $order_id, $transaction_date, $price, $payment_method, $status]);
+            } else {
+                // Insert without transaction_number (backward compatibility)
+                $stmt = $pdo->prepare("INSERT INTO transactions (order_id, transaction_date, price, payment_method, status) VALUES (?, ?, ?, ?, ?)");
+                $result = $stmt->execute([$order_id, $transaction_date, $price, $payment_method, $status]);
+            }
+            
+            if ($result) {
+                respond(true, [], 'Transaction added successfully with number: ' . ($hasTransactionNumber ? $transaction_number : 'auto'));
+            } else {
+                respond(false, [], 'Failed to add transaction');
+            }
         }
     } catch (PDOException $e) {
-        error_log("Database error: " . $e->getMessage());
         respond(false, [], 'Failed to save transaction: ' . $e->getMessage());
     }
     exit;
@@ -153,12 +175,6 @@ switch ($method) {
                 $stmt = $pdo->query("SELECT id, order_id, transaction_date, price, payment_method, status FROM transactions ORDER BY $sort_by $sort_order");
             }
             $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            // ✅ LOG untuk debugging
-            error_log("Fetched " . count($items) . " transactions");
-            foreach ($items as $item) {
-                error_log("ID {$item['id']}: status = '{$item['status']}' (length: " . strlen($item['status']) . ")");
-            }
             
             respond(true, $items);
         } catch (PDOException $e) {

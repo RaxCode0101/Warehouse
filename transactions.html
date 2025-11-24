@@ -254,7 +254,7 @@ function updateUIBasedOnRole() {
     // Sembunyikan tombol Add Transaction untuk non-admin
     const addTransactionBtn = document.getElementById('addTransactionBtn');
     if (addTransactionBtn) {
-        addTransactionBtn.style.display = isAdmin ? 'block' : 'none';
+        addTransactionBtn.style.display = isAdmin ? 'flex' : 'none';
     }
     
     // Sembunyikan kolom Actions untuk non-admin
@@ -333,11 +333,10 @@ function showReadOnlyMessage() {
                       <!-- ✅ TOMBOL ADD TRANSACTION - HANYA UNTUK ADMIN -->
                       <button
                         id="addTransactionBtn"
-                        class="btn-full-width bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        style="display: none;"></button> <!-- Hidden by default, will be shown for admin -->
+                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center"
+                        style="display: none;">
                         <i class="fas fa-plus mr-2"></i>Add Transaction
                       </button>
-
                     </div>
                 </div>
                 <table class="min-w-full divide-y divide-gray-200 mt-4">

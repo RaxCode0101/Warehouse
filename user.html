@@ -211,7 +211,7 @@ function updateUIBasedOnRole() {
     // Sembunyikan tombol Add User untuk non-admin
     const addUserBtn = document.getElementById('addUserBtn');
     if (addUserBtn) {
-        addUserBtn.style.display = isAdmin ? 'block' : 'none';
+        addUserBtn.style.display = isAdmin ? 'flex' : 'none';
     }
     
     // Sembunyikan kolom Actions untuk non-admin
@@ -288,7 +288,7 @@ function showReadOnlyMessage() {
                 <div class="p-4 flex justify-between items-center">
                     <input type="text" id="searchInput" placeholder="Search users..." class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded px-3 py-1 w-1/3" />
                     <!-- ✅ TOMBOL ADD USER - HANYA UNTUK ADMIN -->
-                    <button id="addUserBtn" class="btn-full-width bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" style="display: none;">
+                    <button id="addUserBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center" style="display: none;">
                         <i class="fas fa-plus mr-2"></i>Add User
                     </button>
                 </div>
@@ -305,6 +305,7 @@ function showReadOnlyMessage() {
                         </tr>
                     </thead>
                     <tbody id="usersTableBody" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        <!-- Data akan dimuat di sini -->
                     </tbody>
                 </table>
 
@@ -345,16 +346,18 @@ function showReadOnlyMessage() {
         </div>
     </div>
 
+<!-- HANYA SATU SCRIPT UTAMA UNTUK USER MANAGEMENT -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     
+    console.log('🚀 User Management Initialized');
+    
     // ===== VARIABLES =====
     let usersData = [];
-    let userPermissions = { can_edit: false, can_delete: false, can_add: false };
     let currentSortColumn = 'id';
     let currentSortOrder = 'ASC';
 
-    // ✅ CHECK ADMIN ACCESS BEFORE ALLOWING ACTIONS
+    // ✅ CHECK ADMIN ACCESS
     function checkAdminAccess() {
         return window.currentUserRole === 'admin';
     }
@@ -364,88 +367,58 @@ document.addEventListener('DOMContentLoaded', function() {
         alert(`${action} is only available for administrators. You have read-only access.`);
     }
 
-    // ===== HIGHLIGHT ACTIVE MENU =====
-    const currentPage = window.location.pathname.split('/').pop();
-    document.querySelectorAll('.nav-item').forEach(item => {
-        const href = item.getAttribute('href');
-        if (href && href === currentPage) {
-            item.classList.add('bg-blue-700');
-        } else {
-            item.classList.remove('bg-blue-700');
-        }
-    });
-
-    // ===== LOGOUT =====
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            
-            // Reset dark mode to default before logout
-            const html = document.documentElement;
-            html.classList.remove('dark');
-            localStorage.removeItem('theme');
-            console.log('Dark mode reset to default before logout');
-            
-            fetch('auth.php', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: 'action=logout'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = 'index.html';
-                } else {
-                    alert('Logout failed: ' + (data.message || 'Unknown error'));
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Logout failed. Please try again.');
-            });
-        });
-    }
-
-    // ===== FETCH USERS =====
+    // ===== FETCH USERS - FIXED VERSION =====
     async function fetchUsers() {
-        const search = document.getElementById('searchInput').value;
-        const response = await fetch(`users.php?search=${encodeURIComponent(search)}&sort_by=${currentSortColumn}&sort_order=${currentSortOrder}`);
-        const result = await response.json();
-        
-        console.log('📊 Fetch Users Response:', result);
-        
-        if (result.success) {
-            // Handle new format with permissions
-            if (result.data && result.data.users) {
-                usersData = result.data.users;
-                userPermissions = result.data.permissions || { can_edit: false, can_delete: false, can_add: false };
-            } else if (result.data) {
-                // Backward compatibility - if data exists but no users property
-                usersData = result.data;
-                userPermissions = { can_edit: checkAdminAccess(), can_delete: checkAdminAccess(), can_add: checkAdminAccess() };
-            } else if (Array.isArray(result.data)) {
-                // If result.data is directly an array
-                usersData = result.data;
-                userPermissions = { can_edit: checkAdminAccess(), can_delete: checkAdminAccess(), can_add: checkAdminAccess() };
-            } else if (Array.isArray(result)) {
-                // If result itself is an array
-                usersData = result;
-                userPermissions = { can_edit: checkAdminAccess(), can_delete: checkAdminAccess(), can_add: checkAdminAccess() };
-            } else {
-                // Fallback - try to extract users from any possible format
-                usersData = result.data || result || [];
-                userPermissions = { can_edit: checkAdminAccess(), can_delete: checkAdminAccess(), can_add: checkAdminAccess() };
+        try {
+            console.log('🔍 Fetching users data...');
+            const search = document.getElementById('searchInput').value;
+            
+            const response = await fetch(`users.php?search=${encodeURIComponent(search)}&sort_by=${currentSortColumn}&sort_order=${currentSortOrder}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             
-            console.log('👥 Users:', usersData);
-            console.log('🔐 Permissions:', userPermissions);
+            const result = await response.json();
+            console.log('📊 Users API Response:', result);
             
-            renderTable();
-            updateUIPermissions();
-        } else {
-            alert('Failed to fetch users: ' + result.message);
+            if (result.success) {
+                // Handle different response formats
+                if (result.data && result.data.users) {
+                    usersData = result.data.users;
+                } else if (result.data && Array.isArray(result.data)) {
+                    usersData = result.data;
+                } else if (result.users && Array.isArray(result.users)) {
+                    usersData = result.users;
+                } else if (Array.isArray(result.data)) {
+                    usersData = result.data;
+                } else {
+                    console.error('❌ Unexpected data format:', result);
+                    usersData = [];
+                }
+                
+                console.log('👥 Users data to display:', usersData);
+                renderTable();
+                updateUIPermissions();
+            } else {
+                console.error('❌ API returned error:', result.message);
+                showError('Failed to fetch users: ' + (result.message || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('❌ Error fetching users:', error);
+            showError('Error loading user data. Please check console for details.');
         }
+    }
+
+    function showError(message) {
+        const tbody = document.getElementById('usersTableBody');
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="px-6 py-4 text-center text-red-500 dark:text-red-400">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>${message}
+                </td>
+            </tr>
+        `;
     }
 
     // ===== UPDATE UI BASED ON PERMISSIONS =====
@@ -453,13 +426,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const isAdmin = checkAdminAccess();
         const addBtn = document.getElementById('addUserBtn');
         const badge = document.getElementById('permissionBadge');
+        const actionHeaders = document.querySelectorAll('.admin-only');
+        
+        console.log('🔐 Updating UI permissions, isAdmin:', isAdmin);
         
         if (addBtn) {
-            if (isAdmin) {
-                addBtn.style.display = 'block';
-            } else {
-                addBtn.style.display = 'none';
-            }
+            addBtn.style.display = isAdmin ? 'flex' : 'none';
         }
         
         if (badge) {
@@ -469,14 +441,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 badge.classList.add('hidden');
             }
         }
+        
+        // Hide action columns for non-admin
+        actionHeaders.forEach(header => {
+            header.style.display = isAdmin ? 'table-cell' : 'none';
+        });
     }
 
-    // ===== RENDER TABLE =====
+    // ===== RENDER TABLE - FIXED VERSION =====
     function renderTable() {
         const tbody = document.getElementById('usersTableBody');
+        
+        if (!tbody) {
+            console.error('❌ usersTableBody element not found!');
+            return;
+        }
+        
         tbody.innerHTML = '';
         
         const isAdmin = checkAdminAccess();
+        
+        if (!usersData || usersData.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-users-slash mr-2"></i>No users found
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        console.log(`🎯 Rendering ${usersData.length} users to table`);
         
         usersData.forEach(item => {
             const tr = document.createElement('tr');
@@ -488,26 +484,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
             let actionButtons = '';
             if (isAdmin) {
-                actionButtons = '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium">';
-                actionButtons += `<button class="text-yellow-500 hover:text-yellow-700 mr-3 transition-transform hover:scale-110 editBtn" data-id="${item.id}" title="Edit"><i class="fas fa-pencil-alt"></i></button>`;
-                actionButtons += `<button class="text-red-500 hover:text-red-700 transition-transform hover:scale-110 deleteBtn" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>`;
-                actionButtons += '</td>';
+                actionButtons = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium admin-only">
+                        <button class="text-yellow-500 hover:text-yellow-700 mr-3 transition-transform hover:scale-110 editBtn" data-id="${item.id}" title="Edit">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button class="text-red-500 hover:text-red-700 transition-transform hover:scale-110 deleteBtn" data-id="${item.id}" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
             } else {
-                actionButtons = '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400 dark:text-gray-500"><i class="fas fa-lock mr-2"></i>No access</td>';
+                actionButtons = '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400 dark:text-gray-500 admin-only"><i class="fas fa-lock mr-2"></i>No access</td>';
             }
 
             tr.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">${item.id}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.username}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.full_name}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.created_at}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">${item.id || 'N/A'}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.username || 'N/A'}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.full_name || 'N/A'}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.created_at || 'N/A'}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${roleBadge}</td>
                 ${actionButtons}
             `;
             tbody.appendChild(tr);
         });
 
-        // Attach event listeners
+        // Attach event listeners for admin actions
         if (isAdmin) {
             document.querySelectorAll('.editBtn').forEach(button => {
                 button.addEventListener('click', () => {
@@ -525,11 +527,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
         }
+        
+        console.log('✅ Table rendered successfully');
     }
 
     // ===== MODAL FUNCTIONS =====
     function openModal(id = null) {
-        // ✅ CHECK ADMIN ACCESS BEFORE EDITING
         if (!checkAdminAccess()) {
             showAdminOnlyError('Edit User');
             return;
@@ -545,12 +548,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (id) {
             const item = usersData.find(i => i.id == id);
-            modalTitle.textContent = 'Edit User';
-            userId.value = item.id;
-            username.value = item.username;
-            fullName.value = item.full_name;
-            password.value = '';
-            role.value = item.role;
+            if (item) {
+                modalTitle.textContent = 'Edit User';
+                userId.value = item.id;
+                username.value = item.username;
+                fullName.value = item.full_name;
+                password.value = '';
+                role.value = item.role;
+            }
         } else {
             modalTitle.textContent = 'Add User';
             userId.value = '';
@@ -572,7 +577,6 @@ document.addEventListener('DOMContentLoaded', function() {
     async function saveUser(event) {
         event.preventDefault();
         
-        // ✅ CHECK ADMIN ACCESS BEFORE SAVING
         if (!checkAdminAccess()) {
             showAdminOnlyError('Save User');
             return;
@@ -597,48 +601,56 @@ document.addEventListener('DOMContentLoaded', function() {
             role: role
         };
 
-        const response = await fetch('users.php', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(payload)
-        });
+        try {
+            const response = await fetch('users.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
 
-        const result = await response.json();
-        if (result.success) {
-            alert(result.message);
-            closeModal();
-            fetchUsers();
-        } else {
-            alert('Failed to save user: ' + result.message);
+            const result = await response.json();
+            if (result.success) {
+                alert(result.message);
+                closeModal();
+                fetchUsers();
+            } else {
+                alert('Failed to save user: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Error saving user:', error);
+            alert('Error saving user. Please try again.');
         }
     }
 
     // ===== DELETE USER =====
     async function deleteUser(id) {
-        // ✅ CHECK ADMIN ACCESS BEFORE DELETING
         if (!checkAdminAccess()) {
             showAdminOnlyError('Delete User');
             return;
         }
         
-        const response = await fetch('users.php', {
-            method: 'DELETE',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: 'id=' + encodeURIComponent(id)
-        });
+        try {
+            const response = await fetch('users.php', {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'id=' + encodeURIComponent(id)
+            });
 
-        const result = await response.json();
-        if (result.success) {
-            alert(result.message);
-            fetchUsers();
-        } else {
-            alert('Failed to delete user: ' + result.message);
+            const result = await response.json();
+            if (result.success) {
+                alert(result.message);
+                fetchUsers();
+            } else {
+                alert('Failed to delete user: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            alert('Error deleting user. Please try again.');
         }
     }
 
     // ===== EVENT LISTENERS =====
     document.getElementById('addUserBtn').addEventListener('click', () => {
-        // ✅ CHECK ADMIN ACCESS BEFORE ADDING
         if (!checkAdminAccess()) {
             showAdminOnlyError('Add User');
             return;
@@ -664,8 +676,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Initial fetch
-    fetchUsers();
+    // Initial fetch after auth is complete
+    setTimeout(() => {
+        console.log('🕒 Starting initial users fetch...');
+        fetchUsers();
+    }, 1000);
 
 }); // END DOMCONTENTLOADED
 
@@ -723,6 +738,5 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 })();
 </script>
-
 </body>
 </html>

@@ -396,48 +396,71 @@ function showReadOnlyMessage() {
                     }
 
                     function renderTable() {
-                        const tbody = document.getElementById('ordersTableBody');
-                        tbody.innerHTML = '';
-                        
-                        const isAdmin = checkAdminAccess();
-                        
-                        ordersData.forEach(item => {
-                            const tr = document.createElement('tr');
+    const tbody = document.getElementById('ordersTableBody');
+    tbody.innerHTML = '';
+    
+    const isAdmin = checkAdminAccess();
+    
+    ordersData.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors';
 
-                            let actionButtons = '';
+        // ✅ STATUS BADGE WITH COLORS
+        const statusValue = (item.status || '').toLowerCase();
+        let statusBadge = '';
+        
+        switch(statusValue) {
+            case 'pending':
+                statusBadge = '<span class="px-3 py-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 rounded-full text-xs font-semibold">Pending</span>';
+                break;
+            case 'processing':
+                statusBadge = '<span class="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full text-xs font-semibold">Processing</span>';
+                break;
+            case 'completed':
+                statusBadge = '<span class="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full text-xs font-semibold">Completed</span>';
+                break;
+            case 'cancelled':
+                statusBadge = '<span class="px-3 py-1 bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 rounded-full text-xs font-semibold">Cancelled</span>';
+                break;
+            default:
+                statusBadge = `<span class="px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded-full text-xs font-semibold">${item.status}</span>`;
+        }
 
-                            tr.innerHTML = `
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.item_code}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.buyers}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.id}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.supplier_name || 'N/A'}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.order_date}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.status}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.total_amount}</td>
-                                ${actionButtons}
-                            `;
-                            tbody.appendChild(tr);
-                        });
+        // ✅ ACTION BUTTONS - ONLY FOR ADMIN
+        let actionButtons = '';
 
-                        // Attach event listeners
-                        if (isAdmin) {
-                            document.querySelectorAll('.editBtn').forEach(button => {
-                                button.addEventListener('click', () => {
-                                    const id = button.getAttribute('data-id');
-                                    openModal(id);
-                                });
-                            });
+        tr.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">${item.item_code}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.buyers}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">${item.id}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.supplier_name || 'N/A'}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.order_date}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${statusBadge}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.total_amount}</td>
+            ${actionButtons}
+        `;
+        tbody.appendChild(tr);
+    });
 
-                            document.querySelectorAll('.deleteBtn').forEach(button => {
-                                button.addEventListener('click', () => {
-                                    const id = button.getAttribute('data-id');
-                                    if (confirm('Are you sure you want to delete this order?')) {
-                                        deleteOrder(id);
-                                    }
-                                });
-                            });
-                        }
-                    }
+    // Attach event listeners
+    if (isAdmin) {
+        document.querySelectorAll('.editBtn').forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.getAttribute('data-id');
+                openModal(id);
+            });
+        });
+
+        document.querySelectorAll('.deleteBtn').forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.getAttribute('data-id');
+                if (confirm('Are you sure you want to delete this order?')) {
+                    deleteOrder(id);
+                }
+            });
+        });
+    }
+}
 
                     function openModal(id = null) {
                         // ✅ CHECK ADMIN ACCESS BEFORE EDITING

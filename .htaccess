@@ -1,0 +1,5 @@
+# Prevent infinite loops
+RewriteEngine On
+
+# Disable directory listing
+Options -Indexes

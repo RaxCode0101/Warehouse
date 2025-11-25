@@ -4995,3 +4995,90 @@ Stack trace:
 [24-Nov-2025 10:55:14 Europe/Berlin] Action received: check_status
 [24-Nov-2025 10:55:20 Europe/Berlin] Action received: check_status
 [24-Nov-2025 10:55:35 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:36:24 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:36:26 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:36:27 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:36:29 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:36:30 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:36:31 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:36:32 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:36:40 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:37:04 Europe/Berlin] Action received: login
+[25-Nov-2025 02:37:04 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 654321
+)
+
+[25-Nov-2025 02:37:04 Europe/Berlin] Login successful for user: bryan
+[25-Nov-2025 02:37:04 Europe/Berlin] Action received: login
+[25-Nov-2025 02:37:04 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 654321
+)
+
+[25-Nov-2025 02:37:04 Europe/Berlin] Login successful for user: bryan
+[25-Nov-2025 02:37:04 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:39:29 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:39:37 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:39:43 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:39:47 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:39:50 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:39:55 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:39:59 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:40:05 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:40:09 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:51:56 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:52:11 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:52:15 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:54:18 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:54:30 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:54:39 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:54:49 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:55:10 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:55:43 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:56:00 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:56:15 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:56:16 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:56:20 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:57:27 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:57:56 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:58:30 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:58:57 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:01 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:04 Europe/Berlin] Action received: logout
+[25-Nov-2025 02:59:06 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:07 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:11 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:11 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:15 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:15 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:18 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:19 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:21 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:21 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:23 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:23 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:25 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:25 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:27 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:27 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:30 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:30 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:32 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:32 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:35 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:37 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:38 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:38 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:39 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:39 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:45 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:45 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:46 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:47 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:48 Europe/Berlin] Action received: check_status
+[25-Nov-2025 02:59:48 Europe/Berlin] Action received: check_status

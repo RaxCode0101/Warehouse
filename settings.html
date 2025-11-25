@@ -39,7 +39,7 @@
 
             <div class="p-4 flex items-center justify-between border-b border-blue-700">
                 <div class="flex items-center">
-                    <img src="https://ui-avatars.com/api/?name=User&background=random" class="w-10 h-10 rounded-full mr-3" alt="User">
+                    <img id="sidebarProfilePicture" src="https://ui-avatars.com/api/?name=User&background=random" class="w-10 h-10 rounded-full mr-3" alt="User">
                     <div class="sidebar-text">
                         <div class="font-medium user-name">Loading...</div>
                         <div id="userRoleText" class="text-xs font-semibold px-2 rounded mt-1 inline-block"></div>
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const formData = new FormData();
-            formData.append('profile_picture', fileInput.files[0]); // ✅ PERBAIKAN: Nama field harus 'profile_picture'
+            formData.append('profile_picture', fileInput.files[0]);
 
             statusEl.textContent = 'Uploading...';
             statusEl.className = 'mt-4 text-sm text-blue-600';
@@ -194,16 +194,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
                 const data = await response.json();
+                console.log('Upload response:', data); // Debug
                 
                 if (data.success) {
                     statusEl.textContent = 'Profile picture updated successfully!';
                     statusEl.className = 'mt-4 text-sm text-green-600';
                     
-                    // Update avatar in sidebar
-                    const avatarImage = document.querySelector('img[alt="User"]');
+                    // Update avatar in sidebar dengan cache busting
+                    const avatarImage = document.getElementById('sidebarProfilePicture');
                     if (avatarImage && data.profile_picture) {
-                        avatarImage.src = data.profile_picture + '?t=' + Date.now();
+                        avatarImage.src = data.profile_picture + '?t=' + new Date().getTime();
+                        console.log('Updated sidebar image to:', avatarImage.src); // Debug
                     }
+                    
+                    // Refresh user data untuk memastikan konsistensi
+                    setTimeout(() => {
+                        checkUserAuthStatus();
+                    }, 500);
                     
                     // Reset form
                     profileForm.reset();
@@ -248,45 +255,76 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ===== CHECK LOGIN STATUS & UPDATE USER INFO =====
-fetch('auth.php', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: 'action=check_status',
-})
-.then(response => response.json())
-.then(data => {
-    console.log('✅ Auth Response:', data); // Debug
-    
-    if (data.success && data.logged_in) {
-        // ✅ Update user full name
+    function checkUserAuthStatus() {
+        fetch('auth.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'action=check_status',
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('✅ Auth Response:', data); // Debug
+            
+            if (data.success && data.logged_in) {
+                updateUserInfo(data.user);
+            } else {
+                window.location.href = 'index.html';
+            }
+        })
+        .catch(error => {
+            console.error('❌ Auth Error:', error);
+        });
+    }
+
+    // Fungsi untuk update user info
+    function updateUserInfo(user) {
+        console.log('Updating user info:', user); // Debug
+        
+        // Update user full name
         const userNameElements = document.querySelectorAll('.user-name');
         userNameElements.forEach(element => {
-            element.textContent = data.user.full_name || 'User';
+            element.textContent = user.full_name || 'User';
         });
 
-        // ✅ Update avatar - PRIORITAS: Profile Picture > UI Avatars
-        const avatarImage = document.querySelector('img[alt="User"]');
+        // Update avatar dengan prioritas yang benar
+        const avatarImage = document.getElementById('sidebarProfilePicture');
         if (avatarImage) {
-            if (data.user.profile_picture && data.user.profile_picture.startsWith('uploads/')) {
-                // Gunakan uploaded profile picture
-                avatarImage.src = data.user.profile_picture + '?t=' + Date.now();
-            } else if (data.user.profile_picture && data.user.profile_picture.startsWith('http')) {
-                // Gunakan URL langsung (UI Avatars)
-                avatarImage.src = data.user.profile_picture;
-            } else {
-                // Fallback ke UI Avatars
-                const encodedName = encodeURIComponent(data.user.full_name || 'User');
-                avatarImage.src = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
+            let avatarUrl;
+            
+            // PRIORITAS 1: Profile picture dari database (jika ada dan valid)
+            if (user.profile_picture && user.profile_picture.startsWith('uploads/')) {
+                avatarUrl = user.profile_picture + '?t=' + new Date().getTime();
+                console.log('Using uploaded profile picture:', avatarUrl);
+            } 
+            // PRIORITAS 2: URL langsung (UI Avatars dari session)
+            else if (user.profile_picture && user.profile_picture.startsWith('http')) {
+                avatarUrl = user.profile_picture;
+                console.log('Using URL profile picture:', avatarUrl);
             }
+            // FALLBACK: UI Avatars berdasarkan nama
+            else {
+                const encodedName = encodeURIComponent(user.full_name || 'User');
+                avatarUrl = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
+                console.log('Using fallback avatar:', avatarUrl);
+            }
+            
+            avatarImage.src = avatarUrl;
+            
+            // Handle error loading image
+            avatarImage.onerror = function() {
+                console.warn('Profile picture failed to load, using fallback');
+                const encodedName = encodeURIComponent(user.full_name || 'User');
+                this.src = `https://ui-avatars.com/api/?name=${encodedName}&background=random`;
+            };
         }
 
-        // ✅ Update role badge
+        // Update role badge
         const userRoleText = document.getElementById('userRoleText');
         if (userRoleText) {
-            userRoleText.textContent = data.user.role || 'user';
-            if (data.user.role === 'admin') {
+            userRoleText.textContent = user.role || 'user';
+            if (user.role === 'admin') {
                 userRoleText.style.backgroundColor = 'green';
                 userRoleText.style.color = 'white';
             } else {
@@ -295,22 +333,18 @@ fetch('auth.php', {
             }
         }
         
-        // ✅ Hide user management for non-admin
+        // Hide user management for non-admin
         const userManagementLink = document.querySelector('a[href="user.html"]');
-        if (userManagementLink && data.user.role !== 'admin') {
-            const fullNameLower = (data.user.full_name || '').toLowerCase().trim();
+        if (userManagementLink && user.role !== 'admin') {
+            const fullNameLower = (user.full_name || '').toLowerCase().trim();
             if (fullNameLower !== 'bryan phillip sumarauw') {
                 userManagementLink.style.display = 'none';
             }
         }
-    } else {
-        // Redirect ke login jika tidak authenticated
-        window.location.href = 'index.html';
     }
-})
-.catch(error => {
-    console.error('❌ Auth Error:', error);
-});
+
+    // Initial load
+    checkUserAuthStatus();
 
 }); // END DOMContentLoaded
 

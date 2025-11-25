@@ -19,11 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file = $_FILES['profile_picture'];
         
         // Validate file type
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
         $fileType = mime_content_type($file['tmp_name']);
         
         if (!in_array($fileType, $allowedTypes)) {
-            echo json_encode(['success' => false, 'message' => 'Invalid file type. Only JPG, PNG, and GIF are allowed.']);
+            echo json_encode(['success' => false, 'message' => 'Invalid file type. Only JPG, PNG, GIF, and WebP are allowed.']);
             exit;
         }
         
@@ -47,8 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Move uploaded file
         if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
             
-            // Get old profile picture to delete
+            // Update database dengan path yang benar
+            $profilePicturePath = 'uploads/profile_pictures/' . $filename;
+            
             try {
+                // Get old profile picture to delete
                 $stmt = $pdo->prepare("SELECT profile_picture FROM users WHERE id = ?");
                 $stmt->execute([$userId]);
                 $oldPicture = $stmt->fetchColumn();
@@ -57,27 +60,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($oldPicture && file_exists(__DIR__ . '/' . $oldPicture)) {
                     unlink(__DIR__ . '/' . $oldPicture);
                 }
-            } catch (PDOException $e) {
-                // Continue even if old file deletion fails
-            }
-            
-            // Update database
-            $profilePicturePath = 'uploads/profile_pictures/' . $filename;
-            
-            try {
+                
+                // Update database dengan path relatif
                 $stmt = $pdo->prepare("UPDATE users SET profile_picture = ? WHERE id = ?");
-                $stmt->execute([$profilePicturePath, $userId]);
-                
-                // Update session
-                $_SESSION['profile_picture'] = $profilePicturePath;
-                
-                echo json_encode([
-                    'success' => true, 
-                    'message' => 'Profile picture updated successfully',
-                    'profile_picture' => $profilePicturePath
-                ]);
+                if ($stmt->execute([$profilePicturePath, $userId])) {
+                    
+                    // Update session
+                    $_SESSION['profile_picture'] = $profilePicturePath;
+                    
+                    echo json_encode([
+                        'success' => true, 
+                        'message' => 'Profile picture updated successfully',
+                        'profile_picture' => $profilePicturePath
+                    ]);
+                    
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Failed to update database']);
+                }
                 
             } catch (PDOException $e) {
+                error_log('Database error: ' . $e->getMessage());
                 echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
             }
             

@@ -177,7 +177,7 @@ switch($action) {
         echo json_encode(['success' => true, 'message' => 'Logged out successfully']);
         exit;
 
-            case 'check_status':
+                        case 'check_status':
         if (isset($_SESSION['user_id'])) {
             $stmt = $pdo->prepare("SELECT id, username, full_name, role, profile_picture FROM users WHERE id = ?");
             $stmt->execute([$_SESSION['user_id']]);
@@ -189,7 +189,7 @@ switch($action) {
                 'user' => [
                     'username' => $user['username'],
                     'full_name' => $user['full_name'],
-                    'profile_picture' => $user['profile_picture'] ?? 'https://ui-avatars.com/api/?name=' . urlencode($user['full_name']) . '&background=random',
+                    'profile_picture' => $user['profile_picture'], // HAPUS FALLBACK UI AVATARS DI SINI
                     'role' => $user['role']
                 ]
             ]);

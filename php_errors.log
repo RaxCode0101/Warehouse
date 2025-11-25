@@ -6326,3 +6326,97 @@ Stack trace:
 [25-Nov-2025 05:15:16 Europe/Berlin] Action received: check_status
 [25-Nov-2025 05:15:47 Europe/Berlin] Action received: check_status
 [25-Nov-2025 05:16:18 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:16:49 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:17:19 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:17:24 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:17:29 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:17:57 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:18:00 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:18:05 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:18:11 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:18:15 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:18:21 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:18:22 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:18:26 Europe/Berlin] Action received: logout
+[25-Nov-2025 05:18:31 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:18:37 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:22:19 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:22:25 Europe/Berlin] Action received: login
+[25-Nov-2025 05:22:25 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 654321
+)
+
+[25-Nov-2025 05:22:25 Europe/Berlin] Login successful for user: bryan
+[25-Nov-2025 05:22:26 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:22:30 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:22:35 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:22:36 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:22:46 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:22:49 Europe/Berlin] Action received: logout
+[25-Nov-2025 05:22:51 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:22:52 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:23:04 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:23:04 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:23:07 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:23:07 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:23:15 Europe/Berlin] Action received: login
+[25-Nov-2025 05:23:15 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 654321
+)
+
+[25-Nov-2025 05:23:15 Europe/Berlin] Login successful for user: bryan
+[25-Nov-2025 05:23:15 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:23:18 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:23:22 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:23:23 Europe/Berlin] Action received: logout
+[25-Nov-2025 05:23:25 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:23:25 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:25:52 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:25:52 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:25:56 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:25:58 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:26:36 Europe/Berlin] Action received: login
+[25-Nov-2025 05:26:36 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 654321
+)
+
+[25-Nov-2025 05:26:36 Europe/Berlin] Login successful for user: bryan
+[25-Nov-2025 05:26:37 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:26:40 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:26:44 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:26:45 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:27:11 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:27:12 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:29:26 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:29:28 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:32:29 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:32:31 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:32:49 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:32:51 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:36:41 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:36:41 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:37:50 Europe/Berlin] Action received: logout
+[25-Nov-2025 05:37:58 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:38:05 Europe/Berlin] Action received: login
+[25-Nov-2025 05:38:05 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 654321
+)
+
+[25-Nov-2025 05:38:07 Europe/Berlin] Login successful for user: bryan
+[25-Nov-2025 05:38:08 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:38:20 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:38:40 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:38:46 Europe/Berlin] Action received: check_status
+[25-Nov-2025 05:39:00 Europe/Berlin] Action received: check_status

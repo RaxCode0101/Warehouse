@@ -61,6 +61,9 @@
         .dark .text-gray-900 {
             color: rgb(243 244 246) !important;
         }
+        .dark div.mt-6:last-child span {
+            color: black !important;
+        }
         .dark .text-gray-800 {
             color: rgb(243 244 246) !important;
         }
@@ -475,10 +478,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // Export Data button
     const exportDataBtns = document.querySelectorAll('.quick-action-export');
     exportDataBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            alert('Export functionality coming soon!');
-        });
+    btn.addEventListener('click', async () => {
+        try {
+            const response = await fetch('transactions.html');
+            const htmlContent = await response.text();
+
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'transactions_export.html';  // nama file export
+            document.body.appendChild(a);
+            a.click();
+
+            URL.revokeObjectURL(url);
+            a.remove();
+
+            alert('Export berhasil! File sudah didownload.');
+        } catch (error) {
+            console.error(error);
+            alert('Export gagal, cek lagi file transactions.html kamu.');
+        }
     });
+});
     
     // View All Inventory button
     const viewAllInventoryBtns = document.querySelectorAll('.view-all-inventory');

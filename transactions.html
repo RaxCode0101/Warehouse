@@ -652,7 +652,7 @@ async function fetchTransactions() {
     if (transactions.length === 0) {
         const tr = document.createElement('tr');
         const td = document.createElement('td');
-        td.colSpan = window.currentUserRole === 'admin' ? 7 : 6; // ✅ Dynamic colspan based on role
+        td.colSpan = 7; // Always 7 columns (including Actions)
         td.className = 'text-center py-4 text-gray-500';
         td.textContent = 'No transactions found.';
         tr.appendChild(td);
@@ -696,7 +696,18 @@ async function fetchTransactions() {
         // Format price to Indonesian Rupiah format
         const formattedPrice = formatRupiah(tx.price);
 
-        // ✅ PERBAIKAN: TAMBAHKAN TOMBOL EDIT DAN DELETE UNTUK ADMIN
+        // ✅ PERBAIKAN: SELALU RENDER 7 KOLOM, ADMIN DAPAT TOMBOL, NON-ADMIN DAPAT KOLOM KOSONG
+        const actionsColumn = isAdmin ? `
+            <td class="px-6 py-4 whitespace-nowrap">
+                <button class="editBtn text-yellow-500 hover:text-yellow-700 mr-3 transition-transform hover:scale-110" data-id="${tx.id}" title="Edit">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deleteBtn text-red-500 hover:text-red-700 transition-transform hover:scale-110" data-id="${tx.id}" title="Delete">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        ` : `<td class="px-6 py-4 whitespace-nowrap"></td>`;
+
         tr.innerHTML = `
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">${tx.id}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${tx.order_id}</td>
@@ -706,19 +717,12 @@ async function fetchTransactions() {
             <td class="px-6 py-4 whitespace-nowrap">
                 <span class="px-2 py-1 rounded-full text-xs font-semibold ${statusClass}">${statusText}</span>
             </td>
-            ${isAdmin ? `
-            <td class="px-6 py-4 whitespace-nowrap" style="display: table-cell !important;">
-                <button class="editBtn text-yellow-500 hover:text-yellow-700 mr-3 transition-transform hover:scale-110" data-id="${tx.id}" title="Edit" style="display: inline-block !important;">
-                    <i class="fas fa-pencil-alt"></i>
-                </button>
-                <button class="deleteBtn text-red-500 hover:text-red-700 transition-transform hover:scale-110" data-id="${tx.id}" title="Delete" style="display: inline-block !important;">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
-            ` : '<td class="px-6 py-4"></td>'}
+            ${actionsColumn}
         `;
         transactionsTableBody.appendChild(tr);
     });
+    
+    // ✅ ATTACH EVENT LISTENERS SETELAH RENDER
     attachRowEventListeners();
 }
 

@@ -399,7 +399,8 @@ function showReadOnlyMessage() {
     const tbody = document.getElementById('ordersTableBody');
     tbody.innerHTML = '';
     
-    const isAdmin = checkAdminAccess();
+    const isAdmin = window.currentUserRole === 'admin';
+    console.log('Rendering orders table. Is Admin?', isAdmin); // DEBUG
     
     ordersData.forEach(item => {
         const tr = document.createElement('tr');
@@ -426,23 +427,6 @@ function showReadOnlyMessage() {
                 statusBadge = `<span class="px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded-full text-xs font-semibold">${item.status}</span>`;
         }
 
-        // ✅ ACTION BUTTONS - ONLY FOR ADMIN
-        let actionButtons = '';
-        if (isAdmin) {
-            actionButtons = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium admin-only">
-                    <button class="editBtn text-yellow-500 hover:text-yellow-700 mr-3 transition-transform hover:scale-110" data-id="${item.id}" title="Edit">
-                        <i class="fas fa-pencil-alt"></i>
-                    </button>
-                    <button class="deleteBtn text-red-500 hover:text-red-700 transition-transform hover:scale-110" data-id="${item.id}" title="Delete">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            `;
-        } else {
-            actionButtons = '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400 dark:text-gray-500 admin-only"><i class="fas fa-lock mr-2"></i>No access</td>';
-        }
-
         tr.innerHTML = `
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">${item.item_code}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.buyers}</td>
@@ -451,15 +435,29 @@ function showReadOnlyMessage() {
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.order_date}</td>
             <td class="px-6 py-4 whitespace-nowrap">${statusBadge}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${item.total_amount}</td>
-            ${actionButtons}
+            ${isAdmin ? `
+            <td class="px-6 py-4 whitespace-nowrap" style="display: table-cell !important;">
+                <button class="editBtn text-yellow-500 hover:text-yellow-700 mr-3 transition-transform hover:scale-110" data-id="${item.id}" title="Edit" style="display: inline-block !important;">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deleteBtn text-red-500 hover:text-red-700 transition-transform hover:scale-110" data-id="${item.id}" title="Delete" style="display: inline-block !important;">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+            ` : '<td class="px-6 py-4"></td>'}
         `;
         tbody.appendChild(tr);
     });
 
-    // Attach event listeners
+    // Attach event listeners for admin actions
     if (isAdmin) {
         document.querySelectorAll('.editBtn').forEach(button => {
             button.addEventListener('click', () => {
+                // ✅ CHECK ADMIN ACCESS BEFORE EDITING
+                if (!checkAdminAccess()) {
+                    showAdminOnlyError('Edit Order');
+                    return;
+                }
                 const id = button.getAttribute('data-id');
                 openModal(id);
             });
@@ -467,6 +465,11 @@ function showReadOnlyMessage() {
 
         document.querySelectorAll('.deleteBtn').forEach(button => {
             button.addEventListener('click', () => {
+                // ✅ CHECK ADMIN ACCESS BEFORE DELETING
+                if (!checkAdminAccess()) {
+                    showAdminOnlyError('Delete Order');
+                    return;
+                }
                 const id = button.getAttribute('data-id');
                 if (confirm('Are you sure you want to delete this order?')) {
                     deleteOrder(id);
@@ -474,6 +477,17 @@ function showReadOnlyMessage() {
             });
         });
     }
+}
+
+// ✅ ADD THESE HELPER FUNCTIONS IF NOT ALREADY PRESENT
+function checkAdminAccess() {
+    const isAdmin = window.currentUserRole === 'admin';
+    console.log('Admin access check:', { role: window.currentUserRole, isAdmin }); // DEBUG
+    return isAdmin;
+}
+
+function showAdminOnlyError(action) {
+    alert(`${action} is only available for administrators. You have read-only access.`);
 }
 
                     function openModal(id = null) {

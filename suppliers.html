@@ -363,62 +363,76 @@ function showReadOnlyMessage() {
             }
 
             function renderTable() {
-                const tbody = document.getElementById('suppliersTableBody');
-                tbody.innerHTML = '';
-                
-                const isAdmin = checkAdminAccess();
-                
-                suppliersData.forEach(item => {
-                    const tr = document.createElement('tr');
-                    tr.className = 'hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors';
+    const tbody = document.getElementById('suppliersTableBody');
+    tbody.innerHTML = '';
+    
+    const isAdmin = window.currentUserRole === 'admin';
+    console.log('Rendering suppliers table. Is Admin?', isAdmin); // DEBUG
+    
+    suppliersData.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors';
 
-                    // ✅ ACTION BUTTONS - ONLY FOR ADMIN
-                    let actionButtons = '';
-                    if (isAdmin) {
-                        actionButtons = `
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium admin-only">
-                                <button class="editBtn text-yellow-500 hover:text-yellow-700 mr-3 transition-transform hover:scale-110" data-id="${item.id}" title="Edit">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </button>
-                                <button class="deleteBtn text-red-500 hover:text-red-700 transition-transform hover:scale-110" data-id="${item.id}" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        `;
-                    } else {
-                        actionButtons = '<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400 dark:text-gray-500 admin-only"><i class="fas fa-lock mr-2"></i>No access</td>';
-                    }
+        tr.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">${item.id}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${item.name}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${item.phone}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${item.address}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${item.item_code}</td>
+            ${isAdmin ? `
+            <td class="px-6 py-4 whitespace-nowrap" style="display: table-cell !important;">
+                <button class="editBtn text-yellow-500 hover:text-yellow-700 mr-3 transition-transform hover:scale-110" data-id="${item.id}" title="Edit" style="display: inline-block !important;">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deleteBtn text-red-500 hover:text-red-700 transition-transform hover:scale-110" data-id="${item.id}" title="Delete" style="display: inline-block !important;">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+            ` : '<td class="px-6 py-4"></td>'}
+        `;
+        tbody.appendChild(tr);
+    });
 
-                    tr.innerHTML = `
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">${item.id}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${item.name}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${item.phone}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${item.address}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${item.item_code}</td>
-                        ${actionButtons}
-                    `;
-                    tbody.appendChild(tr);
-                });
-
-                // Attach event listeners
-                if (isAdmin) {
-                    document.querySelectorAll('.editBtn').forEach(button => {
-                        button.addEventListener('click', () => {
-                            const id = button.getAttribute('data-id');
-                            openModal(id);
-                        });
-                    });
-
-                    document.querySelectorAll('.deleteBtn').forEach(button => {
-                        button.addEventListener('click', () => {
-                            const id = button.getAttribute('data-id');
-                            if (confirm('Are you sure you want to delete this supplier?')) {
-                                deleteSupplier(id);
-                            }
-                        });
-                    });
+    // Attach event listeners for admin actions
+    if (isAdmin) {
+        document.querySelectorAll('.editBtn').forEach(button => {
+            button.addEventListener('click', () => {
+                // ✅ CHECK ADMIN ACCESS BEFORE EDITING
+                if (!checkAdminAccess()) {
+                    showAdminOnlyError('Edit Supplier');
+                    return;
                 }
-            }
+                const id = button.getAttribute('data-id');
+                openModal(id);
+            });
+        });
+
+        document.querySelectorAll('.deleteBtn').forEach(button => {
+            button.addEventListener('click', () => {
+                // ✅ CHECK ADMIN ACCESS BEFORE DELETING
+                if (!checkAdminAccess()) {
+                    showAdminOnlyError('Delete Supplier');
+                    return;
+                }
+                const id = button.getAttribute('data-id');
+                if (confirm('Are you sure you want to delete this supplier?')) {
+                    deleteSupplier(id);
+                }
+            });
+        });
+    }
+}
+
+// ✅ ADD THESE HELPER FUNCTIONS IF NOT ALREADY PRESENT
+function checkAdminAccess() {
+    const isAdmin = window.currentUserRole === 'admin';
+    console.log('Admin access check:', { role: window.currentUserRole, isAdmin }); // DEBUG
+    return isAdmin;
+}
+
+function showAdminOnlyError(action) {
+    alert(`${action} is only available for administrators. You have read-only access.`);
+}
 
             function openModal(id = null) {
                 // ✅ CHECK ADMIN ACCESS BEFORE EDITING

@@ -182,6 +182,7 @@ switch($action) {
             $stmt = $pdo->prepare("SELECT id, username, full_name, role, profile_picture FROM users WHERE id = ?");
             $stmt->execute([$_SESSION['user_id']]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $min_interval = 2; // Minimal interval 2 detik antara request
 
             echo json_encode([
                 'success' => true,

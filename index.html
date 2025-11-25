@@ -8,6 +8,9 @@
       window.tailwind = window.tailwind || {};
       window.tailwind.config = { darkMode: 'class' };
     </script>
+
+    <script src="themeReset.js"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="src/output.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -477,28 +480,49 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Export Data button
     const exportDataBtns = document.querySelectorAll('.quick-action-export');
-    exportDataBtns.forEach(btn => {
+exportDataBtns.forEach(btn => {
     btn.addEventListener('click', async () => {
         try {
-            const response = await fetch('transactions.html');
-            const htmlContent = await response.text();
+            // 1. Fetch data transaksi
+            const res = await fetch('get_transactions.php');
+            const data = await res.json();
 
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
+            if (!Array.isArray(data) || data.length === 0) {
+                alert("Tidak ada data transaksi yang bisa diexport.");
+                return;
+            }
 
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'transactions_export.html';  // nama file export
-            document.body.appendChild(a);
-            a.click();
+            // 2. jsPDF setup
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
 
-            URL.revokeObjectURL(url);
-            a.remove();
+            doc.setFontSize(16);
+            doc.text("Transaction Report", 14, 15);
 
-            alert('Export berhasil! File sudah didownload.');
+            // 3. Convert data → table
+            const tableBody = data.map(row => [
+                row.id,
+                row.invoice,
+                row.item_name,
+                row.qty,
+                row.type,
+                row.date
+            ]);
+
+            doc.autoTable({
+                startY: 25,
+                head: [["ID", "Invoice", "Item", "Qty", "Type", "Date"]],
+                body: tableBody,
+                theme: "grid"
+            });
+
+            // 4. Download
+            doc.save("transactions.pdf");
+
+            alert("Export PDF berhasil!");
         } catch (error) {
             console.error(error);
-            alert('Export gagal, cek lagi file transactions.html kamu.');
+            alert("Export gagal! Cek apakah get_transactions.php bisa diakses.");
         }
     });
 });
@@ -513,11 +537,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // View All Activity button
     const viewAllActivityBtns = document.querySelectorAll('.view-all-activity');
-    viewAllActivityBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            alert('Activity log page coming soon!');
-        });
+viewAllActivityBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        // arahkan ke halaman activity log
+        window.location.href = "activity.html";
     });
+});
+
     
     // Inventory Alerts - View buttons
     const viewOutOfStockBtns = document.querySelectorAll('.view-out-of-stock');
@@ -962,5 +988,8 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    
 </body>
 </html>

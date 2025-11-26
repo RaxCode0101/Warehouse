@@ -1,13 +1,26 @@
 <?php
 header('Content-Type: application/json');
-include "koneksi.php";
 
-$q = $conn->query("SELECT id, invoice, item_name, qty, type, date FROM transactions ORDER BY id DESC");
+// include file koneksi (PDO)
+require_once __DIR__ . "/koneksi.php";
 
-$data = [];
-while ($row = $q->fetch_assoc()) {
-    $data[] = $row;
+// cek koneksi PDO
+if (!$pdo) {
+    echo json_encode(["error" => "Database connection failed (PDO not initialized)"]);
+    exit;
 }
 
-echo json_encode($data);
-?>
+try {
+    // Query data transaksi
+    $stmt = $pdo->query("SELECT id, order_id, transaction_date, price, payment_method, status FROM transactions ORDER BY id DESC");
+
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($data);
+
+} catch (PDOException $e) {
+    echo json_encode([
+        "error" => "Query failed",
+        "details" => $e->getMessage()
+    ]);
+}

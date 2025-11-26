@@ -478,53 +478,314 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Export Data button
-    const exportDataBtns = document.querySelectorAll('.quick-action-export');
-exportDataBtns.forEach(btn => {
-    btn.addEventListener('click', async () => {
-        try {
-            // 1. Fetch data transaksi
-            const res = await fetch('get_transactions.php');
-            const data = await res.json();
+    // === Tambahkan canvas untuk pie chart (hidden) ===
+let pieCanvas = document.createElement("canvas");
+pieCanvas.width = 300;
+pieCanvas.height = 300;
+pieCanvas.style.display = "none";
+document.body.appendChild(pieCanvas);
 
-            if (!Array.isArray(data) || data.length === 0) {
-                alert("Tidak ada data transaksi yang bisa diexport.");
-                return;
-            }
+// Export button
+const exportDataBtns = document.querySelectorAll('.quick-action-export');
 
-            // 2. jsPDF setup
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+// ===== EXPORT PDF & EXCEL — Premium All-in-One =====
+// Pastikan libs (jsPDF, autotable, Chart.js, QRious, XLSX) sudah di-include di HTML.
 
-            doc.setFontSize(16);
-            doc.text("Transaction Report", 14, 15);
+// paths ke assets kamu (sesuaikan bila perlu)
+const LOGO_PATH = "uploads/logo.png";
+const TTD_PATH = "uploads/ttdBryan.png";
 
-            // 3. Convert data → table
-            const tableBody = data.map(row => [
-                row.id,
-                row.invoice,
-                row.item_name,
-                row.qty,
-                row.type,
-                row.date
-            ]);
+// helper: load image as base64 (fetch -> blob -> dataURL)
+async function loadImageBase64(path) {
+    try {
+        const r = await fetch(path);
+        if (!r.ok) throw new Error("Image not found: " + path);
+        const blob = await r.blob();
+        return await new Promise((res) => {
+            const reader = new FileReader();
+            reader.onloadend = () => res(reader.result);
+            reader.readAsDataURL(blob);
+        });
+    } catch (e) {
+        console.warn("loadImageBase64 failed:", path, e);
+        return null;
+    }
+}
 
-            doc.autoTable({
-                startY: 25,
-                head: [["ID", "Invoice", "Item", "Qty", "Type", "Date"]],
-                body: tableBody,
-                theme: "grid"
-            });
+// helper: format nominal sederhana (75rb, 5jt -> numeric to rupiah) — adapt jika price sudah numeric
+function formatPrice(raw) {
+    // try to parse numbers in string, fallback to raw
+    const digits = (raw || "").toString().replace(/[^\d]/g, "");
+    if (!digits) return raw;
+    const n = parseInt(digits, 10);
+    return n.toLocaleString('id-ID');
+}
 
-            // 4. Download
-            doc.save("transactions.pdf");
+// helper: auto-detect theme (AUTO mode)
+function detectDarkMode() {
+    try {
+        const saved = localStorage.getItem('theme');
+        if (saved) return saved === 'dark';
+        return document.documentElement.classList.contains('dark');
+    } catch {
+        return false;
+    }
+}
 
-            alert("Export PDF berhasil!");
-        } catch (error) {
-            console.error(error);
-            alert("Export gagal! Cek apakah get_transactions.php bisa diakses.");
+// Excel export (SheetJS) - simple & styled-ish
+function exportExcel(data) {
+    // prepare header
+    const header = ["ID", "Order ID", "Date", "Price", "Payment Method", "Status"];
+    const rows = data.map(r => [
+        r.id, r.order_id, r.transaction_date, formatPrice(r.price), r.payment_method, r.status
+    ]);
+    const aoa = [header, ...rows];
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+
+    // simple column width
+    const wscols = [{wpx:50},{wpx:80},{wpx:90},{wpx:100},{wpx:120},{wpx:90}];
+    ws["!cols"] = wscols;
+
+    // create workbook & save
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Transactions");
+    XLSX.writeFile(wb, "transactions_export.xlsx");
+}
+
+// main export function
+async function exportPremium() {
+    try {
+        // load images
+        const [logoBase64, ttdBase64] = await Promise.all([
+            loadImageBase64(LOGO_PATH),
+            loadImageBase64(TTD_PATH)
+        ]);
+
+        // fetch data
+        const res = await fetch('get_transactions.php');
+        const data = await res.json();
+        if (!Array.isArray(data) || data.length === 0) {
+            alert("Tidak ada data transaksi.");
+            return;
         }
-    });
+
+        // prepare values
+        const total = data.length;
+        const totalLunas = data.filter(d => (d.status || "").toLowerCase() === "lunas").length;
+        const totalBelum = data.filter(d => (d.status || "").toLowerCase() === "belum lunas").length;
+
+        // prepare charts (pie + line)
+        // PIE (lunas vs belum)
+        const pieCanvas = document.createElement('canvas');
+        pieCanvas.width = 400; pieCanvas.height = 400;
+        const pieCtx = pieCanvas.getContext('2d');
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Lunas','Belum Lunas'],
+                datasets: [{
+                    data: [totalLunas, totalBelum],
+                    backgroundColor: ['#28a745','#dc3545']
+                }]
+            },
+            options: { responsive:false, plugins:{legend:{display:true,position:'bottom'}}}
+        });
+
+        // LINE CHART: aggregate price per month (estimate from transaction_date)
+        // build monthly sums
+        const monthly = {}; // { "YYYY-MM": sum }
+        data.forEach(r => {
+            const date = r.transaction_date || r.date || "";
+            const m = (new Date(date)).toISOString().slice(0,7); // may produce 'Invalid Date' -> handle
+            const key = isNaN(new Date(date)) ? "unknown" : m;
+            const val = parseInt((r.price||'').toString().replace(/[^\d]/g,'')) || 0;
+            monthly[key] = (monthly[key] || 0) + val;
+        });
+        // sort months (exclude unknown)
+        const months = Object.keys(monthly).filter(k=>k!=="unknown").sort();
+        const lineCanvas = document.createElement('canvas');
+        lineCanvas.width = 600; lineCanvas.height = 250;
+        const lineCtx = lineCanvas.getContext('2d');
+        new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Total Price',
+                    data: months.map(m => monthly[m]),
+                    fill: true,
+                    borderColor: '#275be8',
+                    backgroundColor: 'rgba(40,82,255,0.12)',
+                    tension: 0.2
+                }]
+            },
+            options: { responsive:false, plugins:{legend:{display:false}} }
+        });
+
+        // small wait so charts render
+        await new Promise(r=>setTimeout(r, 500));
+        const pieImg = pieCanvas.toDataURL('image/png');
+        const lineImg = lineCanvas.toDataURL('image/png');
+
+        // prepare PDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('l','mm','a4');
+        const isDark = detectDarkMode();
+
+        // theme colors
+        const headerColor = isDark ? [30,30,30] : [40,82,255];
+        const headerText = isDark ? [255,255,255] : [255,255,255];
+        const pageBg = isDark ? [20,20,20] : [255,255,255];
+        const textColor = isDark ? [230,230,230] : [0,0,0];
+
+        // set page background for dark theme (fill whole page with dark)
+        if (isDark) {
+            doc.setFillColor(...pageBg);
+            doc.rect(0,0,297,210,'F');
+        }
+
+        // HEADER
+        doc.setFillColor(...headerColor);
+        doc.rect(0,0,297,22,'F');
+        if (logoBase64) doc.addImage(logoBase64, 'PNG', 6, 1.5, 18, 18);
+        doc.setFontSize(18);
+        doc.setTextColor(...headerText);
+        doc.text('Transaction Report', 30, 14);
+
+        // QR code - positioned BELOW header (Y=25 instead of Y=2)
+        const qrCanvas = document.createElement('canvas');
+        new QRious({ element: qrCanvas, value: `Warehouse Report\nGenerated: ${new Date().toLocaleString()}`, size: 120 });
+        const qrBase64 = qrCanvas.toDataURL('uploads/qrcode.png');
+        doc.addImage(qrBase64, 'PNG', 260, 25, 28, 28);
+
+        // SUMMARY (left under header)
+        doc.setFontSize(11);
+        doc.setTextColor(...textColor);
+        const summaryY = 30;
+        doc.text('Ringkasan Laporan:', 10, summaryY);
+        doc.text(`Total Transaksi  : ${total}`, 10, summaryY + 8);
+        doc.text(`Lunas            : ${totalLunas}`, 10, summaryY + 16);
+        doc.text(`Belum Lunas      : ${totalBelum}`, 10, summaryY + 24);
+
+        // Add a small horizontal separator
+        doc.setDrawColor(180);
+        doc.line(8, summaryY + 28, 289, summaryY + 28);
+
+        // DIAGONAL WATERMARK (large & semi-transparent)
+        if (logoBase64) {
+            // place center large watermark rotated 45deg, opacity low
+            try {
+                doc.addImage(logoBase64, 'PNG', 90, 60, 120, 120, undefined, 'NONE', 0.06, 45);
+            } catch (e) {
+                // fallback - place two side watermarks
+                doc.addImage(logoBase64, 'PNG', 10, 90, 60, 60, '', 'NONE', 0.06);
+                doc.addImage(logoBase64, 'PNG', 225, 90, 60, 60, '', 'NONE', 0.06);
+            }
+        }
+
+        // BUILD TABLE DATA (use formatted price)
+        const tableBody = data.map(r => [
+            r.id,
+            r.order_id,
+            r.transaction_date,
+            formatPrice(r.price),
+            r.payment_method,
+            r.status
+        ]);
+
+        // create table
+        doc.autoTable({
+            startY: summaryY + 36,
+            head: [['ID','Order ID','Date','Price','Payment','Status']],
+            body: tableBody,
+            theme: 'grid',
+            styles: {
+                fontSize: 9,
+                cellPadding: 3,
+                textColor: isDark ? [230,230,230] : [0,0,0]
+            },
+            headStyles: {
+                fillColor: headerColor,
+                textColor: headerText,
+                halign: 'center'
+            },
+            didParseCell: function (dataCell) {
+                // color status cell background
+                if (dataCell.section === 'body' && dataCell.column.index === 5) {
+                    const val = (dataCell.cell.raw || '').toString().toLowerCase();
+                    if (val === 'lunas') {
+                        dataCell.cell.styles.fillColor = [0,150,0];
+                        dataCell.cell.styles.textColor = [255,255,255];
+                        dataCell.cell.styles.fontStyle = 'bold';
+                    } else {
+                        dataCell.cell.styles.fillColor = [200,0,0];
+                        dataCell.cell.styles.textColor = [255,255,255];
+                        dataCell.cell.styles.fontStyle = 'bold';
+                    }
+                }
+            }
+        });
+
+        // position for charts AFTER table
+        const tableEndY = doc.lastAutoTable.finalY || (summaryY + 36 + 60);
+
+        // Check if we need a new page for charts
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const remainingSpace = pageHeight - tableEndY - 15; // 15mm for footer/margin
+        
+        // If not enough space (less than 120mm), add new page
+        if (remainingSpace < 120) {
+            doc.addPage();
+            doc.setFillColor(...pageBg);
+            if (isDark) doc.rect(0, 0, 297, 210, 'F');
+        }
+
+        // LINE CHART - place at top of available space
+        const lineX = 10;
+        const lineY = remainingSpace < 120 ? 20 : tableEndY + 15;
+        doc.addImage(lineImg, 'PNG', lineX, lineY, 95, 45);
+
+        // PIE CHART - place to the right of line chart with enough bottom margin
+        const pieX = 115;
+        const pieY = lineY;
+        doc.addImage(pieImg, 'PNG', pieX, pieY, 70, 70);
+
+        // SIGNATURE area (directly after charts, no barcode section)
+        const signY = Math.max(lineY, pieY) + 80;
+        if (ttdBase64) {
+            doc.addImage(ttdBase64, 'PNG', 10, signY, 50, 22);
+        }
+        doc.setFontSize(11);
+        doc.setTextColor(...textColor);
+        doc.text('Ditandatangani oleh:', 10, signY + 28);
+        doc.text('Bryan Phillip', 10, signY + 36);
+        doc.text('Warehouse Manager', 10, signY + 42);
+
+        // FOOTER - page numbers
+        const totalPages = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= totalPages; i++) {
+            doc.setPage(i);
+            doc.setFontSize(9);
+            doc.setTextColor(120);
+            doc.text(`Page ${i} of ${totalPages}`, doc.internal.pageSize.getWidth()/2, doc.internal.pageSize.getHeight() - 8, { align: 'center' });
+        }
+
+        // SAVE PDF
+        doc.save('transactions_report_ultimate.pdf');
+
+        // ALSO export Excel
+        exportExcel(data);
+
+        alert('Export PDF + Excel sukses. File didownload.');
+    } catch (err) {
+        console.error('Export failed:', err);
+        alert('Export gagal! cek console untuk detail.');
+    }
+}
+
+// attach export to buttons
+document.querySelectorAll('.quick-action-export').forEach(btn=>{
+    btn.addEventListener('click', exportPremium);
 });
     
     // View All Inventory button
@@ -987,9 +1248,21 @@ viewAllActivityBtns.forEach(btn => {
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    
+    <!-- jsPDF + AutoTable -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+<!-- QR generator -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- JsBarcode -->
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
+<!-- SheetJS (XLSX) untuk Excel export -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
 </body>
 </html>

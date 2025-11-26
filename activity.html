@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Log - Warehouse Management System</title>
+    <script>
+      window.tailwind = window.tailwind || {};
+      window.tailwind.config = { darkMode: 'class' };
+    </script>
+    <script src="themeReset.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+        .sidebar.collapsed .logo-text {
+            display: none;
+        }
+        .sidebar.collapsed .nav-item {
+            justify-content: center;
+        }
+        .content {
+            transition: all 0.3s ease;
+        }
+        .content.expanded {
+            margin-left: 70px;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                z-index: 50;
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .content {
+                margin-left: 0 !important;
+            }
+        }
+        .activity-item {
+            transition: all 0.3s ease;
+        }
+        .activity-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .timeline-line {
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #3b82f6, transparent);
+        }
+        
+        /* Dark mode fixes */
+        .dark .text-gray-900 {
+            color: rgb(243 244 246) !important;
+        }
+        .dark .text-gray-800 {
+            color: rgb(243 244 246) !important;
+        }
+        .dark .text-gray-700 {
+            color: rgb(209 213 219) !important;
+        }
+        .dark .text-gray-600 {
+            color: rgb(209 213 219) !important;
+        }
+        .dark .text-gray-500 {
+            color: rgb(156 163 175) !important;
+        }
+        .dark .bg-white {
+            background-color: rgb(31 41 55) !important;
+        }
+        .dark .bg-gray-50 {
+            background-color: rgb(55 65 81) !important;
+        }
+        .dark .border-gray-200 {
+            border-color: rgb(75 85 99) !important;
+        }
+        .dark .border-gray-300 {
+            border-color: rgb(75 85 99) !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 font-sans">
+    <!-- Sidebar -->
+    <div class="sidebar bg-blue-800 dark:bg-gray-900 text-white w-64 flex flex-col fixed h-full">
+        <div class="p-4 flex items-center border-b border-blue-700 dark:border-gray-700">
+            <div class="flex items-center">
+                <i class="fas fa-warehouse text-2xl mr-3"></i>
+                <span class="logo-text font-bold text-xl">WarehousePro</span>
+            </div>
+            <button id="toggleSidebar" class="ml-auto md:hidden">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="p-4 flex items-center justify-between border-b border-blue-700 dark:border-gray-700">
+            <div class="flex items-center">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=random" class="w-10 h-10 rounded-full mr-3" alt="User">
+                <div class="sidebar-text">
+                    <div class="font-medium user-name">Admin</div>
+                    <div class="text-xs text-blue-200">Administrator</div>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-4">
+            <div class="px-4 space-y-2">
+                <a href="index.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    <span class="sidebar-text">Dashboard</span>
+                </a>
+                <a href="inventory.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <i class="fas fa-boxes mr-3"></i>
+                    <span class="sidebar-text">Inventory</span>
+                </a>
+                <a href="suppliers.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <i class="fas fa-truck mr-3"></i>
+                    <span class="sidebar-text">Suppliers</span>
+                </a>
+                <a href="orders.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <i class="fas fa-shopping-cart mr-3"></i>
+                    <span class="sidebar-text">Orders</span>
+                </a>
+                <a href="transactions.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <i class="fas fa-exchange-alt mr-3"></i>
+                    <span class="sidebar-text">Transactions</span>
+                </a>
+                <a href="user.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <i class="fas fa-users mr-3"></i>
+                    <span class="sidebar-text">Users</span>
+                </a>
+                <a href="settings.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <i class="fas fa-cog mr-3"></i>
+                    <span class="sidebar-text">Settings</span>
+                </a>
+            </div>
+        </nav>
+        
+        <div class="p-4 border-t border-blue-700 dark:border-gray-700">
+            <a href="index.html" class="flex items-center text-white hover:text-blue-200">
+                <i class="fas fa-sign-out-alt mr-3"></i>
+                <span class="sidebar-text">Logout</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="content flex-1 overflow-auto ml-64">
+        <!-- Top Navigation -->
+        <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-10">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex items-center">
+                    <button id="mobileToggleSidebar" class="mr-4 md:hidden">
+                        <i class="fas fa-bars text-gray-600 dark:text-gray-300"></i>
+                    </button>
+                    <h1 class="text-xl font-semibold text-gray-800 dark:text-gray-100">Activity Log</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="exportActivityBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
+                        <i class="fas fa-download"></i>
+                        <span class="hidden sm:inline">Export</span>
+                    </button>
+                    <button id="refreshBtn" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content Area -->
+        <main class="p-6">
+            <!-- Filters -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Search</label>
+                        <div class="relative">
+                            <input type="text" id="searchInput" placeholder="Search activity..." 
+                                class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Activity Type</label>
+                        <select id="activityTypeFilter" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
+                            <option value="all">All Activities</option>
+                            <option value="stock">Stock Movement</option>
+                            <option value="order">Orders</option>
+                            <option value="supplier">Suppliers</option>
+                            <option value="user">User Actions</option>
+                            <option value="system">System</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">From Date</label>
+                        <input type="date" id="fromDate" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">To Date</label>
+                        <input type="date" id="toDate" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
+                    </div>
+                </div>
+                <div class="mt-4 flex gap-2">
+                    <button id="applyFilterBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-filter mr-2"></i>Apply Filters
+                    </button>
+                    <button id="clearFilterBtn" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                        <i class="fas fa-times mr-2"></i>Clear
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Today's Activities</p>
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">127</h3>
+                        </div>
+                        <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300">
+                            <i class="fas fa-chart-line text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Stock Movements</p>
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">84</h3>
+                        </div>
+                        <div class="p-3 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300">
+                            <i class="fas fa-boxes text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Orders Processed</p>
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">23</h3>
+                        </div>
+                        <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300">
+                            <i class="fas fa-shopping-cart text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">User Actions</p>
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">20</h3>
+                        </div>
+                        <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300">
+                            <i class="fas fa-users text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Timeline -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Activity Timeline</h2>
+                <div id="activityContainer" class="space-y-4 relative">
+                    <!-- Activity items will be generated here -->
+                </div>
+                
+                <!-- Load More Button -->
+                <div class="mt-6 text-center">
+                    <button id="loadMoreBtn" class="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                        <i class="fas fa-chevron-down mr-2"></i>Load More
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Sample activity data
+        const activities = [
+            {
+                id: 1,
+                type: 'stock',
+                icon: 'fas fa-box-open',
+                color: 'blue',
+                title: 'New Stock Received',
+                description: 'Item #A-2456 - Wireless Headphones (50 units)',
+                user: 'John Doe',
+                timestamp: '10 minutes ago',
+                date: new Date()
+            },
+            {
+                id: 2,
+                type: 'order',
+                icon: 'fas fa-shipping-fast',
+                color: 'green',
+                title: 'Order Shipped',
+                description: 'Order #ORD-7894 shipped to customer',
+                user: 'Sarah Smith',
+                timestamp: '2 hours ago',
+                date: new Date(Date.now() - 2 * 60 * 60 * 1000)
+            },
+            {
+                id: 3,
+                type: 'stock',
+                icon: 'fas fa-exclamation-circle',
+                color: 'yellow',
+                title: 'Low Stock Alert',
+                description: 'Item #B-4521 - Bluetooth Speaker (3 units left)',
+                user: 'System',
+                timestamp: '5 hours ago',
+                date: new Date(Date.now() - 5 * 60 * 60 * 1000)
+            },
+            {
+                id: 4,
+                type: 'supplier',
+                icon: 'fas fa-truck',
+                color: 'purple',
+                title: 'New Supplier Added',
+                description: 'Global Suppliers Inc. added to system',
+                user: 'Admin',
+                timestamp: 'Yesterday',
+                date: new Date(Date.now() - 24 * 60 * 60 * 1000)
+            },
+            {
+                id: 5,
+                type: 'user',
+                icon: 'fas fa-user-plus',
+                color: 'indigo',
+                title: 'New User Registered',
+                description: 'Michael Johnson registered as Warehouse Staff',
+                user: 'Admin',
+                timestamp: 'Yesterday',
+                date: new Date(Date.now() - 25 * 60 * 60 * 1000)
+            },
+            {
+                id: 6,
+                type: 'order',
+                icon: 'fas fa-check-circle',
+                color: 'green',
+                title: 'Order Completed',
+                description: 'Order #ORD-7890 marked as completed',
+                user: 'Jane Wilson',
+                timestamp: '2 days ago',
+                date: new Date(Date.now() - 48 * 60 * 60 * 1000)
+            },
+            {
+                id: 7,
+                type: 'stock',
+                icon: 'fas fa-minus-circle',
+                color: 'red',
+                title: 'Stock Reduced',
+                description: 'Item #C-7894 - Desk Lamp (20 units sold)',
+                user: 'System',
+                timestamp: '2 days ago',
+                date: new Date(Date.now() - 50 * 60 * 60 * 1000)
+            },
+            {
+                id: 8,
+                type: 'system',
+                icon: 'fas fa-cog',
+                color: 'gray',
+                title: 'System Backup',
+                description: 'Daily system backup completed successfully',
+                user: 'System',
+                timestamp: '3 days ago',
+                date: new Date(Date.now() - 72 * 60 * 60 * 1000)
+            }
+        ];
+
+        let displayedActivities = [...activities];
+
+        // Function to render activities
+        function renderActivities(activitiesToRender = displayedActivities) {
+            const container = document.getElementById('activityContainer');
+            container.innerHTML = '';
+
+            activitiesToRender.forEach((activity, index) => {
+                const activityHTML = `
+                    <div class="activity-item flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-${activity.color}-100 dark:bg-${activity.color}-900 flex items-center justify-center">
+                                <i class="${activity.icon} text-${activity.color}-600 dark:text-${activity.color}-300"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <h4 class="text-sm font-semibold text-gray-900 dark:text-gray-100">${activity.title}</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${activity.description}</p>
+                                </div>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap ml-2">${activity.timestamp}</span>
+                            </div>
+                            <div class="mt-2 flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                                <span><i class="fas fa-user mr-1"></i>${activity.user}</span>
+                                <span><i class="fas fa-tag mr-1"></i>${activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += activityHTML;
+            });
+        }
+
+        // Filter activities
+        function filterActivities() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const activityType = document.getElementById('activityTypeFilter').value;
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+
+            displayedActivities = activities.filter(activity => {
+                const matchesSearch = activity.title.toLowerCase().includes(searchTerm) || 
+                                    activity.description.toLowerCase().includes(searchTerm);
+                const matchesType = activityType === 'all' || activity.type === activityType;
+                
+                let matchesDate = true;
+                if (fromDate) {
+                    matchesDate = matchesDate && activity.date >= new Date(fromDate);
+                }
+                if (toDate) {
+                    matchesDate = matchesDate && activity.date <= new Date(toDate);
+                }
+
+                return matchesSearch && matchesType && matchesDate;
+            });
+
+            renderActivities(displayedActivities);
+        }
+
+        // Export functionality
+        document.getElementById('exportActivityBtn').addEventListener('click', function() {
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Type,Title,Description,User,Timestamp\n" +
+                displayedActivities.map(a => 
+                    `${a.type},"${a.title}","${a.description}",${a.user},${a.timestamp}`
+                ).join("\n");
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "activity_log.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // Event listeners
+        document.getElementById('applyFilterBtn').addEventListener('click', filterActivities);
+        document.getElementById('clearFilterBtn').addEventListener('click', function() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('activityTypeFilter').value = 'all';
+            document.getElementById('fromDate').value = '';
+            document.getElementById('toDate').value = '';
+            displayedActivities = [...activities];
+            renderActivities();
+        });
+
+        document.getElementById('searchInput').addEventListener('input', filterActivities);
+        document.getElementById('activityTypeFilter').addEventListener('change', filterActivities);
+
+        document.getElementById('refreshBtn').addEventListener('click', function() {
+            renderActivities();
+            this.querySelector('i').classList.add('fa-spin');
+            setTimeout(() => {
+                this.querySelector('i').classList.remove('fa-spin');
+            }, 1000);
+        });
+
+        // Sidebar toggle
+        const toggleSidebar = document.getElementById('toggleSidebar');
+        const mobileToggleSidebar = document.getElementById('mobileToggleSidebar');
+        const sidebar = document.querySelector('.sidebar');
+        const content = document.querySelector('.content');
+        
+        if (toggleSidebar) {
+            toggleSidebar.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                content.classList.toggle('expanded');
+            });
+        }
+        
+        if (mobileToggleSidebar) {
+            mobileToggleSidebar.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+            });
+        }
+
+        // Initial render
+        renderActivities();
+    </script>
+</body>
+</html>

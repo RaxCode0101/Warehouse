@@ -17,6 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         .sidebar {
             transition: all 0.3s ease;
@@ -118,6 +119,36 @@
             justify-content: center;
             width: 100%;
         }
+
+    /* TAMBAHAN CSS - Masukkan di dalam tag <style> yang sudah ada --> */
+/* Modal styles */
+#activityModal {
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#activityModal > div {
+    animation: slideUp 0.3s ease-in-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
     </style>
     
 <script>
@@ -788,24 +819,6 @@ document.querySelectorAll('.quick-action-export').forEach(btn=>{
     btn.addEventListener('click', exportPremium);
 });
     
-    // View All Inventory button
-    const viewAllInventoryBtns = document.querySelectorAll('.view-all-inventory');
-    viewAllInventoryBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            window.location.href = 'inventory.html';
-        });
-    });
-    
-    // View All Activity button
-    const viewAllActivityBtns = document.querySelectorAll('.view-all-activity');
-viewAllActivityBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        // arahkan ke halaman activity log
-        window.location.href = "activity.html";
-    });
-});
-
-    
     // Inventory Alerts - View buttons
     const viewOutOfStockBtns = document.querySelectorAll('.view-out-of-stock');
     viewOutOfStockBtns.forEach(btn => {
@@ -820,6 +833,342 @@ viewAllActivityBtns.forEach(btn => {
             window.location.href = 'inventory.html?filter=low_stock';
         });
     });
+
+    // Tambahkan script ini DI DALAM tag <script> yang sudah ada di index.html, 
+    // SEBELUM closing tag document.addEventListener('DOMContentLoaded'... -->
+
+// ===== ACTIVITY MODAL FUNCTIONALITY =====
+
+// Extended activity data (50+ items untuk demo)
+const allActivities = [
+    {
+        id: 1,
+        type: 'stock',
+        icon: 'fas fa-box-open',
+        color: 'blue',
+        title: 'New Stock Received',
+        description: 'Item #A-2456 - Wireless Headphones (50 units)',
+        user: 'John Doe',
+        timestamp: '10 minutes ago',
+        date: new Date()
+    },
+    {
+        id: 2,
+        type: 'order',
+        icon: 'fas fa-shipping-fast',
+        color: 'green',
+        title: 'Order Shipped',
+        description: 'Order #ORD-7894 shipped to customer',
+        user: 'Sarah Smith',
+        timestamp: '2 hours ago',
+        date: new Date(Date.now() - 2 * 60 * 60 * 1000)
+    },
+    {
+        id: 3,
+        type: 'stock',
+        icon: 'fas fa-exclamation-circle',
+        color: 'yellow',
+        title: 'Low Stock Alert',
+        description: 'Item #B-4521 - Bluetooth Speaker (3 units left)',
+        user: 'System',
+        timestamp: '5 hours ago',
+        date: new Date(Date.now() - 5 * 60 * 60 * 1000)
+    },
+    {
+        id: 4,
+        type: 'supplier',
+        icon: 'fas fa-truck',
+        color: 'purple',
+        title: 'New Supplier Added',
+        description: 'Global Suppliers Inc. added to system',
+        user: 'Admin',
+        timestamp: 'Yesterday',
+        date: new Date(Date.now() - 24 * 60 * 60 * 1000)
+    },
+    {
+        id: 5,
+        type: 'user',
+        icon: 'fas fa-user-plus',
+        color: 'indigo',
+        title: 'New User Registered',
+        description: 'Michael Johnson registered as Warehouse Staff',
+        user: 'Admin',
+        timestamp: 'Yesterday',
+        date: new Date(Date.now() - 25 * 60 * 60 * 1000)
+    },
+    {
+        id: 6,
+        type: 'order',
+        icon: 'fas fa-check-circle',
+        color: 'green',
+        title: 'Order Completed',
+        description: 'Order #ORD-7890 marked as completed',
+        user: 'Jane Wilson',
+        timestamp: '2 days ago',
+        date: new Date(Date.now() - 48 * 60 * 60 * 1000)
+    },
+    {
+        id: 7,
+        type: 'stock',
+        icon: 'fas fa-minus-circle',
+        color: 'red',
+        title: 'Stock Reduced',
+        description: 'Item #C-7894 - Desk Lamp (20 units sold)',
+        user: 'System',
+        timestamp: '2 days ago',
+        date: new Date(Date.now() - 50 * 60 * 60 * 1000)
+    },
+    {
+        id: 8,
+        type: 'system',
+        icon: 'fas fa-cog',
+        color: 'gray',
+        title: 'System Backup',
+        description: 'Daily system backup completed successfully',
+        user: 'System',
+        timestamp: '3 days ago',
+        date: new Date(Date.now() - 72 * 60 * 60 * 1000)
+    },
+    {
+        id: 9,
+        type: 'stock',
+        icon: 'fas fa-box-open',
+        color: 'blue',
+        title: 'Stock Adjustment',
+        description: 'Item #E-1122 - Gaming Mouse quantity adjusted',
+        user: 'Admin',
+        timestamp: '3 days ago',
+        date: new Date(Date.now() - 75 * 60 * 60 * 1000)
+    },
+    {
+        id: 10,
+        type: 'order',
+        icon: 'fas fa-shopping-cart',
+        color: 'green',
+        title: 'New Order Created',
+        description: 'Order #ORD-7895 created for ABC Corp',
+        user: 'Sarah Smith',
+        timestamp: '4 days ago',
+        date: new Date(Date.now() - 96 * 60 * 60 * 1000)
+    },
+    // Tambahkan lebih banyak aktivitas...
+    {
+        id: 11,
+        type: 'supplier',
+        icon: 'fas fa-handshake',
+        color: 'purple',
+        title: 'Supplier Updated',
+        description: 'Tech Supplies Ltd contact information updated',
+        user: 'Admin',
+        timestamp: '4 days ago',
+        date: new Date(Date.now() - 100 * 60 * 60 * 1000)
+    },
+    {
+        id: 12,
+        type: 'user',
+        icon: 'fas fa-user-edit',
+        color: 'indigo',
+        title: 'User Profile Updated',
+        description: 'John Doe updated profile information',
+        user: 'John Doe',
+        timestamp: '5 days ago',
+        date: new Date(Date.now() - 120 * 60 * 60 * 1000)
+    },
+    {
+        id: 13,
+        type: 'stock',
+        icon: 'fas fa-exchange-alt',
+        color: 'blue',
+        title: 'Stock Transfer',
+        description: 'Transfer of 30 units from Warehouse A to B',
+        user: 'Warehouse Manager',
+        timestamp: '5 days ago',
+        date: new Date(Date.now() - 125 * 60 * 60 * 1000)
+    },
+    {
+        id: 14,
+        type: 'order',
+        icon: 'fas fa-times-circle',
+        color: 'red',
+        title: 'Order Cancelled',
+        description: 'Order #ORD-7880 cancelled by customer',
+        user: 'Customer Service',
+        timestamp: '6 days ago',
+        date: new Date(Date.now() - 144 * 60 * 60 * 1000)
+    },
+    {
+        id: 15,
+        type: 'system',
+        icon: 'fas fa-shield-alt',
+        color: 'gray',
+        title: 'Security Update',
+        description: 'System security patches applied',
+        user: 'System',
+        timestamp: '1 week ago',
+        date: new Date(Date.now() - 168 * 60 * 60 * 1000)
+    }
+];
+
+let filteredModalActivities = [...allActivities];
+
+// Function to render activities in modal
+function renderModalActivities(activities = filteredModalActivities) {
+    const container = document.getElementById('modalActivityContainer');
+    container.innerHTML = '';
+
+    if (activities.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-12 text-gray-500 dark:text-gray-400">
+                <i class="fas fa-inbox text-4xl mb-4"></i>
+                <p>No activities found</p>
+            </div>
+        `;
+        return;
+    }
+
+    activities.forEach(activity => {
+        const activityHTML = `
+            <div class="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 hover:shadow-md transition">
+                <div class="flex-shrink-0">
+                    <div class="w-10 h-10 rounded-full bg-${activity.color}-100 dark:bg-${activity.color}-900 flex items-center justify-center">
+                        <i class="${activity.icon} text-${activity.color}-600 dark:text-${activity.color}-300 text-sm"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h4 class="text-sm font-semibold text-gray-900 dark:text-gray-100">${activity.title}</h4>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">${activity.description}</p>
+                        </div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap ml-2">${activity.timestamp}</span>
+                    </div>
+                    <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                        <span><i class="fas fa-user mr-1"></i>${activity.user}</span>
+                        <span class="px-2 py-0.5 bg-${activity.color}-100 dark:bg-${activity.color}-900/30 text-${activity.color}-700 dark:text-${activity.color}-400 rounded-full">${activity.type}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.innerHTML += activityHTML;
+    });
+
+    // Update stats
+    updateModalStats(activities);
+}
+
+// Update modal statistics
+function updateModalStats(activities) {
+    const total = activities.length;
+    const stock = activities.filter(a => a.type === 'stock').length;
+    const orders = activities.filter(a => a.type === 'order').length;
+    const users = activities.filter(a => a.type === 'user').length;
+
+    document.getElementById('modalStatTotal').textContent = total;
+    document.getElementById('modalStatStock').textContent = stock;
+    document.getElementById('modalStatOrders').textContent = orders;
+    document.getElementById('modalStatUsers').textContent = users;
+}
+
+// Filter modal activities
+function filterModalActivities() {
+    const searchTerm = document.getElementById('modalSearchInput').value.toLowerCase();
+    const activityType = document.getElementById('modalActivityTypeFilter').value;
+    const fromDate = document.getElementById('modalFromDate').value;
+    const toDate = document.getElementById('modalToDate').value;
+
+    filteredModalActivities = allActivities.filter(activity => {
+        const matchesSearch = activity.title.toLowerCase().includes(searchTerm) || 
+                            activity.description.toLowerCase().includes(searchTerm);
+        const matchesType = activityType === 'all' || activity.type === activityType;
+        
+        let matchesDate = true;
+        if (fromDate) {
+            matchesDate = matchesDate && activity.date >= new Date(fromDate);
+        }
+        if (toDate) {
+            matchesDate = matchesDate && activity.date <= new Date(toDate + 'T23:59:59');
+        }
+
+        return matchesSearch && matchesType && matchesDate;
+    });
+
+    renderModalActivities(filteredModalActivities);
+}
+
+// Export modal activities to CSV
+function exportModalActivities() {
+    const csvContent = "data:text/csv;charset=utf-8," + 
+        "Type,Title,Description,User,Timestamp\n" +
+        filteredModalActivities.map(a => 
+            `${a.type},"${a.title}","${a.description}",${a.user},${a.timestamp}`
+        ).join("\n");
+    
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "activity_log.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Open modal
+function openActivityModal() {
+    document.getElementById('activityModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // Prevent background scroll
+    renderModalActivities();
+}
+
+// Close modal
+function closeActivityModal() {
+    document.getElementById('activityModal').classList.add('hidden');
+    document.body.style.overflow = 'auto'; // Restore scroll
+}
+
+// Event listeners for modal
+document.getElementById('closeActivityModal').addEventListener('click', closeActivityModal);
+
+// Close modal when clicking outside
+document.getElementById('activityModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeActivityModal();
+    }
+});
+
+// Close modal with ESC key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeActivityModal();
+    }
+});
+
+// Modal filter buttons
+document.getElementById('modalApplyFilterBtn').addEventListener('click', filterModalActivities);
+document.getElementById('modalClearFilterBtn').addEventListener('click', function() {
+    document.getElementById('modalSearchInput').value = '';
+    document.getElementById('modalActivityTypeFilter').value = 'all';
+    document.getElementById('modalFromDate').value = '';
+    document.getElementById('modalToDate').value = '';
+    filteredModalActivities = [...allActivities];
+    renderModalActivities();
+});
+
+// Modal search real-time
+document.getElementById('modalSearchInput').addEventListener('input', filterModalActivities);
+document.getElementById('modalActivityTypeFilter').addEventListener('change', filterModalActivities);
+
+// Modal export button
+document.getElementById('modalExportBtn').addEventListener('click', exportModalActivities);
+
+// GANTI event listener untuk tombol "View All Activity"
+// View All Activity button
+    const viewAllActivityBtns = document.querySelectorAll('.view-all-activity');
+    viewAllActivityBtns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        openActivityModal(); // Buka modal instead of redirect
+    });
+});
 });
 </script>
 </head>
@@ -1263,6 +1612,80 @@ viewAllActivityBtns.forEach(btn => {
 
 <!-- SheetJS (XLSX) untuk Excel export -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<!-- Activity Modal -->
+<div id="activityModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">All Activity Log</h2>
+            <button id="closeActivityModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Modal Filters -->
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="relative">
+                    <input type="text" id="modalSearchInput" placeholder="Search activity..." 
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+                <select id="modalActivityTypeFilter" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
+                    <option value="all">All Activities</option>
+                    <option value="stock">Stock Movement</option>
+                    <option value="order">Orders</option>
+                    <option value="supplier">Suppliers</option>
+                    <option value="user">User Actions</option>
+                    <option value="system">System</option>
+                </select>
+                <input type="date" id="modalFromDate" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
+                <input type="date" id="modalToDate" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
+            </div>
+            <div class="mt-4 flex gap-2">
+                <button id="modalApplyFilterBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    <i class="fas fa-filter mr-2"></i>Apply
+                </button>
+                <button id="modalClearFilterBtn" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                    <i class="fas fa-times mr-2"></i>Clear
+                </button>
+                <button id="modalExportBtn" class="ml-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                    <i class="fas fa-download mr-2"></i>Export CSV
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal Stats -->
+        <div class="p-6 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-center">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Activities</p>
+                    <p id="modalStatTotal" class="text-2xl font-bold text-gray-900 dark:text-gray-100">0</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Stock Movements</p>
+                    <p id="modalStatStock" class="text-2xl font-bold text-blue-600 dark:text-blue-400">0</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Orders</p>
+                    <p id="modalStatOrders" class="text-2xl font-bold text-green-600 dark:text-green-400">0</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">User Actions</p>
+                    <p id="modalStatUsers" class="text-2xl font-bold text-purple-600 dark:text-purple-400">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Content -->
+        <div class="p-6 overflow-y-auto" style="max-height: 50vh;">
+            <div id="modalActivityContainer" class="space-y-3">
+                <!-- Activities will be rendered here -->
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

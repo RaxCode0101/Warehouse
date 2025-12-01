@@ -19,27 +19,64 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        .sidebar {
-            transition: all 0.3s ease;
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #6366f1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
         }
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        .dark body {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        }
+        
+        .sidebar {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%);
+        }
+        
+        .dark .sidebar {
+            background: linear-gradient(180deg, #1a202c 0%, #2d3748 100%);
+        }
+        
         .sidebar.collapsed {
             width: 70px;
         }
+        
         .sidebar.collapsed .sidebar-text {
             display: none;
         }
+        
         .sidebar.collapsed .logo-text {
             display: none;
         }
+        
         .sidebar.collapsed .nav-item {
             justify-content: center;
         }
+        
         .content {
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
         .content.expanded {
             margin-left: 70px;
         }
+        
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
@@ -53,12 +90,596 @@
                 margin-left: 0 !important;
             }
         }
+        
+        .highlight-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            background: white;
+        }
+        
+        .dark .highlight-card {
+            background: #1f2937;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .highlight-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
         .highlight-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
         }
+        
+        .dark .highlight-card:hover {
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+        }
+        
         .chart-container {
             height: 300px;
+            position: relative;
+        }
+        
+        .nav-item {
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin: 4px 0;
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn {
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+        }
+        
+        .table-container {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .dark .table-container {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .status-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        
+        .status-badge.in-stock {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+        
+        .status-badge.in-stock::before {
+            background-color: var(--success);
+        }
+        
+        .status-badge.low-stock {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-badge.low-stock::before {
+            background-color: var(--warning);
+        }
+        
+        .status-badge.out-of-stock {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+        
+        .status-badge.out-of-stock::before {
+            background-color: var(--danger);
+        }
+        
+        .activity-item {
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .activity-item:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+            border-left-color: var(--primary);
+        }
+        
+        .dark .activity-item:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        
+        .quick-action-btn {
+            transition: all 0.2s ease;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: white;
+        }
+        
+        .dark .quick-action-btn {
+            background: #1f2937;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .quick-action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .dark .quick-action-btn:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .alert-card {
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .alert-card.danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--danger);
+        }
+        
+        .alert-card.warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning);
+        }
+        
+        .dark .alert-card.danger {
+            background-color: rgba(239, 68, 68, 0.2);
+        }
+        
+        .dark .alert-card.warning {
+            background-color: rgba(245, 158, 11, 0.2);
+        }
+        
+        .card {
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            background: white;
+        }
+        
+        .dark .card {
+            background: #1f2937;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dark .card-header {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .dark .login-container {
+            background: #1f2937;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .login-body {
+            padding: 30px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: all 0.2s ease;
+            background: white;
+        }
+        
+        .dark .form-control {
+            background: #374151;
+            border-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        
+        .top-nav {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dark .top-nav {
+            background: #1f2937;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .notification-icon:hover {
+            color: var(--primary);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--danger);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .stat-icon.blue {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+        }
+        
+        .stat-icon.green {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+        
+        .stat-icon.yellow {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+        
+        .stat-icon.purple {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--secondary);
+        }
+        
+        .dark .stat-icon.blue {
+            background: rgba(59, 130, 246, 0.2);
+        }
+        
+        .dark .stat-icon.green {
+            background: rgba(16, 185, 129, 0.2);
+        }
+        
+        .dark .stat-icon.yellow {
+            background: rgba(245, 158, 11, 0.2);
+        }
+        
+        .dark .stat-icon.purple {
+            background: rgba(99, 102, 241, 0.2);
+        }
+        
+        .stat-change {
+            display: inline-flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 20px;
+        }
+        
+        .stat-change.positive {
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .stat-change.negative {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .dark .stat-change.positive {
+            background: rgba(16, 185, 129, 0.2);
+        }
+        
+        .dark .stat-change.negative {
+            background: rgba(239, 68, 68, 0.2);
+        }
+        
+        .chart-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chart-control-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            background: rgba(0, 0, 0, 0.05);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .dark .chart-control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .chart-control-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .activity-icon.blue {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+        }
+        
+        .activity-icon.green {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+        
+        .activity-icon.yellow {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+        
+        .activity-icon.purple {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--secondary);
+        }
+        
+        .dark .activity-icon.blue {
+            background: rgba(59, 130, 246, 0.2);
+        }
+        
+        .dark .activity-icon.green {
+            background: rgba(16, 185, 129, 0.2);
+        }
+        
+        .dark .activity-icon.yellow {
+            background: rgba(245, 158, 11, 0.2);
+        }
+        
+        .dark .activity-icon.purple {
+            background: rgba(99, 102, 241, 0.2);
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #1f2937;
+        }
+        
+        .dark .activity-title {
+            color: #f9fafb;
+        }
+        
+        .activity-desc {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        
+        .dark .activity-desc {
+            color: #d1d5db;
+        }
+        
+        .activity-time {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        
+        .dark .activity-time {
+            color: #6b7280;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: left;
+            padding: 12px 15px;
+            font-weight: 600;
+            color: #374151;
+            background: rgba(0, 0, 0, 0.02);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .dark th {
+            color: #f9fafb;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: 14px;
+        }
+        
+        .dark td {
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        tr:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+        
+        .dark tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .view-all-btn {
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .view-all-btn:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .alert-section {
+            margin-top: 25px;
+        }
+        
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #374151;
+            font-size: 14px;
+        }
+        
+        .dark .alert-title {
+            color: #f9fafb;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         /* Dark mode fixes for text colors */
@@ -120,38 +741,18 @@
             width: 100%;
         }
 
-    /* TAMBAHAN CSS - Masukkan di dalam tag <style> yang sudah ada --> */
-/* Modal styles */
-#activityModal {
-    animation: fadeIn 0.2s ease-in-out;
-}
+        #allActivitiesExpanded {
+            animation: fadeIn 0.3s ease-in-out;
+        }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-#activityModal > div {
-    animation: slideUp 0.3s ease-in-out;
-}
-
-@keyframes slideUp {
-    from {
-        transform: translateY(50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
     
-<script>
+    <!-- JavaScript remains unchanged -->
+    <script>
 // ✅ PERBAIKAN: Early theme initialization - JANGAN HAPUS DARK MODE
 (function(){
   try {
@@ -629,7 +1230,7 @@ async function exportPremium() {
             const date = r.transaction_date || r.date || "";
             const m = (new Date(date)).toISOString().slice(0,7); // may produce 'Invalid Date' -> handle
             const key = isNaN(new Date(date)) ? "unknown" : m;
-            const val = parseInt((r.price||'').toString().replace(/[^\d]/g,'')) || 0;
+            const val = parseInt((r.price||'').toString().replace(/[^\d.]/g,'')) || 0;
             monthly[key] = (monthly[key] || 0) + val;
         });
         // sort months (exclude unknown)
@@ -834,341 +1435,421 @@ document.querySelectorAll('.quick-action-export').forEach(btn=>{
         });
     });
 
-    // Tambahkan script ini DI DALAM tag <script> yang sudah ada di index.html, 
-    // SEBELUM closing tag document.addEventListener('DOMContentLoaded'... -->
+    // ===== DYNAMIC ACTIVITY LOG SYSTEM =====
+    let allActivities = [];
+    let displayedActivitiesCount = 4; // Show 4 recent activities by default
+    const ACTIVITIES_PER_LOAD = 10; // Load 10 more each time
 
-// ===== ACTIVITY MODAL FUNCTIONALITY =====
+    // Fetch real data from database and build activity log
+    async function fetchAndBuildActivityLog() {
+        try {
+            // Fetch all data in parallel
+            const [ordersRes, inventoryRes, suppliersRes, transactionsRes] = await Promise.all([
+                fetch('get_orders.php').catch(() => ({ json: () => [] })),
+                fetch('get_inventory.php').catch(() => ({ json: () => [] })),
+                fetch('get_suppliers.php').catch(() => ({ json: () => [] })),
+                fetch('get_transactions.php').catch(() => ({ json: () => [] }))
+            ]);
 
-// Extended activity data (50+ items untuk demo)
-const allActivities = [
-    {
-        id: 1,
-        type: 'stock',
-        icon: 'fas fa-box-open',
-        color: 'blue',
-        title: 'New Stock Received',
-        description: 'Item #A-2456 - Wireless Headphones (50 units)',
-        user: 'John Doe',
-        timestamp: '10 minutes ago',
-        date: new Date()
-    },
-    {
-        id: 2,
-        type: 'order',
-        icon: 'fas fa-shipping-fast',
-        color: 'green',
-        title: 'Order Shipped',
-        description: 'Order #ORD-7894 shipped to customer',
-        user: 'Sarah Smith',
-        timestamp: '2 hours ago',
-        date: new Date(Date.now() - 2 * 60 * 60 * 1000)
-    },
-    {
-        id: 3,
-        type: 'stock',
-        icon: 'fas fa-exclamation-circle',
-        color: 'yellow',
-        title: 'Low Stock Alert',
-        description: 'Item #B-4521 - Bluetooth Speaker (3 units left)',
-        user: 'System',
-        timestamp: '5 hours ago',
-        date: new Date(Date.now() - 5 * 60 * 60 * 1000)
-    },
-    {
-        id: 4,
-        type: 'supplier',
-        icon: 'fas fa-truck',
-        color: 'purple',
-        title: 'New Supplier Added',
-        description: 'Global Suppliers Inc. added to system',
-        user: 'Admin',
-        timestamp: 'Yesterday',
-        date: new Date(Date.now() - 24 * 60 * 60 * 1000)
-    },
-    {
-        id: 5,
-        type: 'user',
-        icon: 'fas fa-user-plus',
-        color: 'indigo',
-        title: 'New User Registered',
-        description: 'Michael Johnson registered as Warehouse Staff',
-        user: 'Admin',
-        timestamp: 'Yesterday',
-        date: new Date(Date.now() - 25 * 60 * 60 * 1000)
-    },
-    {
-        id: 6,
-        type: 'order',
-        icon: 'fas fa-check-circle',
-        color: 'green',
-        title: 'Order Completed',
-        description: 'Order #ORD-7890 marked as completed',
-        user: 'Jane Wilson',
-        timestamp: '2 days ago',
-        date: new Date(Date.now() - 48 * 60 * 60 * 1000)
-    },
-    {
-        id: 7,
-        type: 'stock',
-        icon: 'fas fa-minus-circle',
-        color: 'red',
-        title: 'Stock Reduced',
-        description: 'Item #C-7894 - Desk Lamp (20 units sold)',
-        user: 'System',
-        timestamp: '2 days ago',
-        date: new Date(Date.now() - 50 * 60 * 60 * 1000)
-    },
-    {
-        id: 8,
-        type: 'system',
-        icon: 'fas fa-cog',
-        color: 'gray',
-        title: 'System Backup',
-        description: 'Daily system backup completed successfully',
-        user: 'System',
-        timestamp: '3 days ago',
-        date: new Date(Date.now() - 72 * 60 * 60 * 1000)
-    },
-    {
-        id: 9,
-        type: 'stock',
-        icon: 'fas fa-box-open',
-        color: 'blue',
-        title: 'Stock Adjustment',
-        description: 'Item #E-1122 - Gaming Mouse quantity adjusted',
-        user: 'Admin',
-        timestamp: '3 days ago',
-        date: new Date(Date.now() - 75 * 60 * 60 * 1000)
-    },
-    {
-        id: 10,
-        type: 'order',
-        icon: 'fas fa-shopping-cart',
-        color: 'green',
-        title: 'New Order Created',
-        description: 'Order #ORD-7895 created for ABC Corp',
-        user: 'Sarah Smith',
-        timestamp: '4 days ago',
-        date: new Date(Date.now() - 96 * 60 * 60 * 1000)
-    },
-    // Tambahkan lebih banyak aktivitas...
-    {
-        id: 11,
-        type: 'supplier',
-        icon: 'fas fa-handshake',
-        color: 'purple',
-        title: 'Supplier Updated',
-        description: 'Tech Supplies Ltd contact information updated',
-        user: 'Admin',
-        timestamp: '4 days ago',
-        date: new Date(Date.now() - 100 * 60 * 60 * 1000)
-    },
-    {
-        id: 12,
-        type: 'user',
-        icon: 'fas fa-user-edit',
-        color: 'indigo',
-        title: 'User Profile Updated',
-        description: 'John Doe updated profile information',
-        user: 'John Doe',
-        timestamp: '5 days ago',
-        date: new Date(Date.now() - 120 * 60 * 60 * 1000)
-    },
-    {
-        id: 13,
-        type: 'stock',
-        icon: 'fas fa-exchange-alt',
-        color: 'blue',
-        title: 'Stock Transfer',
-        description: 'Transfer of 30 units from Warehouse A to B',
-        user: 'Warehouse Manager',
-        timestamp: '5 days ago',
-        date: new Date(Date.now() - 125 * 60 * 60 * 1000)
-    },
-    {
-        id: 14,
-        type: 'order',
-        icon: 'fas fa-times-circle',
-        color: 'red',
-        title: 'Order Cancelled',
-        description: 'Order #ORD-7880 cancelled by customer',
-        user: 'Customer Service',
-        timestamp: '6 days ago',
-        date: new Date(Date.now() - 144 * 60 * 60 * 1000)
-    },
-    {
-        id: 15,
-        type: 'system',
-        icon: 'fas fa-shield-alt',
-        color: 'gray',
-        title: 'Security Update',
-        description: 'System security patches applied',
-        user: 'System',
-        timestamp: '1 week ago',
-        date: new Date(Date.now() - 168 * 60 * 60 * 1000)
+            const orders = await ordersRes.json().catch(() => []);
+            const inventory = await inventoryRes.json().catch(() => []);
+            const suppliers = await suppliersRes.json().catch(() => []);
+            const transactions = await transactionsRes.json().catch(() => []);
+
+            const activities = [];
+
+            // === 1. Process Orders ===
+            if (Array.isArray(orders)) {
+                orders.forEach(order => {
+                    const date = new Date(order.order_date || order.created_at || Date.now());
+                    let title, description, icon, color;
+
+                    const status = (order.status || '').toLowerCase();
+                    if (status === 'pending' || status === 'processing') {
+                        title = 'New Order Created';
+                        description = `Order #${order.order_id || order.id} - ${order.customer_name || 'Customer'}`;
+                        icon = 'fas fa-shopping-cart';
+                        color = 'blue';
+                    } else if (status === 'shipped' || status === 'delivered') {
+                        title = 'Order Shipped';
+                        description = `Order #${order.order_id || order.id} shipped to ${order.customer_name || 'Customer'}`;
+                        icon = 'fas fa-shipping-fast';
+                        color = 'green';
+                    } else if (status === 'cancelled') {
+                        title = 'Order Cancelled';
+                        description = `Order #${order.order_id || order.id} cancelled`;
+                        icon = 'fas fa-times-circle';
+                        color = 'red';
+                    } else {
+                        title = 'Order Updated';
+                        description = `Order #${order.order_id || order.id} - Status: ${order.status}`;
+                        icon = 'fas fa-clipboard-check';
+                        color = 'yellow';
+                    }
+
+                    activities.push({
+                        id: `order-${order.id}`,
+                        type: 'order',
+                        icon,
+                        color,
+                        title,
+                        description,
+                        user: order.created_by || 'Staff',
+                        timestamp: formatTimeAgo(date),
+                        date,
+                        rawDate: date
+                    });
+                });
+            }
+
+            // === 2. Process Inventory ===
+            if (Array.isArray(inventory)) {
+                inventory.forEach(item => {
+                    const date = new Date(item.last_updated || item.created_at || Date.now());
+                    let title, description, icon, color;
+
+                    const stock = parseInt(item.stock_quantity || item.stock || 0);
+                    
+                    if (stock === 0) {
+                        title = 'Item Out of Stock';
+                        description = `${item.item_name || item.name} is now out of stock`;
+                        icon = 'fas fa-exclamation-circle';
+                        color = 'red';
+                    } else if (stock < (item.min_stock || 10)) {
+                        title = 'Low Stock Alert';
+                        description = `${item.item_name || item.name} - Only ${stock} units left`;
+                        icon = 'fas fa-exclamation-triangle';
+                        color = 'yellow';
+                    } else if (item.action === 'added' || item.action === 'restocked') {
+                        title = 'New Stock Received';
+                        description = `${item.item_name || item.name} - ${stock} units added`;
+                        icon = 'fas fa-box-open';
+                        color = 'blue';
+                    } else {
+                        title = 'Inventory Updated';
+                        description = `${item.item_name || item.name} - Stock: ${stock} units`;
+                        icon = 'fas fa-boxes';
+                        color = 'blue';
+                    }
+
+                    activities.push({
+                        id: `inv-${item.id}`,
+                        type: 'stock',
+                        icon,
+                        color,
+                        title,
+                        description,
+                        user: item.updated_by || 'System',
+                        timestamp: formatTimeAgo(date),
+                        date,
+                        rawDate: date
+                    });
+                });
+            }
+
+            // === 3. Process Suppliers ===
+            if (Array.isArray(suppliers)) {
+                suppliers.forEach(sup => {
+                    const date = new Date(sup.created_at || sup.last_contact || Date.now());
+                    let title, description, icon, color;
+
+                    if (sup.action === 'added' || sup.is_new) {
+                        title = 'New Supplier Added';
+                        description = `${sup.supplier_name || sup.name} added to system`;
+                        icon = 'fas fa-truck';
+                        color = 'purple';
+                    } else if (sup.action === 'updated') {
+                        title = 'Supplier Updated';
+                        description = `${sup.supplier_name || sup.name} information updated`;
+                        icon = 'fas fa-handshake';
+                        color = 'purple';
+                    } else {
+                        title = 'Supplier Activity';
+                        description = `Contact with ${sup.supplier_name || sup.name}`;
+                        icon = 'fas fa-building';
+                        color = 'purple';
+                    }
+
+                    activities.push({
+                        id: `sup-${sup.id}`,
+                        type: 'supplier',
+                        icon,
+                        color,
+                        title,
+                        description,
+                        user: sup.added_by || 'Admin',
+                        timestamp: formatTimeAgo(date),
+                        date,
+                        rawDate: date
+                    });
+                });
+            }
+
+            // === 4. Process Transactions ===
+            if (Array.isArray(transactions)) {
+                transactions.forEach(trx => {
+                    const date = new Date(trx.transaction_date || trx.created_at || Date.now());
+                    const amount = parseFloat((trx.price || trx.amount || '0').toString().replace(/[^\d.]/g, ''));
+                    const status = (trx.status || '').toLowerCase();
+                    
+                    let title, description, icon, color;
+
+                    if (status === 'lunas' || status === 'paid' || status === 'completed') {
+                        title = 'Payment Received';
+                        description = `IDR ${amount.toLocaleString('id-ID')} - ${trx.payment_method || 'Payment'} - Order #${trx.order_id || trx.id}`;
+                        icon = 'fas fa-money-bill-wave';
+                        color = 'green';
+                    } else if (status === 'belum lunas' || status === 'pending') {
+                        title = 'Pending Payment';
+                        description = `IDR ${amount.toLocaleString('id-ID')} - Order #${trx.order_id || trx.id} awaiting payment`;
+                        icon = 'fas fa-clock';
+                        color = 'yellow';
+                    } else {
+                        title = 'Transaction Recorded';
+                        description = `IDR ${amount.toLocaleString('id-ID')} - ${trx.payment_method || 'Payment'}`;
+                        icon = 'fas fa-receipt';
+                        color = 'blue';
+                    }
+
+                    activities.push({
+                        id: `trx-${trx.id}`,
+                        type: 'transaction',
+                        icon,
+                        color,
+                        title,
+                        description,
+                        user: trx.processed_by || 'System',
+                        timestamp: formatTimeAgo(date),
+                        date,
+                        rawDate: date
+                    });
+                });
+            }
+
+            // Sort by date (newest first)
+            allActivities = activities.sort((a, b) => b.rawDate - a.rawDate);
+            
+            // Update recent activities display
+            renderRecentActivities();
+            
+        } catch (error) {
+            console.error('Error fetching activity data:', error);
+            allActivities = [];
+        }
     }
-];
 
-let filteredModalActivities = [...allActivities];
+    // Render recent activities (first 4)
+    function renderRecentActivities() {
+        const recentContainer = document.getElementById('recentActivitiesContainer');
+        if (!recentContainer) return;
 
-// Function to render activities in modal
-function renderModalActivities(activities = filteredModalActivities) {
-    const container = document.getElementById('modalActivityContainer');
-    container.innerHTML = '';
+        // Clear existing activities
+        recentContainer.innerHTML = '';
 
-    if (activities.length === 0) {
-        container.innerHTML = `
-            <div class="text-center py-12 text-gray-500 dark:text-gray-400">
-                <i class="fas fa-inbox text-4xl mb-4"></i>
-                <p>No activities found</p>
-            </div>
-        `;
-        return;
-    }
+        // Get first 4 activities
+        const recentActivities = allActivities.slice(0, 4);
 
-    activities.forEach(activity => {
-        const activityHTML = `
-            <div class="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 hover:shadow-md transition">
-                <div class="flex-shrink-0">
-                    <div class="w-10 h-10 rounded-full bg-${activity.color}-100 dark:bg-${activity.color}-900 flex items-center justify-center">
-                        <i class="${activity.icon} text-${activity.color}-600 dark:text-${activity.color}-300 text-sm"></i>
+        if (recentActivities.length === 0) {
+            const noDataHTML = `
+                <div class="flex items-start">
+                    <div class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-400 mr-3">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-500 dark:text-gray-400">No recent activities</p>
+                        <p class="text-sm text-gray-400 dark:text-gray-500">Activities will appear here</p>
                     </div>
                 </div>
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <h4 class="text-sm font-semibold text-gray-900 dark:text-gray-100">${activity.title}</h4>
-                            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">${activity.description}</p>
+            `;
+            recentContainer.innerHTML = noDataHTML;
+            return;
+        }
+
+        // Render each activity
+        recentActivities.forEach(activity => {
+            const activityHTML = `
+                <div class="flex items-start">
+                    <div class="p-2 rounded-full bg-${activity.color}-100 dark:bg-${activity.color}-900 text-${activity.color}-600 dark:text-${activity.color}-300 mr-3">
+                        <i class="${activity.icon}"></i>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-900 dark:text-gray-100">${activity.title}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">${activity.description}</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500">${activity.timestamp}</p>
+                    </div>
+                </div>
+            `;
+            recentContainer.innerHTML += activityHTML;
+        });
+    }
+
+    // Render activities in expanded view
+    function renderExpandedActivities(showMore = false) {
+        const container = document.getElementById('allActivitiesExpanded');
+        if (!container) return;
+
+        if (!showMore) {
+            container.innerHTML = '';
+            displayedActivitiesCount = 10; // Reset to show 10 initially
+        }
+
+        const activitiesToShow = allActivities.slice(0, displayedActivitiesCount);
+
+        if (activitiesToShow.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-inbox text-4xl mb-3"></i>
+                    <p class="font-medium">No activities found</p>
+                    <p class="text-sm mt-1">New activities will appear here</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Stats summary
+        const stats = {
+            total: allActivities.length,
+            orders: allActivities.filter(a => a.type === 'order').length,
+            stock: allActivities.filter(a => a.type === 'stock').length,
+            suppliers: allActivities.filter(a => a.type === 'supplier').length,
+            transactions: allActivities.filter(a => a.type === 'transaction').length
+        };
+
+        const statsHTML = `
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">${stats.total}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Total Activities</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">${stats.orders}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Orders</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">${stats.stock}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Stock Changes</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">${stats.suppliers}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Suppliers</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">${stats.transactions}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Transactions</p>
+                </div>
+            </div>
+        `;
+
+        if (!showMore) {
+            container.innerHTML = statsHTML;
+        }
+
+        // Render activities
+        activitiesToShow.forEach((activity, index) => {
+            if (showMore && index < displayedActivitiesCount - ACTIVITIES_PER_LOAD) {
+                return; // Skip already rendered activities
+            }
+
+            const activityHTML = `
+                <div class="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 hover:shadow-md transition-shadow">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 rounded-full bg-${activity.color}-100 dark:bg-${activity.color}-900 flex items-center justify-center">
+                            <i class="${activity.icon} text-${activity.color}-600 dark:text-${activity.color}-300"></i>
                         </div>
-                        <span class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap ml-2">${activity.timestamp}</span>
                     </div>
-                    <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                        <span><i class="fas fa-user mr-1"></i>${activity.user}</span>
-                        <span class="px-2 py-0.5 bg-${activity.color}-100 dark:bg-${activity.color}-900/30 text-${activity.color}-700 dark:text-${activity.color}-400 rounded-full">${activity.type}</span>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex-1">
+                                <h4 class="text-sm font-semibold text-gray-900 dark:text-gray-100">${activity.title}</h4>
+                                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">${activity.description}</p>
+                            </div>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">${activity.timestamp}</span>
+                        </div>
+                        <div class="mt-2 flex items-center gap-3 text-xs">
+                            <span class="text-gray-500 dark:text-gray-400">
+                                <i class="fas fa-user mr-1"></i>${activity.user}
+                            </span>
+                            <span class="px-2 py-0.5 bg-${activity.color}-100 dark:bg-${activity.color}-900/30 text-${activity.color}-700 dark:text-${activity.color}-300 rounded-full font-medium">
+                                ${activity.type}
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-        container.innerHTML += activityHTML;
-    });
+            `;
+            container.insertAdjacentHTML('beforeend', activityHTML);
+        });
 
-    // Update stats
-    updateModalStats(activities);
-}
-
-// Update modal statistics
-function updateModalStats(activities) {
-    const total = activities.length;
-    const stock = activities.filter(a => a.type === 'stock').length;
-    const orders = activities.filter(a => a.type === 'order').length;
-    const users = activities.filter(a => a.type === 'user').length;
-
-    document.getElementById('modalStatTotal').textContent = total;
-    document.getElementById('modalStatStock').textContent = stock;
-    document.getElementById('modalStatOrders').textContent = orders;
-    document.getElementById('modalStatUsers').textContent = users;
-}
-
-// Filter modal activities
-function filterModalActivities() {
-    const searchTerm = document.getElementById('modalSearchInput').value.toLowerCase();
-    const activityType = document.getElementById('modalActivityTypeFilter').value;
-    const fromDate = document.getElementById('modalFromDate').value;
-    const toDate = document.getElementById('modalToDate').value;
-
-    filteredModalActivities = allActivities.filter(activity => {
-        const matchesSearch = activity.title.toLowerCase().includes(searchTerm) || 
-                            activity.description.toLowerCase().includes(searchTerm);
-        const matchesType = activityType === 'all' || activity.type === activityType;
-        
-        let matchesDate = true;
-        if (fromDate) {
-            matchesDate = matchesDate && activity.date >= new Date(fromDate);
-        }
-        if (toDate) {
-            matchesDate = matchesDate && activity.date <= new Date(toDate + 'T23:59:59');
+        // Add "Load More" button if there are more activities
+        const existingLoadMore = document.getElementById('loadMoreActivities');
+        if (existingLoadMore) {
+            existingLoadMore.remove();
         }
 
-        return matchesSearch && matchesType && matchesDate;
+        if (displayedActivitiesCount < allActivities.length) {
+            const loadMoreHTML = `
+                <button id="loadMoreActivities" class="w-full mt-4 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-chevron-down"></i>
+                    Load More (${allActivities.length - displayedActivitiesCount} remaining)
+                </button>
+            `;
+            container.insertAdjacentHTML('beforeend', loadMoreHTML);
+
+            // Add event listener for load more button
+            document.getElementById('loadMoreActivities').addEventListener('click', function() {
+                displayedActivitiesCount += ACTIVITIES_PER_LOAD;
+                renderExpandedActivities(true);
+            });
+        }
+    }
+
+    // Toggle View All Activity
+    document.getElementById('viewAllActivityBtn').addEventListener('click', function() {
+        const expandedContainer = document.getElementById('allActivitiesExpanded');
+        const isHidden = expandedContainer.classList.contains('hidden');
+
+        if (isHidden) {
+            renderExpandedActivities(false);
+            expandedContainer.classList.remove('hidden');
+            this.innerHTML = '<i class="fas fa-chevron-up mr-1"></i> Hide Activities';
+            
+            // Smooth scroll to expanded section
+            setTimeout(() => {
+                expandedContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        } else {
+            expandedContainer.classList.add('hidden');
+            this.innerHTML = '<i class="fas fa-chevron-down mr-1"></i> View All Activity';
+            displayedActivitiesCount = 10; // Reset counter
+            
+            // Scroll back to Recent Activity section
+            this.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
     });
 
-    renderModalActivities(filteredModalActivities);
-}
+    // Helper function to format time ago
+    function formatTimeAgo(date) {
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMins / 60);
+        const diffDays = Math.floor(diffHours / 24);
 
-// Export modal activities to CSV
-function exportModalActivities() {
-    const csvContent = "data:text/csv;charset=utf-8," + 
-        "Type,Title,Description,User,Timestamp\n" +
-        filteredModalActivities.map(a => 
-            `${a.type},"${a.title}","${a.description}",${a.user},${a.timestamp}`
-        ).join("\n");
-    
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "activity_log.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-// Open modal
-function openActivityModal() {
-    document.getElementById('activityModal').classList.remove('hidden');
-    document.body.style.overflow = 'hidden'; // Prevent background scroll
-    renderModalActivities();
-}
-
-// Close modal
-function closeActivityModal() {
-    document.getElementById('activityModal').classList.add('hidden');
-    document.body.style.overflow = 'auto'; // Restore scroll
-}
-
-// Event listeners for modal
-document.getElementById('closeActivityModal').addEventListener('click', closeActivityModal);
-
-// Close modal when clicking outside
-document.getElementById('activityModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeActivityModal();
+        if (diffMins < 1) return 'Just now';
+        if (diffMins === 1) return '1 minute ago';
+        if (diffMins < 60) return `${diffMins} minutes ago`;
+        if (diffHours === 1) return '1 hour ago';
+        if (diffHours < 24) return `${diffHours} hours ago`;
+        if (diffDays === 1) return 'Yesterday';
+        if (diffDays < 7) return `${diffDays} days ago`;
+        if (diffDays < 30) return `${diffDays} days ago`;
+        return date.toLocaleDateString('id-ID');
     }
-});
 
-// Close modal with ESC key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeActivityModal();
-    }
-});
+    // Initial fetch
+    fetchAndBuildActivityLog();
 
-// Modal filter buttons
-document.getElementById('modalApplyFilterBtn').addEventListener('click', filterModalActivities);
-document.getElementById('modalClearFilterBtn').addEventListener('click', function() {
-    document.getElementById('modalSearchInput').value = '';
-    document.getElementById('modalActivityTypeFilter').value = 'all';
-    document.getElementById('modalFromDate').value = '';
-    document.getElementById('modalToDate').value = '';
-    filteredModalActivities = [...allActivities];
-    renderModalActivities();
-});
-
-// Modal search real-time
-document.getElementById('modalSearchInput').addEventListener('input', filterModalActivities);
-document.getElementById('modalActivityTypeFilter').addEventListener('change', filterModalActivities);
-
-// Modal export button
-document.getElementById('modalExportBtn').addEventListener('click', exportModalActivities);
-
-// GANTI event listener untuk tombol "View All Activity"
-// View All Activity button
-    const viewAllActivityBtns = document.querySelectorAll('.view-all-activity');
-    viewAllActivityBtns.forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        openActivityModal(); // Buka modal instead of redirect
-    });
-});
+    // Auto-refresh every 30 seconds
+    setInterval(fetchAndBuildActivityLog, 30000);
 });
 </script>
 </head>
@@ -1475,7 +2156,13 @@ document.getElementById('modalExportBtn').addEventListener('click', exportModalA
                                 </div>
                             </div>
                         </div>
-                        <button class="mt-4 view-all-activity text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline">View All Activity</button>
+    <button id="viewAllActivityBtn" class="mt-3 text-blue-600 hover:underline">
+        View All Activity
+    </button>
+
+    <!-- Container untuk semua aktivitas (sembunyi awalnya) -->
+    <div id="allActivitiesExpanded" class="mt-6 hidden space-y-3"></div>
+</div>
                     </div>
                 </div>
                 
@@ -1612,80 +2299,6 @@ document.getElementById('modalExportBtn').addEventListener('click', exportModalA
 
 <!-- SheetJS (XLSX) untuk Excel export -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
-<!-- Activity Modal -->
-<div id="activityModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
-        <!-- Modal Header -->
-        <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">All Activity Log</h2>
-            <button id="closeActivityModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                <i class="fas fa-times text-2xl"></i>
-            </button>
-        </div>
-
-        <!-- Modal Filters -->
-        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="relative">
-                    <input type="text" id="modalSearchInput" placeholder="Search activity..." 
-                        class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
-                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                </div>
-                <select id="modalActivityTypeFilter" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
-                    <option value="all">All Activities</option>
-                    <option value="stock">Stock Movement</option>
-                    <option value="order">Orders</option>
-                    <option value="supplier">Suppliers</option>
-                    <option value="user">User Actions</option>
-                    <option value="system">System</option>
-                </select>
-                <input type="date" id="modalFromDate" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
-                <input type="date" id="modalToDate" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
-            </div>
-            <div class="mt-4 flex gap-2">
-                <button id="modalApplyFilterBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                    <i class="fas fa-filter mr-2"></i>Apply
-                </button>
-                <button id="modalClearFilterBtn" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-                    <i class="fas fa-times mr-2"></i>Clear
-                </button>
-                <button id="modalExportBtn" class="ml-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
-                    <i class="fas fa-download mr-2"></i>Export CSV
-                </button>
-            </div>
-        </div>
-
-        <!-- Modal Stats -->
-        <div class="p-6 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="text-center">
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Activities</p>
-                    <p id="modalStatTotal" class="text-2xl font-bold text-gray-900 dark:text-gray-100">0</p>
-                </div>
-                <div class="text-center">
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Stock Movements</p>
-                    <p id="modalStatStock" class="text-2xl font-bold text-blue-600 dark:text-blue-400">0</p>
-                </div>
-                <div class="text-center">
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Orders</p>
-                    <p id="modalStatOrders" class="text-2xl font-bold text-green-600 dark:text-green-400">0</p>
-                </div>
-                <div class="text-center">
-                    <p class="text-sm text-gray-500 dark:text-gray-400">User Actions</p>
-                    <p id="modalStatUsers" class="text-2xl font-bold text-purple-600 dark:text-purple-400">0</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal Content -->
-        <div class="p-6 overflow-y-auto" style="max-height: 50vh;">
-            <div id="modalActivityContainer" class="space-y-3">
-                <!-- Activities will be rendered here -->
-            </div>
-        </div>
-    </div>
-</div>
 
 </body>
 </html>

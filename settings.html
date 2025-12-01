@@ -58,6 +58,12 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
             background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 40;
+            overflow-y: auto;
         }
         
         .dark .sidebar {
@@ -90,8 +96,6 @@
         
         @media (max-width: 768px) {
             .sidebar {
-                position: fixed;
-                z-index: 50;
                 transform: translateX(-100%);
             }
             .sidebar.open {
@@ -1061,7 +1065,7 @@
 <body class="bg-gray-100 dark:bg-gray-900 font-sans">
     <div class="flex">
         <!-- Sidebar -->
-        <div class="sidebar bg-blue-800 dark:bg-gray-900 text-white w-64 flex flex-col h-screen fixed inset-y-0 left-0 z-40 transform transition-transform duration-200 ease-in-out -translate-x-full md:translate-x-0 md:relative md:transform-none">
+        <div class="sidebar bg-blue-800 dark:bg-gray-900 text-white w-64 flex flex-col z-40 transform transition-transform duration-200 ease-in-out -translate-x-full md:translate-x-0">
             <div class="p-4 flex items-center justify-between border-b border-blue-700">
                 <div class="flex items-center">
                     <i class="fas fa-warehouse text-2xl mr-3"></i>
@@ -1127,7 +1131,7 @@
         <div id="mobileOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
 
         <!-- Main Content -->
-        <div class="flex-1 p-6">
+        <div class="flex-1 md:ml-64 p-6">
             <header class="bg-white dark:bg-gray-800 shadow-sm md:sticky md:top-0 relative z-20">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div class="flex items-center">
@@ -1174,7 +1178,7 @@
                             <div class="settings-item">
                                 <div>
                                     <div class="settings-item-label">Full Name</div>
-                                    <div class="settings-item-desc">Your name as it will be displayed throughout the system</div>
+                                    <div class="settings-item-desc">Your name as it will be displayed throughout system</div>
                                 </div>
                                 <input type="text" class="form-input w-64" value="John Doe">
                             </div>
@@ -1195,7 +1199,7 @@
                             <div class="settings-item">
                                 <div>
                                     <div class="settings-item-label">Department</div>
-                                    <div class="settings-item-desc">Your department within the organization</div>
+                                    <div class="settings-item-desc">Your department within organization</div>
                                 </div>
                                 <select class="form-input w-64">
                                     <option>Warehouse Management</option>

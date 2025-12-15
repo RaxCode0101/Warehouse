@@ -26,7 +26,7 @@ if ($search) {
     $stmt = $pdo->prepare("SELECT suppliers.*, suppliers.item_code AS supplier_item_code, inventory.item_code AS item_code_display FROM suppliers LEFT JOIN inventory ON suppliers.item_code = inventory.item_code WHERE suppliers.name LIKE ?
     OR suppliers.phone LIKE ? OR suppliers.address LIKE ? ORDER BY $sort_by $sort_order");
     $like_search = "%$search%";
-    $stmt->execute([$like_search, $like_search, $like_search, $like_search, $like_search]);
+    $stmt->execute([$like_search, $like_search, $like_search]);
 } else {
     $stmt = $pdo->query("SELECT suppliers.*, suppliers.item_code AS supplier_item_code, inventory.item_code AS item_code_display FROM suppliers LEFT JOIN inventory ON suppliers.item_code = inventory.item_code ORDER BY $sort_by $sort_order");
 }

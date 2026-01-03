@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Sistem Aksesibilitas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Inline CSS for High Contrast Mode -->
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #6b7280;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --background-color: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+            --card-background: #ffffff;
+            --hover-background: #f9fafb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* High Contrast Mode Styles */
+        body.high-contrast-mode {
+            --primary-color: #0000ff;
+            --secondary-color: #000000;
+            --success-color: #008000;
+            --warning-color: #ff8c00;
+            --danger-color: #ff0000;
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --border-color: #000000;
+            --card-background: #ffffff;
+            --hover-background: #f0f0f0;
+        }
+
+        body.high-contrast-mode * {
+            border-width: 2px !important;
+            border-color: #000000 !important;
+            outline: 2px solid #000000 !important;
+            outline-offset: 1px !important;
+        }
+
+        body.high-contrast-mode button,
+        body.high-contrast-mode input,
+        body.high-contrast-mode select,
+        body.high-contrast-mode textarea {
+            border: 3px solid #000000 !important;
+            background: #ffffff !important;
+            color: #000000 !important;
+            font-weight: bold !important;
+        }
+
+        body.high-contrast-mode button:hover,
+        body.high-contrast-mode input:hover,
+        body.high-contrast-mode select:hover,
+        body.high-contrast-mode textarea:hover {
+            background: #000000 !important;
+            color: #ffffff !important;
+        }
+
+        body.high-contrast-mode a {
+            color: #0000ff !important;
+            text-decoration: underline !important;
+            font-weight: bold !important;
+        }
+
+        body.high-contrast-mode a:hover {
+            color: #ff0000 !important;
+        }
+
+        body.high-contrast-mode .demo-section,
+        body.high-contrast-mode .demo-button {
+            border: 3px solid #000000 !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        /* Compact View Styles */
+        body.compact-view {
+            --spacing-factor: 0.6;
+        }
+
+        body.compact-view .container {
+            padding: calc(2rem * var(--spacing-factor));
+        }
+
+        body.compact-view .demo-section {
+            margin-bottom: calc(2rem * var(--spacing-factor));
+            padding: calc(2rem * var(--spacing-factor));
+        }
+
+        body.compact-view .demo-button {
+            padding: calc(0.75rem * var(--spacing-factor)) calc(1.5rem * var(--spacing-factor));
+            margin: calc(0.5rem * var(--spacing-factor));
+        }
+
+        /* No Animations */
+        body.no-animations * {
+            animation: none !important;
+            transition: none !important;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            --primary-color: #60a5fa;
+            --secondary-color: #9ca3af;
+            --success-color: #34d399;
+            --warning-color: #fbbf24;
+            --danger-color: #f87171;
+            --background-color: #1f2937;
+            --text-color: #f9fafb;
+            --border-color: #374151;
+            --card-background: #374151;
+            --hover-background: #4b5563;
+        }
+
+        /* Layout Styles */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .demo-section {
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .demo-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            margin: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .demo-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            background: var(--card-background);
+            color: var(--text-color);
+        }
+        
+        .demo-card {
+            background: var(--hover-background);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .status-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .status-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .status-active {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .status-inactive {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Accessibility Toggle */
+        .accessibility-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: var(--card-background);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+        }
+
+        .toggle-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .toggle-label {
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: var(--secondary-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary-color);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(26px);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-background);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1002;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .notification-message {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .accessibility-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 0.5rem;
+                max-width: 250px;
+            }
+
+            .status-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Accessibility Toggle -->
+    <div class="accessibility-toggle">
+        <h4 style="margin-bottom: 1rem; font-size: 0.9rem;">Aksesibilitas</h4>
+        
+        <div class="toggle-item">
+            <span class="toggle-label">Kontras Tinggi</span>
+            <div class="toggle-switch" id="high-contrast-toggle" onclick="toggleHighContrast()"></div>
+        </div>
+        
+        <div class="toggle-item">
+            <span class="toggle-label">Tampilan Ringkas</span>
+            <div class="toggle-switch" id="compact-view-toggle" onclick="toggleCompactView()"></div>
+        </div>
+        
+        <div class="toggle-item">
+            <span class="toggle-label">Mode Gelap</span>
+            <div class="toggle-switch" id="dark-mode-toggle" onclick="toggleDarkMode()"></div>
+        </div>
+        
+        <div class="toggle-item">
+            <span class="toggle-label">Animasi</span>
+            <div class="toggle-switch active" id="animations-toggle" onclick="toggleAnimations()"></div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-title" id="notification-title"></div>
+        <div class="notification-message" id="notification-message"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <h1 style="text-align: center; margin-bottom: 2rem;">
+            🎯 Demo Sistem Aksesibilitas
+        </h1>
+        
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <p style="font-size: 1.1rem; color: var(--secondary-color);">
+                Cobalah semua fitur aksesibilitas di halaman ini.
+                Buka <a href="settings.html" target="_blank">settings.html</a> di tab lain untuk melihat sinkronisasi real-time!
+            </p>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="demo-section">
+            <h2>🚀 Aksi Cepat</h2>
+            <div style="text-align: center;">
+                <button class="demo-button" onclick="toggleHighContrast()">
+                    🎨 Toggle Kontras Tinggi
+                </button>
+                <button class="demo-button" onclick="toggleDarkMode()">
+                    🌙 Toggle Mode Gelap
+                </button>
+                <button class="demo-button" onclick="toggleCompactView()">
+                    📱 Toggle Tampilan Ringkas
+                </button>
+                <button class="demo-button" onclick="toggleAnimations()">
+                    ⚡ Toggle Animasi
+                </button>
+            </div>
+        </div>
+        
+        <!-- Current Status -->
+        <div class="demo-section">
+            <h2>📊 Status Aksesibilitas Saat Ini</h2>
+            <div class="status-grid" id="statusGrid">
+                <!-- Status will be updated by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Interactive Elements -->
+        <div class="demo-section">
+            <h2>🎮 Elemen Interaktif</h2>
+            
+            <div class="demo-card">
+                <h3>Form Input</h3>
+                <input type="text" class="demo-input" placeholder="Nama Anda">
+                <input type="email" class="demo-input" placeholder="Email Anda">
+                <textarea class="demo-input" rows="3" placeholder="Pesan Anda"></textarea>
+                <button class="demo-button">Kirim</button>
+            </div>
+            
+            <div class="demo-card">
+                <h3>Links dan Buttons</h3>
+                <a href="#" style="margin-right: 1rem;">Link biasa</a>
+                <button class="demo-button">Button biasa</button>
+                <button class="demo-button" style="background: var(--success-color);">Button Success</button>
+                <button class="demo-button" style="background: var(--danger-color);">Button Danger</button>
+            </div>
+            
+            <div class="demo-card">
+                <h3>Select Dropdown</h3>
+                <select class="demo-input">
+                    <option>Pilih opsi 1</option>
+                    <option>Pilih opsi 2</option>
+                    <option>Pilih opsi 3</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Keyboard Shortcuts -->
+        <div class="demo-section">
+            <h2>⌨️ Keyboard Shortcuts</h2>
+            <div class="status-grid">
+                <div class="demo-card">
+                    <strong>Ctrl + Shift + H</strong>
+                    <p style="color: var(--secondary-color); margin: 0.5rem 0;">Toggle High Contrast</p>
+                </div>
+                <div class="demo-card">
+                    <strong>Ctrl + Shift + D</strong>
+                    <p style="color: var(--secondary-color); margin: 0.5rem 0;">Toggle Dark Mode</p>
+                </div>
+                <div class="demo-card">
+                    <strong>Ctrl + Shift + C</strong>
+                    <p style="color: var(--secondary-color); margin: 0.5rem 0;">Toggle Compact View</p>
+                </div>
+                <div class="demo-card">
+                    <strong>Ctrl + Shift + A</strong>
+                    <p style="color: var(--secondary-color); margin: 0.5rem 0;">Toggle Animations</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test Instructions -->
+        <div class="demo-section">
+            <h2>🧪 Cara Testing</h2>
+            <ol style="line-height: 1.8;">
+                <li><strong>Buka halaman ini di browser</strong></li>
+                <li><strong>Buka <a href="settings.html" target="_blank">settings.html</a> di tab baru</strong></li>
+                <li><strong>Aktifkan High Contrast Mode di salah satu halaman</strong></li>
+                <li><strong>Perhatikan bahwa semua halaman otomatis update</strong></li>
+                <li><strong>Coba semua keyboard shortcuts</strong></li>
+                <li><strong>Test dengan screen reader (jika tersedia)</strong></li>
+                <li><strong>Test navigasi keyboard (Tab, Shift+Tab)</strong></li>
+            </ol>
+        </div>
+        
+        <!-- Links to Other Pages -->
+        <div class="demo-section">
+            <h2>🔗 Halaman Lain</h2>
+            <div style="text-align: center;">
+                <a href="index.html" class="demo-button" style="margin: 0.5rem;">
+                    🏠 Dashboard
+                </a>
+                <a href="settings.html" class="demo-button" style="margin: 0.5rem;">
+                    ⚙️ Settings
+                </a>
+                <a href="inventory.html" class="demo-button" style="margin: 0.5rem;">
+                    📦 Inventory
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Inline JavaScript for Accessibility -->
+    <script>
+        // Accessibility Manager - Inline Version
+        (function() {
+            // Load settings from localStorage
+            function loadSettings() {
+                try {
+                    const saved = localStorage.getItem('accessibilitySettings');
+                    return saved ? JSON.parse(saved) : {
+                        highContrast: false,
+                        compactView: false,
+                        darkMode: false,
+                        animations: true
+                    };
+                } catch (error) {
+                    console.warn('Error loading settings:', error);
+                    return {
+                        highContrast: false,
+                        compactView: false,
+                        darkMode: false,
+                        animations: true
+                    };
+                }
+            }
+
+            // Save settings to localStorage
+            function saveSettings(settings) {
+                try {
+                    localStorage.setItem('accessibilitySettings', JSON.stringify(settings));
+                    
+                    // Trigger storage event for other tabs
+                    window.dispatchEvent(new StorageEvent('storage', {
+                        key: 'accessibilitySettings',
+                        newValue: JSON.stringify(settings),
+                        oldValue: null
+                    }));
+                } catch (error) {
+                    console.warn('Error saving settings:', error);
+                }
+            }
+
+            // Apply settings to page
+            function applySettings(settings) {
+                const body = document.body;
+                
+                // Remove all classes first
+                body.classList.remove('high-contrast-mode', 'compact-view', 'dark-mode', 'no-animations');
+                
+                // Apply high contrast mode
+                if (settings.highContrast) {
+                    body.classList.add('high-contrast-mode');
+                }
+
+                // Apply compact view
+                if (settings.compactView) {
+                    body.classList.add('compact-view');
+                }
+
+                // Apply dark mode
+                if (settings.darkMode) {
+                    body.classList.add('dark-mode');
+                }
+
+                // Apply animations
+                if (!settings.animations) {
+                    body.classList.add('no-animations');
+                }
+
+                // Update toggle switches
+                updateToggleSwitches(settings);
+            }
+
+            // Update toggle switches
+            function updateToggleSwitches(settings) {
+                const highContrastToggle = document.getElementById('high-contrast-toggle');
+                const compactViewToggle = document.getElementById('compact-view-toggle');
+                const darkModeToggle = document.getElementById('dark-mode-toggle');
+                const animationsToggle = document.getElementById('animations-toggle');
+
+                if (highContrastToggle) {
+                    highContrastToggle.classList.toggle('active', settings.highContrast);
+                }
+                if (compactViewToggle) {
+                    compactViewToggle.classList.toggle('active', settings.compactView);
+                }
+                if (darkModeToggle) {
+                    darkModeToggle.classList.toggle('active', settings.darkMode);
+                }
+                if (animationsToggle) {
+                    animationsToggle.classList.toggle('active', settings.animations);
+                }
+            }
+
+            // Show notification
+            function showNotification(title, message) {
+                const notification = document.getElementById('notification');
+                const titleElement = document.getElementById('notification-title');
+                const messageElement = document.getElementById('notification-message');
+
+                if (titleElement) titleElement.textContent = title;
+                if (messageElement) messageElement.textContent = message;
+
+                notification.classList.add('show');
+
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            // Initialize settings
+            let settings = loadSettings();
+            applySettings(settings);
+
+            // Listen for storage changes from other tabs
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'accessibilitySettings' && e.newValue) {
+                    settings = JSON.parse(e.newValue);
+                    applySettings(settings);
+                    updateStatus();
+                }
+            });
+
+            // Toggle functions
+            window.toggleHighContrast = function() {
+                settings.highContrast = !settings.highContrast;
+                saveSettings(settings);
+                applySettings(settings);
+                showNotification('Mode Kontras Tinggi', settings.highContrast ? 'Diaktifkan' : 'Dinonaktifkan');
+                updateStatus();
+            };
+
+            window.toggleCompactView = function() {
+                settings.compactView = !settings.compactView;
+                saveSettings(settings);
+                applySettings(settings);
+                showNotification('Tampilan Ringkas', settings.compactView ? 'Diaktifkan' : 'Dinonaktifkan');
+                updateStatus();
+            };
+
+            window.toggleDarkMode = function() {
+                settings.darkMode = !settings.darkMode;
+                saveSettings(settings);
+                applySettings(settings);
+                showNotification('Mode Gelap', settings.darkMode ? 'Diaktifkan' : 'Dinonaktifkan');
+                updateStatus();
+            };
+
+            window.toggleAnimations = function() {
+                settings.animations = !settings.animations;
+                saveSettings(settings);
+                applySettings(settings);
+                showNotification('Animasi', settings.animations ? 'Diaktifkan' : 'Dinonaktifkan');
+                updateStatus();
+            };
+
+            // Update status display
+            function updateStatus() {
+                const statusGrid = document.getElementById('statusGrid');
+                if (statusGrid) {
+                    statusGrid.innerHTML = `
+                        <div class="status-item ${settings.highContrast ? 'status-active' : 'status-inactive'}">
+                            <h3>🎨 Kontras Tinggi</h3>
+                            <p>${settings.highContrast ? '✅ Aktif' : '❌ Nonaktif'}</p>
+                        </div>
+                        <div class="status-item ${settings.darkMode ? 'status-active' : 'status-inactive'}">
+                            <h3>🌙 Mode Gelap</h3>
+                            <p>${settings.darkMode ? '✅ Aktif' : '❌ Nonaktif'}</p>
+                        </div>
+                        <div class="status-item ${settings.compactView ? 'status-active' : 'status-inactive'}">
+                            <h3>📱 Tampilan Ringkas</h3>
+                            <p>${settings.compactView ? '✅ Aktif' : '❌ Nonaktif'}</p>
+                        </div>
+                        <div class="status-item ${settings.animations ? 'status-active' : 'status-inactive'}">
+                            <h3>⚡ Animasi</h3>
+                            <p>${settings.animations ? '✅ Aktif' : '❌ Nonaktif'}</p>
+                        </div>
+                        <div class="status-item">
+                            <h3>🕐 Update Terakhir</h3>
+                            <p>${new Date().toLocaleTimeString('id-ID')}</p>
+                        </div>
+                        <div class="status-item">
+                            <h3>💾 Tersimpan</h3>
+                            <p>✅ Lokal Storage</p>
+                        </div>
+                    `;
+                }
+            }
+
+            // Setup keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                // Ctrl/Cmd + Shift + H: Toggle High Contrast
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'H') {
+                    e.preventDefault();
+                    window.toggleHighContrast();
+                }
+
+                // Ctrl/Cmd + Shift + C: Toggle Compact View
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
+                    e.preventDefault();
+                    window.toggleCompactView();
+                }
+
+                // Ctrl/Cmd + Shift + D: Toggle Dark Mode
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
+                    e.preventDefault();
+                    window.toggleDarkMode();
+                }
+
+                // Ctrl/Cmd + Shift + A: Toggle Animations
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
+                    e.preventDefault();
+                    window.toggleAnimations();
+                }
+            });
+
+            // Periodically check for settings changes
+            setInterval(() => {
+                const newSettings = loadSettings();
+                if (JSON.stringify(newSettings) !== JSON.stringify(settings)) {
+                    settings = newSettings;
+                    applySettings(settings);
+                    updateStatus();
+                }
+            }, 1000);
+
+            // Add click handlers to demo cards
+            const demoCards = document.querySelectorAll('.demo-card');
+            demoCards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function() {
+                    showNotification('Demo', 'Anda mengklik demo card');
+                });
+            });
+
+            // Initialize status display
+            setTimeout(() => {
+                updateStatus();
+                
+                // Update status every 2 seconds
+                setInterval(updateStatus, 2000);
+            }, 100);
+        })();
+    </script>
+</body>
+</html>

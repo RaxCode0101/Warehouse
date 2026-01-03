@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,15 +9,13 @@
       window.tailwind.config = { darkMode: 'class' };
     </script>
 
-    <script src="themeReset.js"></script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="src/output.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+        
     <style>
         :root {
             --primary: #3b82f6;
@@ -27,8 +24,9 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --dark: #1f2937;
+             --dark: #1f2937; 
             --light: #f9fafb;
+            --contrast-mode: normal; /* Default contrast mode */
         }
         
         * {
@@ -41,10 +39,6 @@
             perspective: 1000px;
         }
         
-        .dark body {
-            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-        }
-        
         .sidebar {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
@@ -54,7 +48,6 @@
             left: 0;
             height: 100vh;
             z-index: 40;
-            overflow-y: auto;
             transform-style: preserve-3d;
         }
         
@@ -90,8 +83,7 @@
             margin-left: 70px;
             width: calc(100vw - 70px);
         }
-        
-                
+          
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -145,11 +137,6 @@
             transform: translateZ(0);
         }
         
-        .dark .highlight-card {
-            background: #1f2937;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-        
         .highlight-card::before {
             content: '';
             position: absolute;
@@ -176,11 +163,20 @@
             perspective: 1000px;
         }
         
+        /* ✅ PERBAIKAN: Nav item styles - z-index dan pointer-events yang benar */
         .nav-item {
             transition: all 0.2s ease;
             border-radius: 8px;
             margin: 4px 0;
             transform-style: preserve-3d;
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
         }
         
         .nav-item:hover {
@@ -191,6 +187,17 @@
         .nav-item.active {
             background-color: rgba(255, 255, 255, 0.15);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* ✅ PERBAIKAN: Pastikan nav links selalu bisa diklik */
+        .sidebar nav {
+            position: relative;
+            z-index: 15;
+        }
+        
+        .sidebar .nav-item {
+            position: relative;
+            z-index: 20;
         }
         
         .btn {
@@ -232,10 +239,6 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             transform-style: preserve-3d;
             transform: translateZ(0);
-        }
-        
-        .dark .table-container {
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
         .status-badge {
@@ -310,11 +313,6 @@
             transform: translateZ(0);
         }
         
-        .dark .quick-action-btn {
-            background: #1f2937;
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-        
         .quick-action-btn:hover {
             transform: translateY(-3px) rotateX(5deg) translateZ(10px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
@@ -384,10 +382,6 @@
             align-items: center;
         }
         
-        .dark .card-header {
-            border-bottom-color: rgba(255, 255, 255, 0.1);
-        }
-        
         .card-body {
             padding: 20px;
         }
@@ -431,12 +425,6 @@
             transform: translateZ(0);
         }
         
-        .dark .form-control {
-            background: #374151;
-            border-color: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-        
         .form-control:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
@@ -445,6 +433,9 @@
         }
         
         .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
             background: white;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             padding: 15px 30px;
@@ -456,6 +447,9 @@
         }
         
         .dark .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
             background: #1f2937;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
@@ -464,6 +458,8 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            position: relative;
+            z-index: 110; /* ensure above content */
         }
         
         .notification-icon {
@@ -601,11 +597,6 @@
             transform: translateZ(0);
         }
         
-        .dark .chart-control-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-        
         .chart-control-btn:hover {
             transform: translateY(-2px) translateZ(5px);
         }
@@ -679,19 +670,11 @@
             margin-bottom: 4px;
             color: #1f2937;
         }
-        
-        .dark .activity-title {
-            color: #f9fafb;
-        }
-        
+
         .activity-desc {
             font-size: 14px;
             color: #6b7280;
             margin-bottom: 4px;
-        }
-        
-        .dark .activity-desc {
-            color: #d1d5db;
         }
         
         .activity-time {
@@ -709,10 +692,6 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             transform-style: preserve-3d;
             transform: translateZ(0);
-        }
-        
-        .dark .table-responsive {
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
         table {
@@ -755,10 +734,6 @@
             font-size: 14px;
             position: relative;
             transition: all 0.2s ease;
-        }
-        
-        .dark td {
-            border-top-color: rgba(255, 255, 255, 0.1);
         }
         
         tr {
@@ -810,9 +785,9 @@
         }
         
         .dark .alert-title {
-            color: #f9fafb;
+            color: white;
         }
-        
+
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
         }
@@ -873,7 +848,7 @@
             color: rgb(156 163 175) !important;
         }
         .dark .bg-white {
-            background-color: rgb(31 41 55) !important;
+            background-color: rgb(45, 55, 72) !important;
         }
         .dark .bg-gray-50 {
             background-color: rgb(55 65 81) !important;
@@ -907,7 +882,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Enhanced 3D effects for the recent items table */
+        /* Enhanced 3D effects for recent items table */
         .recent-items-container {
             transform-style: preserve-3d;
             perspective: 1000px;
@@ -975,7 +950,20 @@
         .status-badge-3d:hover {
             transform: translateZ(5px);
         }
-        
+
+        .high-contrast-mode {
+            --contrast-mode: high;
+        }
+
+        .high-contrast-mode {
+            filter: contrast(1.5) brightness(1.1);
+        }
+
+        .high-contrast-mode .highlight-card {
+            border-width: 2px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
         /* 3D floating animation for cards */
         @keyframes float {
             0% { transform: translateY(0px) translateZ(0px); }
@@ -1050,6 +1038,8 @@
         .sidebar-3d:hover {
             transform: translateZ(20px);
         }
+        /* Hide sidebar logout link; unify logout via header avatar dropdown */
+        .sidebar a#logoutBtn { display: none !important; }
     </style>
     
     <!-- JavaScript remains unchanged -->
@@ -1123,15 +1113,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(jsonData => {
             if (jsonData.success) {
-                document.getElementById('loginPage').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
-                localStorage.setItem('isLoggedIn', 'true');
-                
-                // Check session status immediately after login
-                checkSessionStatus();
-                
-                // Check session status periodically
-                setInterval(checkSessionStatus, 300000); // 5 minutes
+                // Redirect to index.html after successful login
+                window.location.href = 'index.html';
             } else {
                 alert(jsonData.message || 'Login failed. Please try again.');
             }
@@ -1199,7 +1182,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Highlight active menu based on current page
+    // ✅ PERBAIKAN: Highlight active menu based on current page
     const currentPage = window.location.pathname.split('/').pop();
     document.querySelectorAll('.nav-item').forEach(item => {
         const href = item.getAttribute('href');
@@ -1245,6 +1228,40 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Logout failed. Please try again.');
         });
     });
+
+    // Bind header dropdown logout to ensure consistent behavior
+    (function(){
+        const headerLogoutBtn = document.querySelector('#profileDropdown a#logoutBtn');
+        if (headerLogoutBtn) {
+            headerLogoutBtn.addEventListener('click', function(e){
+                e.preventDefault();
+                const html = document.documentElement;
+                html.classList.remove('dark');
+                try { localStorage.removeItem('theme'); } catch(e){}
+                fetch('auth.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'action=logout'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.success) {
+                        document.getElementById('loginPage').classList.remove('hidden');
+                        document.getElementById('dashboard').classList.add('hidden');
+                        localStorage.removeItem('isLoggedIn');
+                        const loginForm = document.getElementById('loginForm');
+                        if (loginForm) loginForm.reset();
+                    } else {
+                        alert('Logout failed: ' + (data && data.message ? data.message : 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Logout failed. Please try again.');
+                });
+            });
+        }
+    })();
 
     // ===== CHECK LOGIN STATUS & UPDATE USER INFO =====
     fetch('auth.php', {
@@ -1349,6 +1366,38 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // ===== PROFILE DROPDOWN FUNCTIONALITY =====
+    const userMenuButton = document.getElementById('userMenuButton');
+    const profileDropdown = document.getElementById('profileDropdown');
+    
+    if (userMenuButton && profileDropdown) {
+        // Ensure dropdown overlays other content
+        profileDropdown.style.position = 'absolute';
+        profileDropdown.style.right = '0';
+        profileDropdown.style.top = '100%';
+        profileDropdown.style.zIndex = '120';
+
+        // Toggle dropdown
+        userMenuButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!userMenuButton.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Close dropdown when pressing Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+    }
+    
     // Initialize charts
     const inventoryCanvas = document.getElementById('inventoryChart');
     if (inventoryCanvas) {
@@ -1412,7 +1461,7 @@ const exportDataBtns = document.querySelectorAll('.quick-action-export');
 // Pastikan libs (jsPDF, autotable, Chart.js, QRious, XLSX) sudah di-include di HTML.
 
 // paths ke assets kamu (sesuaikan bila perlu)
-const LOGO_PATH = "uploads/logo.png";
+const LOGO_PATH = "uploads/Gudang.jpg";
 const TTD_PATH = "uploads/ttdBryan.png";
 
 // helper: load image as base64 (fetch -> blob -> dataURL)
@@ -1946,12 +1995,12 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
         if (recentActivities.length === 0) {
             const noDataHTML = `
                 <div class="flex items-start">
-                    <div class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-400 mr-3">
+                    <div class="p-2 rounded-full bg-gray-100  text-gray-400 mr-3">
                         <i class="fas fa-inbox"></i>
                     </div>
                     <div>
-                        <p class="font-medium text-gray-500 dark:text-gray-400">No recent activities</p>
-                        <p class="text-sm text-gray-400 dark:text-gray-500">Activities will appear here</p>
+                        <p class="font-medium text-gray-500 ">No recent activities</p>
+                        <p class="text-sm text-gray-400 ">Activities will appear here</p>
                     </div>
                 </div>
             `;
@@ -1963,13 +2012,13 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
         recentActivities.forEach(activity => {
             const activityHTML = `
                 <div class="flex items-start">
-                    <div class="p-2 rounded-full bg-${activity.color}-100 dark:bg-${activity.color}-900 text-${activity.color}-600 dark:text-${activity.color}-300 mr-3">
+                    <div class="p-2 rounded-full bg-${activity.color}-100  text-${activity.color}-600  mr-3">
                         <i class="${activity.icon}"></i>
                     </div>
                     <div>
-                        <p class="font-medium text-gray-900 dark:text-gray-100">${activity.title}</p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">${activity.description}</p>
-                        <p class="text-xs text-gray-400 dark:text-gray-500">${activity.timestamp}</p>
+                        <p class="font-medium text-gray-900 ">${activity.title}</p>
+                        <p class="text-sm text-gray-500 ">${activity.description}</p>
+                        <p class="text-xs text-gray-400 ">${activity.timestamp}</p>
                     </div>
                 </div>
             `;
@@ -1991,7 +2040,7 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
 
         if (activitiesToShow.length === 0) {
             container.innerHTML = `
-                <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                <div class="text-center py-8 text-gray-500 ">
                     <i class="fas fa-inbox text-4xl mb-3"></i>
                     <p class="font-medium">No activities found</p>
                     <p class="text-sm mt-1">New activities will appear here</p>
@@ -2010,26 +2059,26 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
         };
 
         const statsHTML = `
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6 p-4 bg-gray-50  rounded-lg">
                 <div class="text-center">
-                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">${stats.total}</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Total Activities</p>
+                    <p class="text-2xl font-bold text-gray-900 ">${stats.total}</p>
+                    <p class="text-xs text-gray-500 ">Total Activities</p>
                 </div>
                 <div class="text-center">
-                    <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">${stats.orders}</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Orders</p>
+                    <p class="text-2xl font-bold text-blue-600 ">${stats.orders}</p>
+                    <p class="text-xs text-gray-500 ">Orders</p>
                 </div>
                 <div class="text-center">
-                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">${stats.stock}</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Stock Changes</p>
+                    <p class="text-2xl font-bold text-green-600 ">${stats.stock}</p>
+                    <p class="text-xs text-gray-500 ">Stock Changes</p>
                 </div>
                 <div class="text-center">
-                    <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">${stats.suppliers}</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Suppliers</p>
+                    <p class="text-2xl font-bold text-purple-600 ">${stats.suppliers}</p>
+                    <p class="text-xs text-gray-500 ">Suppliers</p>
                 </div>
                 <div class="text-center">
-                    <p class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">${stats.transactions}</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Transactions</p>
+                    <p class="text-2xl font-bold text-yellow-600 ">${stats.transactions}</p>
+                    <p class="text-xs text-gray-500 ">Transactions</p>
                 </div>
             </div>
         `;
@@ -2045,25 +2094,25 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
             }
 
             const activityHTML = `
-                <div class="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 hover:shadow-md transition-shadow">
+                <div class="flex items-start gap-4 p-4 bg-gray-50  rounded-lg border border-gray-200  hover:shadow-md transition-shadow">
                     <div class="flex-shrink-0">
-                        <div class="w-12 h-12 rounded-full bg-${activity.color}-100 dark:bg-${activity.color}-900 flex items-center justify-center">
-                            <i class="${activity.icon} text-${activity.color}-600 dark:text-${activity.color}-300"></i>
+                        <div class="w-12 h-12 rounded-full bg-${activity.color}-100  flex items-center justify-center">
+                            <i class="${activity.icon} text-${activity.color}-600 "></i>
                         </div>
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex-1">
-                                <h4 class="text-sm font-semibold text-gray-900 dark:text-gray-100">${activity.title}</h4>
-                                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">${activity.description}</p>
+                                <h4 class="text-sm font-semibold text-gray-900 ">${activity.title}</h4>
+                                <p class="text-xs text-gray-600  mt-1">${activity.description}</p>
                             </div>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">${activity.timestamp}</span>
+                            <span class="text-xs text-gray-500  whitespace-nowrap">${activity.timestamp}</span>
                         </div>
                         <div class="mt-2 flex items-center gap-3 text-xs">
-                            <span class="text-gray-500 dark:text-gray-400">
+                            <span class="text-gray-500 ">
                                 <i class="fas fa-user mr-1"></i>${activity.user}
                             </span>
-                            <span class="px-2 py-0.5 bg-${activity.color}-100 dark:bg-${activity.color}-900/30 text-${activity.color}-700 dark:text-${activity.color}-300 rounded-full font-medium">
+                            <span class="px-2 py-0.5 bg-${activity.color}-100  text-${activity.color}-700  rounded-full font-medium">
                                 ${activity.type}
                             </span>
                         </div>
@@ -2146,13 +2195,13 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
 });
 </script>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 font-sans">
+<body class="bg-gray-100 font-sans">
     <!-- Login Page (initially shown) -->
-    <div id="loginPage" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 dark:from-gray-800 dark:via-gray-900 dark:to-black py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8 bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 p-8 rounded-lg shadow-md">
+    <div id="loginPage" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 p-8 rounded-lg shadow-md">
             <div>
-                <i class="fas fa-warehouse text-5xl text-blue-600 dark:text-blue-400 mx-auto block text-center"></i>
-                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+                <i class="fas fa-warehouse text-5xl text-blue-600  mx-auto block text-center"></i>
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
                     Login
                 </h2>
             </div>
@@ -2161,13 +2210,13 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                     <div>
                         <label for="username" class="sr-only">Username</label>
                         <input id="username" name="username" type="text" required
-                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                             placeholder="Username">
                     </div>
                     <div>
                         <label for="password" class="sr-only">Password</label>
                         <input id="password" name="password" type="password" required
-                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                             placeholder="Password">
                     </div>
                 </div>
@@ -2181,9 +2230,9 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
             </form>
 
             <div class="mt-6 text-center">
-                <p class="text-sm text-gray-600 dark:text-gray-300">
+                <p class="text-sm text-gray-600">
                     Don't have an account? 
-                    <a href="#" id="showRegister" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500">
+                    <a href="#" id="showRegister" class="font-medium text-blue-600 hover:text-blue-500">
                         Register here
                     </a>
                 </p>
@@ -2193,19 +2242,19 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                 <div>
                     <label for="regUsername" class="sr-only">Username</label>
                     <input id="regUsername" name="username" type="text" required
-                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300  placeholder-gray-500  text-gray-900   rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                         placeholder="Username">
                 </div>
                 <div>
                     <label for="regPassword" class="sr-only">Password</label>
                     <input id="regPassword" name="password" type="password" required
-                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300  placeholder-gray-500  text-gray-900   rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                         placeholder="Password">
                 </div>
                 <div>
                     <label for="regFullName" class="sr-only">Full Name</label>
                     <input id="regFullName" name="full_name" type="text" required
-                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300  placeholder-gray-500  text-gray-900   rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                         placeholder="Full Name">
                 </div>
                 <div>
@@ -2215,7 +2264,7 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                     </button>
                 </div>
                 <div class="text-center">
-                    <a href="#" id="showLogin" class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500">
+                    <a href="#" id="showLogin" class="text-sm font-medium text-blue-600  hover:text-blue-500">
                         Back to login
                     </a>
                 </div>
@@ -2227,18 +2276,18 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
     <!-- Dashboard (initially hidden) -->
     <div id="dashboard" class="hidden">
         <!-- Sidebar -->
-        <div class="sidebar sidebar-3d bg-blue-800 dark:bg-gray-900 text-white w-64 flex flex-col fixed h-full">
-            <div class="p-4 flex items-center border-b border-blue-700 dark:border-gray-700">
+        <div class="sidebar sidebar-3d bg-blue-800  text-white w-64 flex flex-col fixed h-full">
+            <div class="p-4 flex items-center border-b border-blue-700 ">
                 <div class="flex items-center">
                     <i class="fas fa-warehouse text-2xl mr-3"></i>
-                    <span class="logo-text font-bold text-xl">WarehousePro</span>
+                    <span class="logo-text font-bold text-xl">Stokku</span>
                 </div>
                 <button id="toggleSidebar" class="ml-auto md:hidden">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             
-            <div class="p-4 flex items-center justify-between border-b border-blue-700 dark:border-gray-700">
+            <div class="p-4 flex items-center justify-between border-b border-blue-700 ">
                 <div class="flex items-center">
                     <img src="https://ui-avatars.com/api/?name=User&background=random" class="w-10 h-10 rounded-full mr-3" alt="User">
                         <div class="sidebar-text">
@@ -2250,39 +2299,39 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
             
             <nav class="flex-1 overflow-y-auto py-4">
                 <div class="px-4 space-y-2">
-                    <a href="index.html" class="nav-item flex items-center px-3 py-2 rounded-lg bg-blue-700 dark:bg-gray-700 text-white">
+                    <a href="index.html" class="nav-item cursor-pointer flex items-center px-3 py-2 rounded-lg bg-blue-700  text-white">
                         <i class="fas fa-tachometer-alt mr-3"></i>
                         <span class="sidebar-text">Dashboard</span>
                     </a>
-                    <a href="inventory.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <a href="inventory.html" class="nav-item cursor-pointer flex items-center px-3 py-2 rounded-lg hover:bg-blue-700  text-white">
                         <i class="fas fa-boxes mr-3"></i>
                         <span class="sidebar-text">Inventory</span>
                     </a>
-                    <a href="suppliers.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <a href="suppliers.html" class="nav-item cursor-pointer flex items-center px-3 py-2 rounded-lg hover:bg-blue-700  text-white">
                         <i class="fas fa-truck mr-3"></i>
                         <span class="sidebar-text">Suppliers</span>
                     </a>
-                    <a href="orders.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <a href="orders.html" class="nav-item cursor-pointer flex items-center px-3 py-2 rounded-lg hover:bg-blue-700  text-white">
                         <i class="fas fa-shopping-cart mr-3"></i>
                         <span class="sidebar-text">Orders</span>
                     </a>
-                    <a href="transactions.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <a href="transactions.html" class="nav-item cursor-pointer flex items-center px-3 py-2 rounded-lg hover:bg-blue-700  text-white">
                         <i class="fas fa-exchange-alt mr-3"></i>
                         <span class="sidebar-text">Transactions</span>
                     </a>
-                    <a href="user.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <a href="user.html" class="nav-item cursor-pointer flex items-center px-3 py-2 rounded-lg hover:bg-blue-700  text-white">
                         <i class="fas fa-users mr-3"></i>
                         <span class="sidebar-text">Users</span>
                     </a>
-                    <a href="settings.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-gray-700 text-white">
+                    <a href="settings.html" class="nav-item cursor-pointer flex items-center px-3 py-2 rounded-lg hover:bg-blue-700  text-white">
                         <i class="fas fa-cog mr-3"></i>
                         <span class="sidebar-text">Settings</span>
                     </a>
                 </div>
             </nav>
             
-            <div class="p-4 border-t border-blue-700 dark:border-gray-700">
-                <a href="#" id="logoutBtn" class="flex items-center text-white hover:text-blue-200">
+            <div class="p-4 border-t border-blue-700 ">
+                <a href="#" id="logoutBtn" class="flex items-center text-white hover:text-blue-200 cursor-pointer">
                     <i class="fas fa-sign-out-alt mr-3"></i>
                     <span class="sidebar-text">Logout</span>
                 </a>
@@ -2292,46 +2341,57 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
         <!-- Main Content -->
         <div class="content flex-1 overflow-auto">
             <!-- Top Navigation -->
-            <header class="top-nav bg-white dark:bg-gray-800 shadow-sm">
+            <header class="top-nav bg-white  shadow-sm">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div class="flex items-center">
                         <button id="mobileToggleSidebar" class="mr-4 md:hidden">
-                            <i class="fas fa-bars text-gray-600 dark:text-gray-300"></i>
+                            <i class="fas fa-bars text-gray-600 "></i>
                         </button>
-                        <h1 class="text-xl font-semibold text-gray-800 dark:text-gray-100">Dashboard</h1>
+                        <h1 class="text-xl font-semibold text-gray-800 ">Dashboard</h1>
                     </div>
                     <div class="flex items-center space-x-4">
                         <div class="relative">
-                            <button class="notification-icon text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100">
+                            <button class="notification-icon text-gray-600  hover:text-gray-800 ">
                                 <i class="fas fa-bell"></i>
                                 <span class="notification-badge absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
                             </button>
                         </div>
                         <div class="relative">
-                            <button class="notification-icon text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100">
+                            <button class="notification-icon text-gray-600  hover:text-gray-800 ">
                                 <i class="fas fa-envelope"></i>
                                 <span class="notification-badge absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
                             </button>
                         </div>
                         <div class="relative">
-                            <button id="userMenuButton" class="flex items-center space-x-2">
+                            <button id="userMenuButton" class="flex items-center space-x-2 text-gray-600  hover:text-gray-800 ">
                                 <img src="https://ui-avatars.com/api/?name=Admin&background=random" class="user-avatar w-8 h-8 rounded-full" alt="User">
-                                <span class="hidden md:inline user-name text-gray-800 dark:text-gray-100">Admin</span>
+                                <span class="hidden md:inline user-name text-gray-800 ">Admin</span>
+                                <i class="fas fa-chevron-down text-xs"></i>
                             </button>
+                            
+                            <!-- Profile Dropdown Menu -->
+                            <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white  rounded-md shadow-lg z-50 overflow-hidden">
+                                <div class="py-1">
+                                    <div class="border-t border-gray-100 "></div>
+                                    <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-red-600  hover:bg-gray-100 ">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </header>
             
             <!-- Main Content Area -->
-            <main class="p-6">
+            <main class="p-6 bg-white">
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                    <div class="highlight-card card-3d bg-white dark:bg-gray-800 rounded-lg shadow p-6 transition-all duration-300 floating">
+                    <div class="highlight-card card-3d bg-white rounded-lg shadow p-6 transition-all duration-300 floating">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-gray-500 dark:text-gray-400">Total Items</p>
-                                <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">1,248</h3>
+                                <p class="text-gray-500">Total Items</p>
+                                <h3 class="text-2xl font-bold text-gray-900">1,248</h3>
                             </div>
                             <div class="stat-icon blue">
                                 <i class="fas fa-boxes text-xl"></i>
@@ -2342,11 +2402,11 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                         </div>
                     </div>
                     
-                    <div class="highlight-card card-3d bg-white dark:bg-gray-800 rounded-lg shadow p-6 transition-all duration-300 floating" style="animation-delay: 0.2s">
+                    <div class="highlight-card card-3d bg-white rounded-lg shadow p-6 transition-all duration-300 floating" style="animation-delay: 0.2s">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-gray-500 dark:text-gray-400">Low Stock</p>
-                                <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">47</h3>
+                                <p class="text-gray-500">Low Stock</p>
+                                <h3 class="text-2xl font-bold text-gray-900">47</h3>
                             </div>
                             <div class="stat-icon yellow">
                                 <i class="fas fa-exclamation-triangle text-xl"></i>
@@ -2357,11 +2417,11 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                         </div>
                     </div>
                     
-                    <div class="highlight-card card-3d bg-white dark:bg-gray-800 rounded-lg shadow p-6 transition-all duration-300 floating" style="animation-delay: 0.4s">
+                    <div class="highlight-card card-3d bg-white rounded-lg shadow p-6 transition-all duration-300 floating" style="animation-delay: 0.4s">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-gray-500 dark:text-gray-400">Pending Orders</p>
-                                <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">23</h3>
+                                <p class="text-gray-500">Pending Orders</p>
+                                <h3 class="text-2xl font-bold text-gray-900">23</h3>
                             </div>
                             <div class="stat-icon purple">
                                 <i class="fas fa-clipboard-list text-xl"></i>
@@ -2372,11 +2432,11 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                         </div>
                     </div>
                     
-                    <div class="highlight-card card-3d bg-white dark:bg-gray-800 rounded-lg shadow p-6 transition-all duration-300 floating" style="animation-delay: 0.6s">
+                    <div class="highlight-card card-3d bg-white rounded-lg shadow p-6 transition-all duration-300 floating" style="animation-delay: 0.6s">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-gray-500 dark:text-gray-400">Suppliers</p>
-                                <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">18</h3>
+                                <p class="text-gray-500">Suppliers</p>
+                                <h3 class="text-2xl font-bold text-gray-900">18</h3>
                             </div>
                             <div class="stat-icon green">
                                 <i class="fas fa-truck text-xl"></i>
@@ -2391,9 +2451,9 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                 <!-- Charts and Recent Activity -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                     <!-- Inventory Chart -->
-                    <div class="lg:col-span-2 card bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <div class="lg:col-span-2 card bg-white rounded-lg shadow p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Inventory Overview</h2>
+                            <h2 class="text-lg font-semibold text-gray-900">Inventory Overview</h2>
                             <div class="chart-controls">
                                 <button class="chart-control-btn active">Month</button>
                                 <button class="chart-control-btn">Year</button>
@@ -2405,8 +2465,8 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                     </div>
                     
                     <!-- Recent Activity -->
-                    <div class="card bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                        <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Recent Activity</h2>
+                    <div class="card bg-white rounded-lg shadow p-6">
+                        <h2 class="text-lg font-semibold mb-4 text-gray-900">Recent Activity</h2>
                         <div id="recentActivitiesContainer" class="space-y-4">
                             <!-- Activities will be populated here -->
                         </div>
@@ -2421,9 +2481,9 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                     <!-- Recent Items -->
                     <div class="lg:col-span-2 recent-items-container">
-                        <div class="card bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                        <div class="card bg-white rounded-lg shadow overflow-hidden">
                             <div class="card-header">
-                                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Inventory Items</h2>
+                                <h2 class="text-lg font-semibold text-gray-900">Recent Inventory Items</h2>
                                 <button class="viewallbtn">View All</button>
                             </div>
                             <div class="card-body p-0">
@@ -2440,37 +2500,37 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="font-medium text-gray-900 dark:text-gray-100">#A-2456</td>
-                                                <td class="text-gray-500 dark:text-gray-300">Wireless Headphones</td>
-                                                <td class="text-gray-500 dark:text-gray-300">Electronics</td>
-                                                <td class="text-gray-500 dark:text-gray-300">124</td>
+                                                <td class="font-medium text-gray-900">#A-2456</td>
+                                                <td class="text-gray-500">Wireless Headphones</td>
+                                                <td class="text-gray-500">Electronics</td>
+                                                <td class="text-gray-500">124</td>
                                                 <td>
                                                     <span class="status-badge status-badge-3d in-stock">In Stock</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="font-medium text-gray-900 dark:text-gray-100">#B-4521</td>
-                                                <td class="text-gray-500 dark:text-gray-300">Bluetooth Speaker</td>
-                                                <td class="text-gray-500 dark:text-gray-300">Electronics</td>
-                                                <td class="text-gray-500 dark:text-gray-300">3</td>
+                                                <td class="font-medium text-gray-900">#B-4521</td>
+                                                <td class="text-gray-500">Bluetooth Speaker</td>
+                                                <td class="text-gray-500">Electronics</td>
+                                                <td class="text-gray-500">3</td>
                                                 <td>
                                                     <span class="status-badge status-badge-3d low-stock">Low Stock</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="font-medium text-gray-900 dark:text-gray-100">#C-7894</td>
-                                                <td class="text-gray-500 dark:text-gray-300">Desk Lamp</td>
-                                                <td class="text-gray-500 dark:text-gray-300">Furniture</td>
-                                                <td class="text-gray-500 dark:text-gray-300">56</td>
+                                                <td class="font-medium text-gray-900">#C-7894</td>
+                                                <td class="text-gray-500">Desk Lamp</td>
+                                                <td class="text-gray-500">Furniture</td>
+                                                <td class="text-gray-500">56</td>
                                                 <td>
                                                     <span class="status-badge status-badge-3d in-stock">In Stock</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="font-medium text-gray-900 dark:text-gray-100">#D-1234</td>
-                                                <td class="text-gray-500 dark:text-gray-300">Office Chair</td>
-                                                <td class="text-gray-500 dark:text-gray-300">Furniture</td>
-                                                <td class="text-gray-500 dark:text-gray-300">0</td>
+                                                <td class="font-medium text-gray-900">#D-1234</td>
+                                                <td class="text-gray-500">Office Chair</td>
+                                                <td class="text-gray-500">Furniture</td>
+                                                <td class="text-gray-500">0</td>
                                                 <td>
                                                     <span class="status-badge status-badge-3d out-of-stock">Out of Stock</span>
                                                 </td>
@@ -2483,16 +2543,16 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                     </div>
                     
                     <!-- Quick Actions -->
-                    <div class="card bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                        <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Quick Actions</h2>
+                    <div class="card bg-white rounded-lg shadow p-6">
+                        <h2 class="text-lg font-semibold mb-4 text-gray-900">Quick Actions</h2>
                         <div class="quick-actions-grid">
                             <div class="flip-card" data-href="inventory.html">
                                 <div class="flip-card-inner">
                                     <div class="flip-card-front quick-action-add-item">
-                                        <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 mb-2">
+                                        <div class="p-3 rounded-full bg-blue-100 text-blue-600 mb-2">
                                             <i class="fas fa-plus"></i>
                                         </div>
-                                        <button class="text-sm font-medium text-gray-900 dark:text-gray-100">Add Item</button>
+                                        <button class="text-sm font-medium text-gray-900">Add Item</button>
                                     </div>
                                     <div class="flip-card-back">
                                         <i class="fas fa-plus text-2xl mb-2"></i>
@@ -2504,10 +2564,10 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                             <div class="flip-card" data-href="orders.html">
                                 <div class="flip-card-inner">
                                     <div class="flip-card-front quick-action-new-order">
-                                        <div class="p-3 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 mb-2">
+                                        <div class="p-3 rounded-full bg-green-100 text-green-600 mb-2">
                                             <i class="fas fa-truck"></i>
                                         </div>
-                                        <span class="text-sm font-medium text-gray-900 dark:text-gray-100">New Order</span>
+                                        <span class="text-sm font-medium text-gray-900">New Order</span>
                                     </div>
                                     <div class="flip-card-back">
                                         <i class="fas fa-truck text-2xl mb-2"></i>
@@ -2519,10 +2579,10 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                             <div class="flip-card" data-href="suppliers.html">
                                 <div class="flip-card-inner">
                                     <div class="flip-card-front quick-action-add-supplier">
-                                        <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 mb-2">
+                                        <div class="p-3 rounded-full bg-purple-100 text-purple-600 mb-2">
                                             <i class="fas fa-user-plus"></i>
                                         </div>
-                                        <span class="text-sm font-medium text-gray-900 dark:text-gray-100">Add Supplier</span>
+                                        <span class="text-sm font-medium text-gray-900">Add Supplier</span>
                                     </div>
                                     <div class="flip-card-back">
                                         <i class="fas fa-user-plus text-2xl mb-2"></i>
@@ -2534,10 +2594,10 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                             <div class="flip-card">
                                 <div class="flip-card-inner">
                                     <div class="flip-card-front quick-action-export">
-                                        <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 mb-2">
+                                        <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mb-2">
                                             <i class="fas fa-file-export"></i>
                                         </div>
-                                        <span class="text-sm font-medium text-gray-900 dark:text-gray-100">Export Data</span>
+                                        <span class="text-sm font-medium text-gray-900">Export Data</span>
                                     </div>
                                     <div class="flip-card-back">
                                         <i class="fas fa-file-export text-2xl mb-2"></i>
@@ -2553,14 +2613,14 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
                                 <div class="alert-card danger">
                                     <div class="flex items-center">
                                         <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
-                                        <span class="text-sm text-gray-900 dark:text-gray-100">5 items out of stock</span>
+                                        <span class="text-sm text-gray-900">5 items out of stock</span>
                                     </div>
                                     <button class="view-out-of-stock text-red-500 text-sm font-medium hover:underline">View</button>
                                 </div>
                                 <div class="alert-card warning">
                                     <div class="flex items-center">
                                         <i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i>
-                                        <span class="text-sm text-gray-900 dark:text-gray-100">12 items low stock</span>
+                                        <span class="text-sm text-gray-900">12 items low stock</span>
                                     </div>
                                     <button class="view-low-stock text-yellow-500 text-sm font-medium hover:underline">View</button>
                                 </div>
@@ -2588,5 +2648,161 @@ document.querySelectorAll('.quick-action-export').forEach(front => {
 <!-- SheetJS (XLSX) untuk Excel export -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
+<script>
+// High Contrast Mode Manager - Untuk Semua Halaman
+(function() {
+    // Fungsi untuk menerapkan high contrast mode
+    function applyHighContrast() {
+        const highContrast = localStorage.getItem('highContrast') === 'true';
+        
+        if (highContrast) {
+            // Tambahkan class ke body
+            document.body.classList.add('high-contrast-mode');
+            
+            // Tambahkan CSS inline jika belum ada
+            if (!document.getElementById('high-contrast-styles')) {
+                const style = document.createElement('style');
+                style.id = 'high-contrast-styles';
+                style.textContent = `
+                    /* High Contrast Mode Styles */
+                    .high-contrast-mode {
+                        --primary-color: #0000ff !important;
+                        --secondary-color: #000000 !important;
+                        --success-color: #008000 !important;
+                        --warning-color: #ff8c00 !important;
+                        --danger-color: #ff0000 !important;
+                        --background-color: #ffffff !important;
+                        --text-color: #000000 !important;
+                        --border-color: #000000 !important;
+                        --card-background: #ffffff !important;
+                        --hover-background: #f0f0f0 !important;
+                    }
+                    
+                    .high-contrast-mode * {
+                        border-width: 2px !important;
+                        border-color: #000000 !important;
+                        outline: 2px solid #000000 !important;
+                        outline-offset: 1px !important;
+                    }
+                    
+                    .high-contrast-mode button,
+                    .high-contrast-mode input,
+                    .high-contrast-mode select,
+                    .high-contrast-mode textarea {
+                        border: 3px solid #fff !important;
+                        background: #000 !important;
+                        color: #fff !important;
+                        font-weight: bold !important;
+                    }
+                    
+                    .high-contrast-mode button:hover,
+                    .high-contrast-mode input:hover,
+                    .high-contrast-mode select:hover,
+                    .high-contrast-mode textarea:hover {
+                        background: #000000 !important;
+                        color: #ffffff !important;
+                    }
+                    
+                    .high-contrast-mode a {
+                        color: #0000ff !important;
+                        text-decoration: underline !important;
+                        font-weight: bold !important;
+                    }
+                    
+                    .high-contrast-mode a:hover {
+                        color: #ff0000 !important;
+                    }
+                    
+                    .high-contrast-mode .card,
+                    .high-contrast-mode .navbar,
+                    .high-contrast-mode .sidebar,
+                    .high-contrast-mode .header,
+                    .high-contrast-mode .footer,
+                    .high-contrast-mode .section {
+                        border: 3px solid #000000 !important;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+                    }
+                    
+                    .high-contrast-mode img {
+                        border: 2px solid #000000 !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        } else {
+            // Hapus class dari body
+            document.body.classList.remove('high-contrast-mode');
+        }
+    }
+
+    // Terapkan saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', applyHighContrast);
+
+    // Dengarkan perubahan dari localStorage (real-time sync)
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'highContrast') {
+            applyHighContrast();
+        }
+    });
+
+    // Backup: Cek setiap 1 detik (untuk browser yang tidak support storage event)
+    setInterval(applyHighContrast, 1000);
+
+    // Fungsi untuk toggle (opsional, jika ingin tombol di halaman lain)
+    window.toggleHighContrast = function() {
+        const current = localStorage.getItem('highContrast') === 'true';
+        const newValue = !current;
+        localStorage.setItem('highContrast', newValue.toString());
+        applyHighContrast();
+        
+        // Tampilkan notifikasi
+        showNotification('High Contrast Mode', newValue ? 'Diaktifkan' : 'Dinonaktifkan');
+    };
+
+    // Fungsi notifikasi sederhana
+    function showNotification(title, message) {
+        // Hapus notifikasi lama jika ada
+        const oldNotification = document.getElementById('high-contrast-notification');
+        if (oldNotification) {
+            oldNotification.remove();
+        }
+
+        // Buat notifikasi baru
+        const notification = document.createElement('div');
+        notification.id = 'high-contrast-notification';
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 8px;
+            padding:16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            max-width: 300px;
+            font-family: Arial, sans-serif;
+        `;
+        
+        notification.innerHTML = `
+            <div style="font-weight: bold; margin-bottom: 8px; color: #000;">${title}</div>
+            <div style="color: #666; font-size: 14px;">${message}</div>
+        `;
+        
+        document.body.appendChild(notification);
+
+        // Hapus otomatis setelah 3 detik
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 3000);
+    }
+
+    // Debug: Log status saat ini
+    console.log('High Contrast Mode Manager loaded');
+    console.log('Current status:', localStorage.getItem('highContrast'));
+})();
+</script>
 </body>
 </html>

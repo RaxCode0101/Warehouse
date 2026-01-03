@@ -1,0 +1,322 @@
+/* Accessibility CSS - File CSS terpisah untuk semua halaman */
+
+:root {
+    --primary-color: #3b82f6;
+    --secondary-color: #6b7280;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --background-color: #ffffff;
+    --text-color: #1f2937;
+    --border-color: #e5e7eb;
+    --card-background: #ffffff;
+    --hover-background: #f9fafb;
+}
+
+/* High Contrast Mode Styles */
+body.high-contrast-mode {
+    --primary-color: #0000ff;
+    --secondary-color: #000000;
+    --success-color: #008000;
+    --warning-color: #ff8c00;
+    --danger-color: #ff0000;
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --border-color: #000000;
+    --card-background: #ffffff;
+    --hover-background: #f0f0f0;
+}
+
+body.high-contrast-mode * {
+    border-width: 2px !important;
+    border-color: #000000 !important;
+    outline: 2px solid #000000 !important;
+    outline-offset: 1px !important;
+}
+
+body.high-contrast-mode button,
+body.high-contrast-mode input,
+body.high-contrast-mode select,
+body.high-contrast-mode textarea {
+    border: 3px solid #000000 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-weight: bold !important;
+}
+
+body.high-contrast-mode button:hover,
+body.high-contrast-mode input:hover,
+body.high-contrast-mode select:hover,
+body.high-contrast-mode textarea:hover {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+body.high-contrast-mode a {
+    color: #0000ff !important;
+    text-decoration: underline !important;
+    font-weight: bold !important;
+}
+
+body.high-contrast-mode a:hover {
+    color: #ff0000 !important;
+}
+
+body.high-contrast-mode .card,
+body.high-contrast-mode .navbar,
+body.high-contrast-mode .sidebar,
+body.high-contrast-mode .header,
+body.high-contrast-mode .footer,
+body.high-contrast-mode .section {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.high-contrast-mode img {
+    border: 2px solid #000000 !important;
+}
+
+/* Compact View Styles */
+body.compact-view {
+    --spacing-factor: 0.6;
+}
+
+body.compact-view .container,
+body.compact-view .main-content,
+body.compact-view .content {
+    padding: calc(1rem * var(--spacing-factor)) !important;
+}
+
+body.compact-view .card,
+body.compact-view .section {
+    margin-bottom: calc(0.5rem * var(--spacing-factor)) !important;
+}
+
+body.compact-view .navbar,
+body.compact-view .header {
+    padding: calc(0.5rem * var(--spacing-factor)) calc(1rem * var(--spacing-factor)) !important;
+}
+
+body.compact-view .sidebar {
+    width: calc(250px * var(--spacing-factor)) !important;
+}
+
+body.compact-view .main-content {
+    margin-left: calc(250px * var(--spacing-factor)) !important;
+}
+
+body.compact-view .form-group {
+    margin-bottom: calc(0.5rem * var(--spacing-factor)) !important;
+}
+
+body.compact-view h1,
+body.compact-view h2,
+body.compact-view h3,
+body.compact-view h4,
+body.compact-view h5,
+body.compact-view h6 {
+    margin-bottom: calc(0.5rem * var(--spacing-factor)) !important;
+}
+
+/* No Animations */
+body.no-animations *,
+body.no-animations *::before,
+body.no-animations *::after {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+}
+
+/* Dark Mode */
+body.dark-mode {
+    --primary-color: #60a5fa;
+    --secondary-color: #9ca3af;
+    --success-color: #34d399;
+    --warning-color: #fbbf24;
+    --danger-color: #f87171;
+    --background-color: #1f2937;
+    --text-color: #f9fafb;
+    --border-color: #374151;
+    --card-background: #374151;
+    --hover-background: #4b5563;
+}
+
+/* Accessibility Toggle Component */
+.accessibility-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    background: var(--card-background);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+}
+
+.accessibility-toggle h4 {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.toggle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.toggle-label {
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.toggle-switch {
+    position: relative;
+    width: 50px;
+    height: 24px;
+    background: var(--secondary-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+    background: var(--primary-color);
+}
+
+.toggle-switch::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s ease;
+}
+
+.toggle-switch.active::after {
+    transform: translateX(26px);
+}
+
+/* Notification Component */
+.accessibility-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--card-background);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1002;
+    max-width: 300px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+}
+
+.accessibility-notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.accessibility-notification-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.accessibility-notification-message {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+/* High Contrast Button */
+.high-contrast-btn {
+    background: var(--card-background);
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.high-contrast-btn:hover {
+    background: var(--hover-background);
+}
+
+body.high-contrast-mode .high-contrast-btn {
+    border: 3px solid #000000 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-weight: bold !important;
+}
+
+body.high-contrast-mode .high-contrast-btn:hover {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .accessibility-toggle {
+        top: 10px;
+        right: 10px;
+        padding: 0.5rem;
+        max-width: 250px;
+    }
+    
+    .accessibility-notification {
+        top: 10px;
+        right: 10px;
+        max-width: 250px;
+    }
+    
+    .toggle-label {
+        font-size: 0.8rem;
+    }
+}
+
+/* Focus Styles for Accessibility */
+*:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+body.high-contrast-mode *:focus {
+    outline: 3px solid #000000 !important;
+    outline-offset: 2px !important;
+}
+
+/* Skip to Content Link */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--primary-color);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 1000;
+    transition: top 0.3s;
+}
+
+.skip-to-content:focus {
+    top: 6px;
+}
+
+body.high-contrast-mode .skip-to-content {
+    background: #0000ff !important;
+    border: 2px solid #000000 !important;
+    font-weight: bold !important;
+}

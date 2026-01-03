@@ -2,6 +2,32 @@
 header('Content-Type: application/json');
 require_once 'config.php';
 
+// Function to generate QR code using online API
+function generateQRCode($item_code, $name) {
+    $qrData = json_encode([
+        'code' => $item_code,
+        'name' => $name,
+        'type' => 'inventory'
+    ]);
+
+    // Use goqr.me API to generate QR code
+    $apiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . urlencode($qrData);
+
+    // Generate unique filename
+    $filename = 'qr_' . $item_code . '_' . time() . '.png';
+    $filepath = 'uploads/' . $filename;
+
+    // Download and save QR code image
+    $imageData = file_get_contents($apiUrl);
+    if ($imageData !== false) {
+        if (file_put_contents($filepath, $imageData)) {
+            return $filepath;
+        }
+    }
+
+    return null; // Return null if generation failed
+}
+
 $method = $_SERVER['REQUEST_METHOD'];
 
 function respond($success, $data = [], $message = '') {
@@ -16,7 +42,7 @@ switch ($method) {
         $sort_by = $_GET['sort_by'] ?? 'id';
         $sort_order = $_GET['sort_order'] ?? 'ASC';
 
-        $allowed_sort_columns = ['id', 'item_code', 'name', 'category', 'stock', 'status'];
+        $allowed_sort_columns = ['id', 'item_code', 'name', 'category', 'stock', 'status', 'qr_code'];
         if (!in_array($sort_by, $allowed_sort_columns)) {
             $sort_by = 'id';
         }
@@ -60,16 +86,27 @@ switch ($method) {
             $status = 'In Stock';
         }
 
+        // Generate QR code for new items
+        $qr_code = null;
+        if (!$id) {
+            $qr_code = generateQRCode($item_code, $name);
+        }
+
         try {
             if ($id) {
-                // Update
-                $stmt = $pdo->prepare("UPDATE inventory SET item_code = ?, name = ?, category = ?, stock = ?, status = ?, image_path = ? WHERE id = ?");
-                $stmt->execute([$item_code, $name, $category, $stock, $status, $image_path, $id]);
+                // Update - only update qr_code if regenerated
+                if ($qr_code !== null) {
+                    $stmt = $pdo->prepare("UPDATE inventory SET item_code = ?, name = ?, category = ?, stock = ?, status = ?, image_path = ?, qr_code = ? WHERE id = ?");
+                    $stmt->execute([$item_code, $name, $category, $stock, $status, $image_path, $qr_code, $id]);
+                } else {
+                    $stmt = $pdo->prepare("UPDATE inventory SET item_code = ?, name = ?, category = ?, stock = ?, status = ?, image_path = ? WHERE id = ?");
+                    $stmt->execute([$item_code, $name, $category, $stock, $status, $image_path, $id]);
+                }
                 respond(true, [], 'Inventory item updated successfully');
             } else {
                 // Create
-                $stmt = $pdo->prepare("INSERT INTO inventory (item_code, name, category, stock, status, image_path) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$item_code, $name, $category, $stock, $status, $image_path]);
+                $stmt = $pdo->prepare("INSERT INTO inventory (item_code, name, category, stock, status, image_path, qr_code) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$item_code, $name, $category, $stock, $status, $image_path, $qr_code]);
                 respond(true, [], 'Inventory item created successfully');
             }
         } catch (PDOException $e) {

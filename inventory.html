@@ -959,38 +959,36 @@
                         <span class="sidebar-text">Dashboard</span>
                     </a>
                     
-                    <!-- MAIN INVENTORY LINK (Renamed to match request) -->
-                    <a href="inventory.html" class="nav-item flex items-center px-3 py-2 rounded-lg bg-blue-700 text-white active">
+                    <!-- Inventory Dropdown Toggle -->
+                    <button id="inventoryToggle" class="flex items-center w-full px-3 py-2 rounded-lg hover:bg-blue-700 text-white focus:outline-none" aria-expanded="false">
                         <i class="fas fa-boxes mr-3 w-5 text-center"></i>
-                        <span class="sidebar-text">Inventory Management</span>
-                    </a>
+                        <span class="sidebar-text flex-1 text-left">Inventory</span>
+                        <i id="inventoryChevron" class="fas fa-chevron-right transition-transform duration-200"></i>
+                    </button>
 
-                    <!-- NEW INVENTORY SUB-MENUS -->
-                    <!-- Section Header -->
-                    <div class="px-4 py-2 mt-2 mb-1 text-xs font-bold text-blue-200 uppercase tracking-wider sidebar-text border-t border-blue-700 pt-3 flex items-center">
-                        <i class="fas fa-cog mr-2 opacity-50"></i> Inventory Features
-                    </div>
-
-                    <a href="stock_overview.html" class="nav-item flex items-center px-5 py-2 hover:bg-blue-700 text-blue-100">
+                    <!-- Inventory Submenu (collapsed by default) -->
+                    <div id="inventorySubmenu" class="mt-1 ml-2 space-y-1 border-l border-blue-700 pl-4 hidden">
+                      <a href="inventory.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-blue-100">
+                        <i class="fas fa-columns mr-3 w-5 text-center"></i>
+                        <span class="sidebar-text">Inventory overview</span>
+                      </a>
+                      <a href="stock_overview.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-blue-100">
                         <i class="fas fa-map-marked-alt mr-3 w-5 text-center"></i>
                         <span class="sidebar-text">Stock overview</span>
-                    </a>
-
-                    <a href="item_master_data.html" class="nav-item flex items-center px-5 py-2 hover:bg-blue-700 text-blue-100">
+                      </a>
+                      <a href="item_master_data.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-blue-100">
                         <i class="fas fa-database mr-3 w-5 text-center"></i>
-                        <span class="sidebar-text">Item master data</span>
-                    </a>
-
-                    <a href="lot_tracking.html" class="nav-item flex items-center px-5 py-2 hover:bg-blue-700 text-blue-100">
+                        <span class="sidebar-text">Item master</span>
+                      </a>
+                      <a href="lot_tracking.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-blue-100">
                         <i class="fas fa-barcode mr-3 w-5 text-center"></i>
                         <span class="sidebar-text">Lot tracking</span>
-                    </a>
-
-                    <a href="stock_adjustment.html" class="nav-item flex items-center px-5 py-2 hover:bg-blue-700 text-blue-100">
+                      </a>
+                      <a href="stock_adjustment.html" class="nav-item flex items-center px-3 py-2 rounded-lg hover:bg-blue-700 text-blue-100">
                         <i class="fas fa-sliders-h mr-3 w-5 text-center"></i>
                         <span class="sidebar-text">Stock adjustment</span>
-                    </a>
-                    <!-- END NEW INVENTORY SUB-MENUS -->
+                      </a>
+                    </div>
 
                     <a href="suppliers.html" class="nav-item flex items-center px-3 py-2 hover:bg-blue-700 mt-4">
                         <i class="fas fa-truck mr-3 w-5 text-center"></i> 
@@ -1030,6 +1028,48 @@ document.addEventListener('DOMContentLoaded', function() {
             item.classList.remove('bg-blue-700');
         }
     });
+
+    // Inventory dropdown toggle and auto-expand on relevant pages
+    const inventoryToggle = document.getElementById('inventoryToggle');
+    const inventorySubmenu = document.getElementById('inventorySubmenu');
+    const inventoryChevron = document.getElementById('inventoryChevron');
+
+    function setInventoryExpanded(expanded) {
+        if (!inventorySubmenu || !inventoryToggle) return;
+        const isHidden = inventorySubmenu.classList.contains('hidden');
+        if (expanded && isHidden) {
+            inventorySubmenu.classList.remove('hidden');
+            inventoryToggle.classList.add('bg-blue-700');
+            if (inventoryChevron) inventoryChevron.classList.add('rotate-90');
+            inventoryToggle.setAttribute('aria-expanded', 'true');
+        } else if (!expanded && !isHidden) {
+            inventorySubmenu.classList.add('hidden');
+            inventoryToggle.classList.remove('bg-blue-700');
+            if (inventoryChevron) inventoryChevron.classList.remove('rotate-90');
+            inventoryToggle.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+    if (inventoryToggle && inventorySubmenu) {
+        inventoryToggle.addEventListener('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            const willExpand = inventorySubmenu.classList.contains('hidden');
+            setInventoryExpanded(willExpand);
+        });
+
+        // Auto-expand when visiting any inventory-related page
+        const inventoryPages = [
+            'inventory.html',
+            'stock_overview.html',
+            'item_master_data.html',
+            'lot_tracking.html',
+            'stock_adjustment.html'
+        ];
+        if (inventoryPages.includes(currentPage)) {
+            setInventoryExpanded(true);
+        }
+    }
 
     // Handle logout
     const logoutBtn = document.getElementById('logoutBtn');

@@ -10885,3 +10885,87 @@ Stack trace:
 [03-Jan-2026 16:03:28 Europe/Berlin] Action received: check_status
 [03-Jan-2026 16:03:28 Europe/Berlin] Action received: check_status
 [03-Jan-2026 16:03:35 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:06:52 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:06:57 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:06:59 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:07:04 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:11:32 Europe/Berlin] Action received: logout
+[03-Jan-2026 16:11:42 Europe/Berlin] Action received: logout
+[03-Jan-2026 16:11:45 Europe/Berlin] Action received: logout
+[03-Jan-2026 16:11:47 Europe/Berlin] Action received: logout
+[03-Jan-2026 16:34:12 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:34:20 Europe/Berlin] Action received: login
+[03-Jan-2026 16:34:35 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 654321
+)
+
+[03-Jan-2026 16:34:53 Europe/Berlin] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in C:\xampp\htdocs\stokku\auth.php on line 142
+[03-Jan-2026 16:35:01 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:35:20 Europe/Berlin] Action received: login
+[03-Jan-2026 16:35:39 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:35:40 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 654321
+)
+
+[03-Jan-2026 16:35:49 Europe/Berlin] Login successful for user: bryan
+[03-Jan-2026 16:36:03 Europe/Berlin] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in C:\xampp\htdocs\stokku\auth.php on line 157
+[03-Jan-2026 16:36:17 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:36:30 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:36:40 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:36:41 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:38:14 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:38:16 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:38:41 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:38:53 Europe/Berlin] Action received: login
+[03-Jan-2026 16:38:54 Europe/Berlin] Login action triggered: Array
+(
+    [action] => login
+    [username] => bryan
+    [password] => 654321
+)
+
+[03-Jan-2026 16:38:55 Europe/Berlin] Login successful for user: bryan
+[03-Jan-2026 16:42:19 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:42:20 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:42:24 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:42:24 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:42:28 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:42:28 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:42:37 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:42:37 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:42:42 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:42:52 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:42:53 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:43:37 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:43:41 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:44:00 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:44:01 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:44:11 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:47:30 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:47:34 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:47:41 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:47:41 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:47:43 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:49:38 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:49:41 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:51:03 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:52:27 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:52:36 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:53:06 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:53:08 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:53:14 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:54:07 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:54:22 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:54:25 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:54:28 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:54:31 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:54:32 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:54:45 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:54:50 Europe/Berlin] Action received: check_status
+[03-Jan-2026 16:54:50 Europe/Berlin] Action received: check_status
